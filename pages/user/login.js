@@ -1,6 +1,7 @@
 import Link from "next/link";
 import FirstPageFooter from "../../components/FirstPageFooter";
 import LoginPageHeader from "../../components/LoginPageHeader";
+import jwtDecode from 'jwt-decode';
 //import GoogleSignInButton from "@/components/GoogleSignInButton";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import campus from "../../assets/campus.png";
@@ -133,6 +134,8 @@ export default function Login() {
               <GoogleLogin
                 onSuccess={(credentialResponse) => {
                   console.log(credentialResponse);
+                  const creds = jwtDecode(credentialResponse.credential);
+                  console.log(creds);
                 }}
                 onError={() => {
                   console.log("Login Failed");
