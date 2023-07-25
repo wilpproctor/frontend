@@ -137,7 +137,7 @@ export default function Login() {
                   const creds = jwtDecode(credentialResponse.credential);
                   console.log(creds);
                   router.push({
-                    pathname: "/homenew",
+                    pathname: "/student/examselect",
                   });
                 }}
                 onError={() => {
