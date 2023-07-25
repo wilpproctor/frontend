@@ -1,7 +1,7 @@
 import Link from "next/link";
 import FirstPageFooter from "../../components/FirstPageFooter";
 import LoginPageHeader from "../../components/LoginPageHeader";
-import jwtDecode from 'jwt-decode';
+import jwtDecode from "jwt-decode";
 //import GoogleSignInButton from "@/components/GoogleSignInButton";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import campus from "../../assets/campus.png";
@@ -67,13 +67,28 @@ export default function Login() {
     }
   };
 
-  const handleGoogleSignInSuccess = (userData) => {
-    console.log("Google Sign-In Success:", userData);
+  const handleGoogleSignInSuccess = async(credentialResponses) => {
+    console.log(credentialResponse);
+    const creds = jwtDecode(credentialResponse.credential);
+    console.log(creds);
+    try{
+      const response = await fetch(
+        "https://exambackend-khqy.onrender.com/api/auth/googlelogin",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: creds,
+        }
+      );
+      console.log(response);
+    }catch(e){
+      console.log(e);
+    }
     router.push({
-      pathname: "/homenew",
-      //query: { returnUrl: router.asPath },
+      pathname: "/student/examselect",
     });
-    // Handle the successful sign-in here, e.g., send the user data to the server.
   };
 
   const handleGoogleSignInFailure = () => {
@@ -132,14 +147,7 @@ export default function Login() {
           <div style={{ marginTop: "20px", marginLeft: "30%" }}>
             <GoogleOAuthProvider clientId="580012478864-r2u2irsnn7o9qog66r437lcrsuk4s0dl.apps.googleusercontent.com">
               <GoogleLogin
-                onSuccess={(credentialResponse) => {
-                  console.log(credentialResponse);
-                  const creds = jwtDecode(credentialResponse.credential);
-                  console.log(creds);
-                  router.push({
-                    pathname: "/student/examselect",
-                  });
-                }}
+                onSuccess={(credentialResponse) => {handleGoogleSignInSuccess(credentialResponse)}}
                 onError={() => {
                   console.log("Login Failed");
                 }}
