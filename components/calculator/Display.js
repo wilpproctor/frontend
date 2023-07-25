@@ -1,6 +1,6 @@
 import React from "react";
 // import "./styles/Display.css";
-import styles from "@/../styles/Display.module.css"
+import styles from "../../styles/Display.module.css"
 
 
 const Display = ({ input, setInput, answer }) => {

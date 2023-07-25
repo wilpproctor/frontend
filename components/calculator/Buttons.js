@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 // import "./styles/Buttons.css";
-import styles from "@/../styles/Buttons.module.css"
+import styles from "../../styles/Buttons.module.css"
 
 const Buttons = ({ inputHandler, clearInput, backspace, changePlusMinus, calculateAns }) => {
   useEffect(() => {

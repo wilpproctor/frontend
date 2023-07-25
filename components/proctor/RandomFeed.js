@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import StudentFeed from "./StudentFeed";
-import ProctorContext from "@/lib/ProctorContext";
+import ProctorContext from "../../lib/ProctorContext";
 
 export default function RandomFeed() {
   const { useStudentsStore } = useContext(ProctorContext);

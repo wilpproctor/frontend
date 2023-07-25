@@ -1,4 +1,4 @@
-import ProctorContext from "@/lib/ProctorContext";
+import ProctorContext from "../../lib/ProctorContext";
 import { useContext, useEffect, useRef } from "react";
 
 export default function Screen() {

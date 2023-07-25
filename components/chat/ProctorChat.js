@@ -1,12 +1,12 @@
 import { useState, useEffect, useContext, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { connect, sendMessage, readMessages } from "./chatHelper";
-import { getUserDetails } from "@/lib/login";
+import { getUserDetails } from "../../lib/login";
 import { onSnapshot } from "firebase/firestore";
-import { useChatStore } from "@/proctor/StudentFeeds";
-import { db } from "@/lib/firestore";
+import { useChatStore } from "../proctor/StudentFeeds";
+import { db } from "../../lib/firestore";
 import { query, collection, where } from "firebase/firestore";
-import ProctorContext from "@/lib/ProctorContext";
+import ProctorContext from "../../lib/ProctorContext";
 
 export default function ProctorChat() {
   const currentUser = getUserDetails();

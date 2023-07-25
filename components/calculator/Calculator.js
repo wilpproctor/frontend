@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Display from "./Display";
 import Buttons from "./Buttons";
 // import "./styles/Calculator.css";
-import styles from "@/../styles/Calculator.module.css"
+import styles from "../../styles/Calculator.module.css"
 
 import { evaluate, round } from "mathjs";
 

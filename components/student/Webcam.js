@@ -1,7 +1,7 @@
-import StudentContext from "@/lib/StudentContext";
+import StudentContext from "../../lib/StudentContext";
 import { useContext, useEffect, useRef, useState, useCallback } from "react";
-import { getUserDetails } from "@/lib/login";
-import { createDetectorSocket } from "@/lib/sockets";
+import { getUserDetails } from "../../lib/login";
+import { createDetectorSocket } from "../../lib/sockets";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

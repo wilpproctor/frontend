@@ -1,4 +1,4 @@
-import PDFEmbed from "@/widgets/PDFEmbed";
+import PDFEmbed from "../widgets/PDFEmbed";
 
 export default function MCQ({ question, options, marks, negativeMarking }) {
   return (

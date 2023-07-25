@@ -1,5 +1,5 @@
 import { getDoc, setDoc, doc, arrayUnion } from 'firebase/firestore';
-import { db } from '@/lib/firestore.js';
+import { db } from '../../lib/firestore.js';
 
 export const connect = async (proctor, student) => {
     try {
