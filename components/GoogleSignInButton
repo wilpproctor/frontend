@@ -1,0 +1,21 @@
+import React from "react";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+const GoogleSignInButton = ({ onSuccess, onFailure }) => {
+  const responseGoogle = (response) => {
+    // Handle the Google Sign-In response
+    if (response && response.profileObj) {
+      onSuccess(response.profileObj);
+    } else {
+      onFailure();
+    }
+  };
+
+  return (
+    <GoogleLogin
+      clientId="580012478864-r2u2irsnn7o9qog66r437lcrsuk4s0dl.apps.googleusercontent.com"
+      onSuccess={responseGoogle}
+      onFailure={responseGoogle}
+    />
+  );
+};
+export default GoogleSignInButton;
