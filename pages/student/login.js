@@ -1,4 +1,4 @@
-import { goFullscreen } from "@/lib/utils";
+import { goFullscreen } from "../lib/utils";
 import { useRouter } from "next/router";
 
 export default function LoginPage() {

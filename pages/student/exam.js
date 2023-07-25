@@ -1,24 +1,24 @@
-import Calculator from "@/components/calculator/Calculator";
-import CalculatorPage from "@/components/calculator/Calculator";
-import Compiler from "@/components/codeEditor/Compiler";
-import CompilerWidget from "@/components/codeEditor/CompilerWidget";
-import StudentChat from "@/components/chat/StudentChat";
-import Dictaphone from "@/components/question/Dictaphone";
+import Calculator from "../components/calculator/Calculator";
+import CalculatorPage from "../components/calculator/Calculator";
+import Compiler from "../components/codeEditor/Compiler";
+import CompilerWidget from "../components/codeEditor/CompilerWidget";
+import StudentChat from "../components/chat/StudentChat";
+import Dictaphone from "../components/question/Dictaphone";
 import "react-toastify/dist/ReactToastify.css";
-import MCQ from "@/components/question/MCQ";
-import ShortAnswer from "@/components/question/ShortAnswer";
-import Screen from "@/components/student/Screen";
-import TabDetector from "@/components/student/TabDetector";
-import Webcam from "@/components/student/Webcam";
-import StudentContext from "@/lib/StudentContext";
-import { getUserDetails } from "@/lib/login";
-import { createBackendSocket } from "@/lib/sockets";
+import MCQ from "../components/question/MCQ";
+import ShortAnswer from "../components/question/ShortAnswer";
+import Screen from "../components/student/Screen";
+import TabDetector from "../components/student/TabDetector";
+import Webcam from "../components/student/Webcam";
+import StudentContext from "../lib/StudentContext";
+import { getUserDetails } from "../lib/login";
+import { createBackendSocket } from "../lib/sockets";
 import { create } from "zustand";
 import { ToastContainer, toast } from "react-toastify";
-import StudentFeed from "@/components/proctor/StudentFeed";
-import FlowComponent from "@/components/flowchart/FlowComponent";
-import InputViewer from "@/components/chem/InputViewer";
-import Quiz from "@/components/student/mcqQuiz";
+import StudentFeed from "../components/proctor/StudentFeed";
+import FlowComponent from "../components/flowchart/FlowComponent";
+import InputViewer from "../components/chem/InputViewer";
+import Quiz from "../components/student/mcqQuiz";
 
 const useStreamStore = create((set, get) => ({
   frontcam: false,

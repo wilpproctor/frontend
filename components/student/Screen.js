@@ -1,4 +1,4 @@
-import StudentContext from "@/lib/StudentContext";
+import StudentContext from "../lib/StudentContext";
 import { useContext, useEffect, useRef } from "react";
 
 export default function Screen() {

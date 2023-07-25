@@ -1,14 +1,14 @@
-import ProctorChat from "@/components/chat/ProctorChat";
-import RandomFeed from "@/components/proctor/RandomFeed";
-import StudentFeeds from "@/components/proctor/StudentFeeds";
-import ProctorContext from "@/lib/ProctorContext";
-import { createBackendSocket } from "@/lib/sockets";
+import ProctorChat from "../components/chat/ProctorChat";
+import RandomFeed from "../components/proctor/RandomFeed";
+import StudentFeeds from "../components/proctor/StudentFeeds";
+import ProctorContext from "../lib/ProctorContext";
+import { createBackendSocket } from "../lib/sockets";
 import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { getUserDetails } from "@/lib/login";
-import Webcam from "@/components/proctor/Webcam";
-import Screen from "@/components/proctor/Screen";
+import { getUserDetails } from "../lib/login";
+import Webcam from "../components/proctor/Webcam";
+import Screen from "../components/proctor/Screen";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

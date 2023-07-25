@@ -1,7 +1,7 @@
 import Link from "next/link";
-import FirstPageFooter from "@/components/FirstPageFooter";
-import LoginPageHeader from "@/components/LoginPageHeader";
-//import GoogleSignInButton from "@/components/GoogleSignInButton";
+import FirstPageFooter from "../components/FirstPageFooter";
+import LoginPageHeader from "../components/LoginPageHeader";
+//import GoogleSignInButton from "../components/GoogleSignInButton";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import campus from "../../assets/campus.png";
 import styles from "../../styles/Display.module.css";

@@ -1,4 +1,4 @@
-import { getUserDetails } from "@/lib/login";
+import { getUserDetails } from "../lib/login";
 import React from "react";
 
 export default function FirstPageFotter() {
