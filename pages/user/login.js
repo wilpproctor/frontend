@@ -136,6 +136,9 @@ export default function Login() {
                   console.log(credentialResponse);
                   const creds = jwtDecode(credentialResponse.credential);
                   console.log(creds);
+                  router.push({
+                    pathname: "/homenew",
+                  });
                 }}
                 onError={() => {
                   console.log("Login Failed");
