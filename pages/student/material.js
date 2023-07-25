@@ -1,5 +1,5 @@
-import ExcelSheet from "@/components/widgets/ExcelSheet";
-import PDFEmbed from "@/components/widgets/PDFEmbed";
+import ExcelSheet from "../../components/widgets/ExcelSheet";
+import PDFEmbed from "../../components/widgets/PDFEmbed";
 import React from "react";
 
 

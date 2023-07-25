@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { connect, sendMessage, readMessages } from "./chatHelper";
-import { getUserDetails } from "@/lib/login";
+import { getUserDetails } from "../../lib/login";
 import { onSnapshot } from "firebase/firestore";
 import { query, collection, where } from "firebase/firestore";
 import { db } from "../../lib/firestore";

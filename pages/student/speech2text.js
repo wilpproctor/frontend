@@ -1,4 +1,4 @@
-import Dictaphone from "@/../components/question/Dictaphone";
+import Dictaphone from "../../components/question/Dictaphone";
 import React, { useState } from "react";
 
 const Speech2Text = () => {

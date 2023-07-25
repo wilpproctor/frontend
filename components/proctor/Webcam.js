@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef } from "react";
 import { getUserDetails } from "../../lib/login";
 import { createDetectorSocket } from "../../lib/sockets";
-import ProctorContext from "@/lib/ProctorContext";
+import ProctorContext from "../../lib/ProctorContext";
 
 export default function Webcam() {
   const videoRef = useRef(null);

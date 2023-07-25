@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { getUserDetails } from "@/lib/login";
-import { createBackendSocket } from "@/lib/sockets";
+import { getUserDetails } from "../../lib/login";
+import { createBackendSocket } from "../../lib/sockets";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import ProctorCards from "@/components/superproctor/ProctorCards";
-import SuperproctorContext from "@/lib/SuperproctorContext";
+import ProctorCards from "../../components/superproctor/ProctorCards";
+import SuperproctorContext from "../../lib/SuperproctorContext";
 
 export const useProctorsStore = create(
   immer((set) => ({
