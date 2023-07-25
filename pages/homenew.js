@@ -1,7 +1,7 @@
 import Link from "next/link";
-import Footer from "@/components/Footer";
+import Footer from "../components/Footer";
 import { useRouter } from "next/router";
-import SecondPageHeader from "@/components/SecondPageHeader";
+import SecondPageHeader from "../components/SecondPageHeader";
 export default function Home() {
     const router = useRouter();
     const handleButtonClick = (buttonId) => {
