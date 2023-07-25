@@ -1,5 +1,5 @@
 import ProctorContext from "../../lib/ProctorContext";
-import StudentFeed from "../../proctor/StudentFeed";
+import StudentFeed from "../proctor/StudentFeed";
 import { useContext, useState, useRef, useEffect } from "react";
 import { create } from "zustand";
 import { Tab } from "@headlessui/react";
