@@ -1,13 +1,13 @@
 import Link from "next/link";
-import FirstPageFooter from "../components/FirstPageFooter";
-import LoginPageHeader from "../components/LoginPageHeader";
-import Instruction from "../../assets/Intruc_page.jpg";
-import styles from "../../styles/Display.module.css";
+import FirstPageFooter from "@/components/FirstPageFooter";
+import LoginPageHeader from "@/components/LoginPageHeader";
+import Instruction from "@/../assets/Intruc_page.jpg";
+import styles from "@/../styles/Display.module.css";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useContext, useState, useRef, useEffect } from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function ExamStart() {
   const router = useRouter();

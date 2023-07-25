@@ -1,4 +1,4 @@
-import SuperproctorContext from "../lib/SuperproctorContext";
+import SuperproctorContext from "@/lib/SuperproctorContext";
 import { useState, useContext, useEffect, useRef } from "react";
 import { Tab } from "@headlessui/react";
 

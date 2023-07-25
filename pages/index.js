@@ -1,6 +1,6 @@
 import Link from "next/link";
 import FirstPageHeader from "../components/FirstPageHeader";
-import FirstPageFooter from "../components/FirstPageFooter";
+import FirstPageFooter from "../components/FirstPageFooter";  
 import Footer from "../components/Footer";
 import campus from "../assets/campus.png";
 import Image from "next/image";

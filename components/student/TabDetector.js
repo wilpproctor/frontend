@@ -1,5 +1,5 @@
-import StudentContext from "../lib/StudentContext";
-import { goFullscreen } from "../lib/utils";
+import StudentContext from "@/lib/StudentContext";
+import { goFullscreen } from "@/lib/utils";
 import { useContext, useEffect, useState } from "react";
 
 export default function TabDetector() {

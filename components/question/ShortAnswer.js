@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Diagram from "../widgets/Diagram";
+import Diagram from "@/widgets/Diagram";
 import Script from 'next/script';
-import PDFEmbed from "../widgets/PDFEmbed";
+import PDFEmbed from "@/widgets/PDFEmbed";
 import Marking from "./Marking";
 import Dictaphone from "./Dictaphone";
 

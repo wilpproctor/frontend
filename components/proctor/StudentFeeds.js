@@ -1,9 +1,9 @@
-import ProctorContext from "../lib/ProctorContext";
+import ProctorContext from "@/lib/ProctorContext";
 import StudentFeed from "./StudentFeed";
 import { useContext, useState, useRef, useEffect } from "react";
 import { create } from "zustand";
 import { Tab } from "@headlessui/react";
-import { createBackendSocket } from "../lib/sockets";
+import { createBackendSocket } from "@/lib/sockets";
 import { ToastContainer, toast } from "react-toastify";
 import { Page, Text, View, Image, Document, usePDF } from "@react-pdf/renderer";
 import "react-toastify/dist/ReactToastify.css";
