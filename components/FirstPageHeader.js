@@ -98,7 +98,7 @@ export default function FirstPageHeader() {
             {time.toTimeString().substring(0, 8)}
           </Link> */}
         </nav>
-        <button className="inline-flex items-center bg-blue-500 border-0 py-1 px-3 focus:outline-none hover:bg-orange-700 rounded text-white mt-4 md:mt-0">
+        <button className="inline-flex items-center bg-blue-500 border-0 focus:outline-none hover:bg-orange-700 rounded text-white mt-4 md:mt-0">
           {/* <Link
             className="px-4 py-2 text-lg bg-rose-600 text-white rounded drop-shadow"
             href="/proctor/login"
