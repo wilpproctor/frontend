@@ -5,6 +5,7 @@ import wilpimage from "../assets/wilpimage.jpg";
 import bitslogo from "../assets/bitslogo.jpeg";
 import wilplogo from "../assets/wilplogo.png";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import jwtDecode from "jwt-decode";
 
 const headerURLs = [
   {
