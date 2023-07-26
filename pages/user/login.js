@@ -83,12 +83,12 @@ export default function Login() {
         }
       );
       console.log(response);
+      router.push({
+        pathname: "/student/examselect",
+      });
     }catch(e){
       console.log(e);
     }
-    router.push({
-      pathname: "/student/examselect",
-    });
   };
 
   const handleGoogleSignInSuccessTemp = async(credentialResponse) => {
@@ -101,7 +101,7 @@ export default function Login() {
   };
 
   const handleGoogleSignInFailure = () => {
-    console.log("Google Sign-In Failed");
+    console.log("Google Sign-In Failed");  
     // router.push({
     //     pathname: "/homenew",
     //     //query: { returnUrl: router.asPath },
@@ -156,7 +156,7 @@ export default function Login() {
           <div style={{ marginTop: "20px", marginLeft: "30%" }}>
             <GoogleOAuthProvider clientId="580012478864-r2u2irsnn7o9qog66r437lcrsuk4s0dl.apps.googleusercontent.com">
               <GoogleLogin
-                onSuccess={(credentialResponse) => {handleGoogleSignInSuccessTemp(credentialResponse)}}
+                onSuccess={(credentialResponse) => {handleGoogleSignInSuccess(credentialResponse)}}
                 onError={() => {
                   console.log("Login Failed");
                 }}
