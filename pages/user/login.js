@@ -67,7 +67,7 @@ export default function Login() {
     }
   };
 
-  const handleGoogleSignInSuccess = async(credentialResponses) => {
+  const handleGoogleSignInSuccess = async(credentialResponse) => {
     console.log(credentialResponse);
     const creds = jwtDecode(credentialResponse.credential);
     console.log(creds);
@@ -86,6 +86,15 @@ export default function Login() {
     }catch(e){
       console.log(e);
     }
+    router.push({
+      pathname: "/student/examselect",
+    });
+  };
+
+  const handleGoogleSignInSuccessTemp = async(credentialResponse) => {
+    console.log(credentialResponse);
+    const creds = jwtDecode(credentialResponse.credential);
+    console.log(creds);
     router.push({
       pathname: "/student/examselect",
     });
@@ -147,7 +156,7 @@ export default function Login() {
           <div style={{ marginTop: "20px", marginLeft: "30%" }}>
             <GoogleOAuthProvider clientId="580012478864-r2u2irsnn7o9qog66r437lcrsuk4s0dl.apps.googleusercontent.com">
               <GoogleLogin
-                onSuccess={(credentialResponse) => {handleGoogleSignInSuccess(credentialResponse)}}
+                onSuccess={(credentialResponse) => {handleGoogleSignInSuccessTemp(credentialResponse)}}
                 onError={() => {
                   console.log("Login Failed");
                 }}
