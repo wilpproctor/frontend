@@ -45,12 +45,12 @@ const handleGoogleSignInSuccess = async (credentialResponse) => {
       }
     );
     console.log(response);
-    router.push({
-      pathname: "/homenew",
-    });
   } catch (e) {
     console.log(e);
   }
+  router.push({
+    pathname: "/homenew",
+  });
 };
 export default function FirstPageHeader() {
   const [time, setTime] = useState(new Date());
