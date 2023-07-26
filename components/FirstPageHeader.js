@@ -38,7 +38,9 @@ export default function FirstPageHeader() {
   const handleGoogleSignInSuccess = async (credentialResponse) => {
     console.log(credentialResponse);
     const creds = jwtDecode(credentialResponse.credential);
+    const credval=credentialResponse.credential;
     console.log(creds);
+    console.log('credval',credval);
     try {
       const response = await fetch(
         "https://exambackend-khqy.onrender.com/api/auth/googlelogin",
@@ -47,7 +49,7 @@ export default function FirstPageHeader() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: creds,
+          body: {credval},
         }
       );
       console.log(response);
