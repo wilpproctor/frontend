@@ -6,55 +6,58 @@ import bitslogo from "../assets/bitslogo.jpeg";
 import wilplogo from "../assets/wilplogo.png";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import jwtDecode from "jwt-decode";
+import { useRouter } from "next/router";
 
-const headerURLs = [
-  {
-    name: "Compiler",
-    url: "/proctor/compiler",
-  },
-  // {
-  //   name: "Dashboard",
-  //   url: "/proctor/dashboard",
-  // },
-  {
-    name: "Exam",
-    url: "/student/exam",
-  },
-  {
-    name: "speech2text",
-    // should connect to the Speect2Text component
-    url: "/student/speech2text",
-  },
-  {
-    name: "Material",
-    url: "/student/material",
-  },
-];
-const handleGoogleSignInSuccess = async (credentialResponse) => {
-  console.log(credentialResponse);
-  const creds = jwtDecode(credentialResponse.credential);
-  console.log(creds);
-  try {
-    const response = await fetch(
-      "https://exambackend-khqy.onrender.com/api/auth/googlelogin",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: creds,
-      }
-    );
-    console.log(response);
-  } catch (e) {
-    console.log(e);
-  }
-  router.push({
-    pathname: "/homenew",
-  });
-};
+
 export default function FirstPageHeader() {
+  const router = useRouter();
   const [time, setTime] = useState(new Date());
+  const headerURLs = [
+    {
+      name: "Compiler",
+      url: "/proctor/compiler",
+    },
+    // {
+    //   name: "Dashboard",
+    //   url: "/proctor/dashboard",
+    // },
+    {
+      name: "Exam",
+      url: "/student/exam",
+    },
+    {
+      name: "speech2text",
+      // should connect to the Speect2Text component
+      url: "/student/speech2text",
+    },
+    {
+      name: "Material",
+      url: "/student/material",
+    },
+  ];
+  const handleGoogleSignInSuccess = async (credentialResponse) => {
+    console.log(credentialResponse);
+    const creds = jwtDecode(credentialResponse.credential);
+    console.log(creds);
+    try {
+      const response = await fetch(
+        "https://exambackend-khqy.onrender.com/api/auth/googlelogin",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: creds,
+        }
+      );
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    }
+    router.push({
+      pathname: "/homenew",
+    });
+  };
   useEffect(() => {
     let timer = setInterval(() => setTime(new Date()), 1000);
     return () => {
