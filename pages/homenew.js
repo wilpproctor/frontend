@@ -7,17 +7,17 @@ export default function Home() {
     const handleButtonClick = (buttonId) => {
         if(buttonId==="student"){
             router.push({
-                pathname: "/user/login",
+                pathname: "/student/examselect",
                 //query: { returnUrl: router.asPath },
               });
         }else if(buttonId==="proctor"){
             router.push({
-                pathname: "/user/login",
+                pathname: "/proctor/dashboard",
                 //query: { returnUrl: router.asPath },
               });
         }else{
             router.push({
-                pathname: "/user/login",
+                pathname: "/superproctor/dashboard",
                 //query: { returnUrl: router.asPath },
               });
         }
