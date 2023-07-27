@@ -126,7 +126,9 @@ export default function Webcam() {
         const newImage = canvasRef.current
           .toDataURL("image/jpeg")
           .slice("data:image/jpeg;base64,".length);
+        console.log("images emiting: ", newImage)
         backend.emit("student-feed", newImage);
+        console.log("images emitted: ", newImage)
         const cheating = isStudentCheating(imageInfo.detected);
 
         if (cheating) {

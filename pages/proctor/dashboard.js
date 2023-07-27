@@ -81,7 +81,9 @@ export default function DashboardPage() {
   const studentAlerts = useStudentsStore((state) => state.alerts);
 
   useEffect(() => {
+    console.log("function called for student feeds fetch")
     backend.on("student-feeds", ({ email }, image) => {
+      console.log("email: ", email, ", image: ", image)
       addFeed(email, image);
     });
 
