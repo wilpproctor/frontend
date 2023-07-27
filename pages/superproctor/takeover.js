@@ -47,7 +47,7 @@ const useStudentsStore = create(
 export default function DashboardPage() {
   const email = new URLSearchParams(window.location.search).get("id");
   sessionStorage.setItem("user", JSON.stringify({ email }))
-  const backend = createBackendSocket("/proctor");
+  const backend = createBackendSocket("/proctor/dashboard");
   const feeds = useStudentsStore((state) => state.feeds);
   const addFeed = useStudentsStore((state) => state.addFeed);
   const addAlert = useStudentsStore((state) => state.addAlert);

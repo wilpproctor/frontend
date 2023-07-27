@@ -429,7 +429,7 @@ function Tile({ id, feed, onClick, onAnswer, calls }) {
 
 export default function StudentFeeds() {
   const { useStudentsStore } = useContext(ProctorContext);
-  const backend = createBackendSocket("/proctor");
+  const backend = createBackendSocket("/proctor/dashboard");
   const feeds = useStudentsStore((state) => state.feeds);
   const [active, setActive] = useState(false);
   const [answer, setAnswer] = useState(false);

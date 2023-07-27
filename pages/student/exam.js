@@ -51,7 +51,7 @@ const useStreamStore = create((set, get) => ({
 }));
 
 export default function ExamPage() {
-  const backend = createBackendSocket("/student");
+  const backend = createBackendSocket("/student/exam");
   const getImages = useStreamStore((state) => state.getImages);
 
   function sendAlert(reason) {
