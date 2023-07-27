@@ -74,7 +74,7 @@ const useStreamStore = create((set, get) => ({
 }));
 
 export default function DashboardPage() {
-  const backend = createBackendSocket("/proctor/dashboard");
+  const backend = createBackendSocket("/proctor");
   const feeds = useStudentsStore((state) => state.feeds);
   const addFeed = useStudentsStore((state) => state.addFeed);
   const addAlert = useStudentsStore((state) => state.addAlert);

@@ -35,7 +35,7 @@ export const useProctorsStore = create(
 
 export default function DashboardPage() {
   const user = getUserDetails();
-  const backend = createBackendSocket("/superproctor/dashboard");
+  const backend = createBackendSocket("/superproctor");
   const addProctor = useProctorsStore((state) => state.addProctor);
   const addAlert = useProctorsStore((state) => state.addAlert);
   const setRedStudentCount = useProctorsStore(
