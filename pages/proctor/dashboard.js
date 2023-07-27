@@ -82,7 +82,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     console.log("function called for student feeds fetch")
-    backend.on("student-feeds", ({ email }, image) => {
+    backend.on("student-feed", ({ email }, image) => {
       console.log("email: ", email, ", image: ", image)
       addFeed(email, image);
     });
