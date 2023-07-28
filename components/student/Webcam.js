@@ -62,15 +62,23 @@ export default function Webcam() {
   );
 
   useEffect(() => {
-    
+    async function fetchData(){
+    try{
     const canvasContext = canvasRef.current.getContext("2d", {
       willReadFrequently: true,
     });
+    const backend =await createBackendSocket("/proctor");
+    if (backend) {
+      backend.addEventListener("message", (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === "proctor-connected") {
+          const { email } = data;
+          console.log("Proctor logged in", email);
+          setCurrentProctor(email); // Assuming setCurrentProctor is a state setter function
+        }
+      });
+    }
 
-    backend.on("proctor-connected", ({ email }) => {
-      console.log("Proctor loged in" ,email);
-      setCurrentProctor(email);
-    })
 
     console.log("we got cameras", devices)
     
@@ -127,7 +135,8 @@ export default function Webcam() {
           .toDataURL("image/jpeg")
           .slice("data:image/jpeg;base64,".length);
         console.log("images emiting: ", newImage)
-        backend.emit("student-feed", newImage);
+        console.log("images backend: ", backend)
+        if (backend){backend.send(JSON.stringify({ type: "student-feeds", image: newImage }));}
         console.log("images emitted: ", newImage)
         const cheating = isStudentCheating(imageInfo.detected);
 
@@ -137,85 +146,109 @@ export default function Webcam() {
         }
       });
     }, 1000 / frameRate);
-
-    return () => {
-      clearInterval(interval);
-    };
+  }catch(e){
+    console.log(e);
+  }
+}
+    // return () => {
+    //   clearInterval(interval);
+    // };
+    fetchData();
   }, [devices]);
 
   useEffect(() => {
-    let peerVideo;
-    let peerScreen;
-    let peerWeb;
-    import("peerjs").then(({ default: Peer }) => {
-      peerVideo = new Peer(user.email.split("@")[0], { debug: 3 });
-      peerScreen = new Peer(user.email.split("@")[0] + "screen", {
-        debug: 3,
-      });
-      peerWeb = new Peer(user.email.split("@")[0] + "web", {
-        debug: 3,
-      });
-
-
-      peerVideo.on("open", (id) => {
-        console.log("my id:", id);
-      });
-
-      peerScreen.on("open", (id) => {
-        console.log("my id:", id);
-      });
-
-      peerWeb.on("open", (id) => {
-        console.log("my id:", id);
-      });
-
-      peerVideo.on("error", (error) => {
-        console.log("error occured:", error);
-      });
-       
-      peerVideo.on("call", (call) => {
-        call.answer(screenStream().frontcam.video.srcObject);
-        call1Ref.current = call
-        call.on("stream", (remoteStream) => {
-          // var videoTrack = remoteStream.getVideoTracks()
-          // if (videoTrack.length >0) {
-          //   remoteStream.removeTrack(videoTrack[0])
-          // }
-          if (remoteStream.getAudioTracks()[0]) {
-            console.log("status check", callStatus)
-            if (callStatus === "Call Proctor") {
-              toast("Proctor connected") 
-            }
-            setCallStatus("Disconnect")
-          }
-          console.log("we got proctor audio", remoteStream);
-          audioRef.current.srcObject = remoteStream
+    async function fetchData(){
+    try{
+      let peerVideo;
+      let peerScreen;
+      let peerWeb;
+      import("peerjs").then(({ default: Peer }) => {
+        peerVideo = new Peer(user.email.split("@")[0], { debug: 3 });
+        peerScreen = new Peer(user.email.split("@")[0] + "screen", {
+          debug: 3,
         });
+        peerWeb = new Peer(user.email.split("@")[0] + "web", {
+          debug: 3,
+        });
+  
+  
+        peerVideo.on("open", (id) => {
+          console.log("my id:", id);
+        });
+  
+        peerScreen.on("open", (id) => {
+          console.log("my id:", id);
+        });
+  
+        peerWeb.on("open", (id) => {
+          console.log("my id:", id);
+        });
+  
+        peerVideo.on("error", (error) => {
+          console.log("error occured:", error);
+        });
+         
+        peerVideo.on("call", (call) => {
+          call.answer(screenStream().frontcam.video.srcObject);
+          call1Ref.current = call
+          call.on("stream", (remoteStream) => {
+            // var videoTrack = remoteStream.getVideoTracks()
+            // if (videoTrack.length >0) {
+            //   remoteStream.removeTrack(videoTrack[0])
+            // }
+            if (remoteStream.getAudioTracks()[0]) {
+              console.log("status check", callStatus)
+              if (callStatus === "Call Proctor") {
+                toast("Proctor connected") 
+              }
+              setCallStatus("Disconnect")
+            }
+            console.log("we got proctor audio", remoteStream);
+            audioRef.current.srcObject = remoteStream
+          });
+        });
+  
+        peerWeb.on("call", (call) => {
+           call2Ref.current = call
+          call.answer(screenStream().backcam.video.srcObject);
+        });
+  
+        peerScreen.on("call", (call) => {
+           call3Ref.current = call
+          call.answer(screenStream().screenFeed.video.srcObject);
+        });
+  
       });
+      const backend =await createBackendSocket("/proctor");
+      if (backend) {
+        backend.addEventListener("message", (event) => {
+          const data = JSON.parse(event.data);
+          if (data.type === "proctor-connected") {
+            const { email } = data;
+            console.log("Proctor logged in", email);
+            setCurrentProctor(email); // Assuming setCurrentProctor is a state setter function
+          } else if (data.type === "disconnect-proctor") {
+            const { email } = data;
+            console.log("Call disconnected from proctor", email);
+            // Assuming you have access to the 'toast' function for displaying toast messages
+            toast(`Call disconnected from proctor - ${email}`);
+            // Assuming you have access to the 'setCallStatus' function for updating the call status
+            setCallStatus("Call Proctor");
+          }
+        });
+      }
+    }
+    catch(e){
+      console.log(e);
+    }
+  }
+  fetchData();
 
-      peerWeb.on("call", (call) => {
-         call2Ref.current = call
-        call.answer(screenStream().backcam.video.srcObject);
-      });
-
-      peerScreen.on("call", (call) => {
-         call3Ref.current = call
-        call.answer(screenStream().screenFeed.video.srcObject);
-      });
-
-    });
-
-    backend.on("disconnect-proctor", ({email}) => {
-      console.log("call disconnect from proctor", email)
-      toast(`Call disconnected from proctor - ${email}`)
-      setCallStatus("Call Proctor")
-    })
-
-    return () => {
-      peerScreen.destroy();
-      peerVideo.destroy();
-      peerWeb.destroy();
-    };
+    // return () => {
+    //   peerScreen.destroy();
+    //   peerVideo.destroy();
+    //   peerWeb.destroy();
+    // };
   }, [])
 
   const makeCall = (event) => {

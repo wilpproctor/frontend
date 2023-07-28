@@ -80,16 +80,39 @@ export default function DashboardPage() {
   const addAlert = useStudentsStore((state) => state.addAlert);
   const studentAlerts = useStudentsStore((state) => state.alerts);
 
-  useEffect(() => {
+  useEffect(async() => {
+    try{
     console.log("function called for student feeds fetch")
-    backend.on("student-feeds", ({ email }, image) => {
-      console.log("email: ", email, ", image: ", image)
-      addFeed(email, image);
-    });
-
-    backend.on("alert", ({ email }, data) => {
-      addAlert(email, data);
-    });
+    const backend1 =await createBackendSocket("/proctor");
+    if (backend1) {
+      //backend.addEventListener("message", (event) => {
+        const data = JSON.parse(event.data);
+        console.log('bhola',data);
+        if (data.type === "proctor-connected") {
+          const { email } = data;
+          console.log("Proctor logged in", email);
+          setCurrentProctor(email); // Assuming setCurrentProctor is a state setter function
+        } else if (data.type === "student-feeds") {
+          const { email, image } = data;
+          console.log("email: ", email, ", image: ", image);
+          // Assuming you have an "addFeed" function to handle adding the feed to your state
+          addFeed(email, image);
+        }else if (data.type === "proctor-connected") {
+          const { email } = data;
+          console.log("Proctor logged in", email);
+          setCurrentProctor(email); // Assuming setCurrentProctor is a state setter function
+        } else if (data.type === "alert") {
+          const { email, data: alertData } = data;
+          // Assuming you have an "addAlert" function to handle adding the alert to your state
+          addAlert(email, alertData);
+        }
+     // });
+    }
+  }
+catch(e){
+  console.log(e);
+}
+    
   }, []);
 
   useEffect(() => {

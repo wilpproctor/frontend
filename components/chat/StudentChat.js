@@ -5,6 +5,7 @@ import { onSnapshot } from "firebase/firestore";
 import { query, collection, where } from "firebase/firestore";
 import { db } from "../../lib/firestore";
 import StudentContext from "../../lib/StudentContext";
+import { func } from "prop-types";
 
 export default function StudentChat() {
     const currentUser = getUserDetails();
@@ -12,13 +13,54 @@ export default function StudentChat() {
     const [chatMessages, setChatMessages] = useState([]);
     const [isWindowOpen, setWindowOpen] = useState(true);
     const { backend } = useContext(StudentContext);
-
+    const onOpenCallback = () => {
+        console.log('WebSocket connection is open!');
+      };
+      
+      const onMessageCallback = (message) => {
+        console.log('Received message from backend:', message);
+      };
+      
+      const options = {
+        onOpen: onOpenCallback,
+        onMessage: onMessageCallback,
+      };
+    //const socket = createBackendSocket("/student",options);
     useEffect(() => {
-        backend.on("proctor-connected", ({ email }) => {
-            console.log(email);
-            setCurrentProctor(email);
-        })
-    }, []);
+
+        async function fetchData(){
+            try{
+                // Create a WebSocket connection to the "student" namespace on the backend
+                //why socket always null
+                const socket =await createBackendSocket("/student",options);
+                console.log(socket,"ghio");
+                // Handle the "proctor-connected" event from the backend server
+                if (socket) {
+        
+                  socket.addEventListener("message", (event) => {
+                    const data = JSON.parse(event.data);
+                    console.log('klop',data);
+                    if (data.type === "proctor-connected") {
+                      console.log(data.email);
+                      setCurrentProctor(data.email); // Assuming setCurrentProctor is a state setter function
+                    }
+                  });
+                }
+            }catch(e){
+                console.log(e);
+              }
+        }
+
+
+        fetchData();
+        // Clean up the WebSocket connection on component unmount
+        // return () => {
+        //   if (socket) {
+        //     socket.close();
+        //   }
+        // };
+      //},[socket]);
+    },[]);
 
     useEffect(() => {
         (async () => {

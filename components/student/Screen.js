@@ -23,7 +23,7 @@ export default function Screen() {
             .getVideoTracks()[0]
             .getSettings().displaySurface;
           if (displaySurface !== "monitor") {
-            alert("Choose Full screen to continue");
+            //alert("Choose Full screen to continue");
             return monitorDisplay();
           }
           videoRef.current.srcObject = stream;

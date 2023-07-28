@@ -67,7 +67,7 @@ function AlertsModal({ id, onClose }) {
     let peer = null;
     import("peerjs").then(({ default: Peer }) => {
       peer = new Peer({ debug: 3 });
-
+      console.log(peer,'peer');
       peer.on("open", (id) => {
         console.log("my id:", id);
       });
@@ -166,7 +166,7 @@ function AlertsModal({ id, onClose }) {
             <Tab className="grow p-2 ui-selected:bg-blue-300">Instances</Tab>
             <Tab
               className="grow p-2 ui-selected:bg-blue-300"
-              onClick={makeCall}
+              onClick={()=>makeCall(e)}
             >
               Live
             </Tab>
@@ -331,7 +331,7 @@ function CallModal({ id, onClose }) {
         <Tab.Group>
           <button
             className="px-2 py-1 font-semibold bg-green-500 text-white"
-            onClick={makeCall}
+            onClick={(e)=>makeCall(e)}
           >
             Connect
           </button>
@@ -429,31 +429,80 @@ function Tile({ id, feed, onClick, onAnswer, calls }) {
 
 export default function StudentFeeds() {
   const { useStudentsStore } = useContext(ProctorContext);
-  const backend = createBackendSocket("/proctor");
   const feeds = useStudentsStore((state) => state.feeds);
   const [active, setActive] = useState(false);
   const [answer, setAnswer] = useState(false);
   const [calls, setCalls] = useState(new Set());
-  useEffect(() => {
-    backend.on("call", ({ email }) => {
-      let temp = new Set(calls);
-      temp.add(email);
-      console.log(temp, calls);
-      setCalls(temp);
-      console.log("we got a call from student via call", email);
-      toast(`We got a call from student via call from ${email}`);
-    });
 
-    backend.on("disconnect-student", ({ email }) => {
-      console.log("call disconnect from student side", email);
-      toast(`Call disconnected from ${email}`);
-      let temp = new Set(calls);
-      temp.delete(email);
-      console.log(temp, calls);
-      setCalls(temp);
-      setAnswer(false);
-    });
-  }, []);
+  useEffect(async()=>{
+    try{
+    const backend =await createBackendSocket("/proctor");
+    if (backend) {
+      backend.addEventListener("message", (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === "call") {
+          const { email } = data;
+          const temp = new Set(calls);
+          temp.add(email);
+          console.log(temp, calls);
+          setCalls(temp);
+          console.log("We got a call from student via call", email);
+          // Assuming you have access to the 'toast' function for displaying toast messages
+          toast(`We got a call from student via call from ${email}`);
+        }  else if (data.type === "proctor-connected") {
+          const { email } = data;
+          console.log("Proctor logged in", email);
+          setCurrentProctor(email); // Assuming setCurrentProctor is a state setter function
+        } else if (data.type === "disconnect-student") {
+          const { email } = data;
+          console.log("Call disconnect from student side", email);
+          // Assuming you have access to the 'toast' function for displaying toast messages
+          toast(`Call disconnected from ${email}`);
+          const temp = new Set(calls);
+          temp.delete(email);
+          console.log(temp, calls);
+          setCalls(temp);
+          setAnswer(false);
+        }
+      });
+    }
+    }catch(e){
+      console.log(e);
+    }
+  },[]);
+
+
+  // useEffect(() => {
+  //   if (backend) {
+  //     backend.addEventListener("message", (event) => {
+  //       const data = JSON.parse(event.data);
+  //       if (data.type === "call") {
+  //         const { email } = data;
+  //         const temp = new Set(calls);
+  //         temp.add(email);
+  //         console.log(temp, calls);
+  //         setCalls(temp);
+  //         console.log("We got a call from student via call", email);
+  //         // Assuming you have access to the 'toast' function for displaying toast messages
+  //         toast(`We got a call from student via call from ${email}`);
+  //       }  else if (data.type === "proctor-connected") {
+  //         const { email } = data;
+  //         console.log("Proctor logged in", email);
+  //         setCurrentProctor(email); // Assuming setCurrentProctor is a state setter function
+  //       } else if (data.type === "disconnect-student") {
+  //         const { email } = data;
+  //         console.log("Call disconnect from student side", email);
+  //         // Assuming you have access to the 'toast' function for displaying toast messages
+  //         toast(`Call disconnected from ${email}`);
+  //         const temp = new Set(calls);
+  //         temp.delete(email);
+  //         console.log(temp, calls);
+  //         setCalls(temp);
+  //         setAnswer(false);
+  //       }
+  //     });
+  //   }
+  // }, []);
   const handleAnswer = (id) => {
     console.log("handle answer", calls, id);
     setAnswer(id);
