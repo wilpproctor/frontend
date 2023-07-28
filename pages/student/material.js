@@ -1,5 +1,4 @@
-import ExcelSheet from "../../components/widgets/ExcelSheet";
-import PDFEmbed from "../../components/widgets/PDFEmbed";
+import PDFEmbed from "@/components/widgets/PDFEmbed";
 import React from "react";
 
 
@@ -40,16 +39,14 @@ export default function StudyMaterial() {
     }
     return (
       <div className="h-80 overflow-hidden rounded-lg bg-gray-100 shadow-lg sm:rounded-none sm:shadow-none md:h-auto">
-      <ExcelSheet />
-   
-      <img
-    // "https://images.unsplash.com/photo-1452022449339-59005948ec5b?auto=format&q=75&fit=crop&w=600"
-      src= {url}
-      loading="lazy"
-      alt="Photo by Jeremy Cai"
-      className="h-full w-full object-cover object-center"
-    />
-  </div>
+        <img
+          // "https://images.unsplash.com/photo-1452022449339-59005948ec5b?auto=format&q=75&fit=crop&w=600"
+          src={url}
+          loading="lazy"
+          alt="Photo by Jeremy Cai"
+          className="h-full w-full object-cover object-center"
+        />
+      </div>
     )
   };
 

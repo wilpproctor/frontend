@@ -1,11 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import StudentFeed from "./StudentFeed";
-import ProctorContext from "../../lib/ProctorContext";
+import ProctorContext from "@/lib/ProctorContext";
 
 export default function RandomFeed() {
   const { useStudentsStore } = useContext(ProctorContext);
   const feeds = useStudentsStore(state => state.feeds);
-  console.log(feeds)
+
   function getRandomFeed() {
     const items = Object.keys(feeds);
     return items[Math.floor(Math.random() * items.length)];

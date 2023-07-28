@@ -6,18 +6,13 @@ const headerURLs = [
     name: "Compiler",
     url: "/proctor/compiler",
   },
-  // {
-  //   name: "Dashboard",
-  //   url: "/proctor/dashboard",
-  // },
+  {
+    name: "Dashboard",
+    url: "/proctor/dashboard",
+  },
   {
     name: "Exam",
     url: "/student/exam",
-  },
-  {
-    name: "speech2text",
-    // should connect to the Speect2Text component
-    url: "/student/speech2text",
   },
   {
     name: "Material",
@@ -59,7 +54,7 @@ export default function Header() {
             {time.toTimeString().substring(0, 8)}
           </Link>
         </nav>
-        {/* <button className="inline-flex items-center bg-blue-500 border-0 py-1 px-3 focus:outline-none hover:bg-orange-700 rounded text-white mt-4 md:mt-0">
+        <button className="inline-flex items-center bg-blue-500 border-0 py-1 px-3 focus:outline-none hover:bg-orange-700 rounded text-white mt-4 md:mt-0">
           Logout
           {
             //  <svg
@@ -74,9 +69,8 @@ export default function Header() {
             //   <path d="M5 12h14M12 5l7 7-7 7"></path>
             // </svg>
           }
-        </button> */}
+        </button>
       </div>
     </header>
-    // <></>
   );
 }

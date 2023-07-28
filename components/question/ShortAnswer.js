@@ -65,7 +65,7 @@ export default function ShortAnswer() {
                 ></math-field>
               </div>
             </div>
-            <Dictaphone outputUpdater={setAnswer}/>
+            <Dictaphone outputUpdater={setAnswer} answer={answer} />
             <p className="text-sm mt-4 text-gray-500 mb-4 w-full">
               Note: You can resize the answer area by dragging it.
             </p>

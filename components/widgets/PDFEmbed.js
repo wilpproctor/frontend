@@ -13,6 +13,5 @@ export default function PDFEmbed({ pdfURL, dimension="s"}) {
         </p>
       </object>
     </div>
-    // <></>
   );
 }

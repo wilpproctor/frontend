@@ -1,4 +1,4 @@
-import Landing from "../../components/codeEditor/Landing";
+import Landing from "@/components/codeEditor/Landing";
 
 export default function WorkingCompiler() {
 

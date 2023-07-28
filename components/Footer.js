@@ -1,9 +1,8 @@
-import { getUserDetails} from '../lib/login';
+import { getUserDetails } from "@/lib/login";
 import React from "react";
 
 export default function Footer() {
   return (
-    <>
     <footer className="text-gray-600 body-font border-t-2 my-8">
       <div className="container px-5 py-5 mx-auto flex items-center sm:flex-row flex-col">
         <a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
@@ -95,6 +94,5 @@ export default function Footer() {
         </span>
       </div>
     </footer>
-    </>
   );
 }
