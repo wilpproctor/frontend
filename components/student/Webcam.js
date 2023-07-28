@@ -67,10 +67,17 @@ export default function Webcam() {
       willReadFrequently: true,
     });
 
-    backend.on("proctor-connected", ({ email }) => {
-      console.log("Proctor loged in" ,email);
-      setCurrentProctor(email);
-    })
+    if (backend) {
+      backend.addEventListener("message", (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === "proctor-connected") {
+          const { email } = data;
+          console.log("Proctor logged in", email);
+          setCurrentProctor(email); // Assuming setCurrentProctor is a state setter function
+        }
+      });
+    }
+
 
     console.log("we got cameras", devices)
     
@@ -127,7 +134,8 @@ export default function Webcam() {
           .toDataURL("image/jpeg")
           .slice("data:image/jpeg;base64,".length);
         console.log("images emiting: ", newImage)
-        backend.emit("student-feed", newImage);
+        console.log("images backend: ", backend)
+        if (backend){backend.send(JSON.stringify({ type: "student-feed", image: newImage }));}
         console.log("images emitted: ", newImage)
         const cheating = isStudentCheating(imageInfo.detected);
 
@@ -205,11 +213,23 @@ export default function Webcam() {
 
     });
 
-    backend.on("disconnect-proctor", ({email}) => {
-      console.log("call disconnect from proctor", email)
-      toast(`Call disconnected from proctor - ${email}`)
-      setCallStatus("Call Proctor")
-    })
+    if (backend) {
+      backend.addEventListener("message", (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === "proctor-connected") {
+          const { email } = data;
+          console.log("Proctor logged in", email);
+          setCurrentProctor(email); // Assuming setCurrentProctor is a state setter function
+        } else if (data.type === "disconnect-proctor") {
+          const { email } = data;
+          console.log("Call disconnected from proctor", email);
+          // Assuming you have access to the 'toast' function for displaying toast messages
+          toast(`Call disconnected from proctor - ${email}`);
+          // Assuming you have access to the 'setCallStatus' function for updating the call status
+          setCallStatus("Call Proctor");
+        }
+      });
+    }
 
     return () => {
       peerScreen.destroy();
@@ -225,11 +245,20 @@ export default function Webcam() {
       call2Ref.current?.close()
       call3Ref.current?.close()
       setCallStatus("Call Proctor")
-      backend.emit("disconnect-student", "call disconnected by student");
+      const message = "call disconnected by student";
+  const data = JSON.stringify({
+    type: "disconnect-student",
+    message: message,
+  });
+  backend.send(data);
     } else {
       if (currentProctor) {
         console.log("My proctor is" ,currentProctor)
-        backend.emit("call", "call made by student");
+        const data = JSON.stringify({
+          type: "call",
+          message: "call made by student",
+        });
+        backend.send(data);
         setCallStatus("Connecting ...")
     } else {
       console.log("No proctor available" ,currentProctor)

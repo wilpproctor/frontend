@@ -109,10 +109,10 @@ export default function FirstPageHeader() {
             className="px-4 py-2 text-lg bg-rose-600 text-white rounded drop-shadow"
             href="/proctor/login"
           > */}
-          {/* <Link href="/homenew">
+          <Link href="/homenew">
             <div>Hi</div>
-            </Link> */}
-            <GoogleOAuthProvider clientId="580012478864-r2u2irsnn7o9qog66r437lcrsuk4s0dl.apps.googleusercontent.com">
+            </Link>
+            {/* <GoogleOAuthProvider clientId="580012478864-r2u2irsnn7o9qog66r437lcrsuk4s0dl.apps.googleusercontent.com">
               <GoogleLogin
                 onSuccess={(credentialResponse) => {
                   handleGoogleSignInSuccess(credentialResponse);
@@ -121,7 +121,7 @@ export default function FirstPageHeader() {
                   console.log("Login Failed");
                 }}
               />
-            </GoogleOAuthProvider>
+            </GoogleOAuthProvider> */}
             {
               //  <svg
               //   fill="none"

@@ -69,7 +69,12 @@ export default function DashboardPage() {
 
   const sendReplyAction = (student, message) => {
     toast.error(`You have not replied to ${student}. Alerting superproctor...`);
-    backend.emit("chat-alert", { student, message });
+    const data = JSON.stringify({
+      type: "chat-alert",
+      student: student,
+      message: message,
+    });
+    backend.send(data);
   }
 
   return (

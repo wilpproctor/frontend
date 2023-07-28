@@ -25,9 +25,16 @@ export default function ProctorChat() {
 
   useEffect(() => {
     (async () => {
-      backend.on("student-feeds", (obj) => {
-        connect(currentUser.email, obj.email);
-      });
+      if (backend) {
+        backend.addEventListener("message", (event) => {
+          const data = JSON.parse(event.data);
+          if (data.type === "proctor-connected") {
+            const { email } = data;
+            console.log("Proctor logged in", email);
+            setCurrentProctor(email); // Assuming setCurrentProctor is a state setter function
+          }
+        });
+      }
       const q = query(
         collection(db, "chat"),
         where("proctor", "==", currentUser.email)

@@ -68,10 +68,13 @@ export default function ExamPage() {
         </div>
       </div>
     );
-    backend.emit("alert", {
-      reason,
-      images: getImages(),
-    });
+      const data = JSON.stringify({
+        type: "alert",
+        reason: reason,
+        images: images,
+      });
+      if (backend)
+      {backend.send(data);}
   }
 
   return (

@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { connect, sendMessage, readMessages } from "./chatHelper";
 import { getUserDetails } from "../../lib/login";
+import { createBackendSocket } from "../../lib/sockets";
 import { onSnapshot } from "firebase/firestore";
 import { query, collection, where } from "firebase/firestore";
 import { db } from "../../lib/firestore";
@@ -14,11 +15,27 @@ export default function StudentChat() {
     const { backend } = useContext(StudentContext);
 
     useEffect(() => {
-        backend.on("proctor-connected", ({ email }) => {
-            console.log(email);
-            setCurrentProctor(email);
-        })
-    }, []);
+        // Create a WebSocket connection to the "student" namespace on the backend
+        const socket = createBackendSocket("/student");
+    
+        // Handle the "proctor-connected" event from the backend server
+        if (socket) {
+          socket.addEventListener("message", (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === "proctor-connected") {
+              console.log(data.email);
+              setCurrentProctor(data.email); // Assuming setCurrentProctor is a state setter function
+            }
+          });
+        }
+    
+        // Clean up the WebSocket connection on component unmount
+        return () => {
+          if (socket) {
+            socket.close();
+          }
+        };
+      }, []);
 
     useEffect(() => {
         (async () => {

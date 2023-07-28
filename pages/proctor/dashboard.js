@@ -82,20 +82,48 @@ export default function DashboardPage() {
 
   useEffect(() => {
     console.log("function called for student feeds fetch")
-    backend.on("student-feeds", ({ email }, image) => {
-      console.log("email: ", email, ", image: ", image)
-      addFeed(email, image);
-    });
-
-    backend.on("alert", ({ email }, data) => {
-      addAlert(email, data);
-    });
+    if (backend) {
+      backend.addEventListener("message", (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === "proctor-connected") {
+          const { email } = data;
+          console.log("Proctor logged in", email);
+          setCurrentProctor(email); // Assuming setCurrentProctor is a state setter function
+        } else if (data.type === "student-feeds") {
+          const { email, image } = data;
+          console.log("email: ", email, ", image: ", image);
+          // Assuming you have an "addFeed" function to handle adding the feed to your state
+          addFeed(email, image);
+        }
+      });
+      backend.addEventListener("message", (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === "proctor-connected") {
+          const { email } = data;
+          console.log("Proctor logged in", email);
+          setCurrentProctor(email); // Assuming setCurrentProctor is a state setter function
+        } else if (data.type === "alert") {
+          const { email, data: alertData } = data;
+          // Assuming you have an "addAlert" function to handle adding the alert to your state
+          addAlert(email, alertData);
+        }
+      });
+    }
+    
+    
   }, []);
 
   useEffect(() => {
     const count = Object.values(studentAlerts).filter((x) => x.length >= 5).length;
     if (count > 0) {
-      backend.emit("red-students", count);
+      const data = JSON.stringify({
+        type: "red-students",
+        count: count,
+      });
+      if (backend.readyState == 1){
+        console.log("Are you there");
+        backend.send(data);
+      }
     }
 
   }, [studentAlerts])
@@ -106,7 +134,12 @@ export default function DashboardPage() {
 
   const sendReplyAction = (student, message) => {
     toast.error(`You have not replied to ${student}. Alerting superproctor...`);
-    backend.emit("chat-alert", { student, message });
+    const data = JSON.stringify({
+      type: "chat-alert",
+      student: student,
+      message: message,
+    });
+    backend.send(data);
   };
 
   return (

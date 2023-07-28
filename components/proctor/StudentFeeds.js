@@ -435,24 +435,42 @@ export default function StudentFeeds() {
   const [answer, setAnswer] = useState(false);
   const [calls, setCalls] = useState(new Set());
   useEffect(() => {
-    backend.on("call", ({ email }) => {
-      let temp = new Set(calls);
-      temp.add(email);
-      console.log(temp, calls);
-      setCalls(temp);
-      console.log("we got a call from student via call", email);
-      toast(`We got a call from student via call from ${email}`);
-    });
+    if (backend) {
+      backend.addEventListener("message", (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === "call") {
+          const { email } = data;
+          const temp = new Set(calls);
+          temp.add(email);
+          console.log(temp, calls);
+          setCalls(temp);
+          console.log("We got a call from student via call", email);
+          // Assuming you have access to the 'toast' function for displaying toast messages
+          toast(`We got a call from student via call from ${email}`);
+        }
+      });
+    }
 
-    backend.on("disconnect-student", ({ email }) => {
-      console.log("call disconnect from student side", email);
-      toast(`Call disconnected from ${email}`);
-      let temp = new Set(calls);
-      temp.delete(email);
-      console.log(temp, calls);
-      setCalls(temp);
-      setAnswer(false);
-    });
+    if (backend) {
+      backend.addEventListener("message", (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === "proctor-connected") {
+          const { email } = data;
+          console.log("Proctor logged in", email);
+          setCurrentProctor(email); // Assuming setCurrentProctor is a state setter function
+        } else if (data.type === "disconnect-student") {
+          const { email } = data;
+          console.log("Call disconnect from student side", email);
+          // Assuming you have access to the 'toast' function for displaying toast messages
+          toast(`Call disconnected from ${email}`);
+          const temp = new Set(calls);
+          temp.delete(email);
+          console.log(temp, calls);
+          setCalls(temp);
+          setAnswer(false);
+        }
+      });
+    }
   }, []);
   const handleAnswer = (id) => {
     console.log("handle answer", calls, id);
@@ -460,8 +478,13 @@ export default function StudentFeeds() {
   };
 
   const handleClose = () => {
-    console.log("closing");
-    backend.emit("disconnect-proctor", "Closing from proctor side");
+    console.log("closing");const message = "Closing from proctor side";
+    const data = JSON.stringify({
+      type: "disconnect-proctor",
+      message: message,
+    });
+    backend.send(data);
+    
     setAnswer(false);
   };
   return (
