@@ -50,7 +50,7 @@ export default function FirstPageHeader() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: {credResp},
+          body: credResp,
         }
       );
       console.log(response);
