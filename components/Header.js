@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-
+import axios from 'axios'
 const headerURLs = [
   {
     name: "Compiler",
@@ -27,10 +27,51 @@ const headerURLs = [
 
 export default function Header() {
   const [time, setTime] = useState(new Date());
+  const [backTimer, setBackTimer] = useState(null);
+
   useEffect(() => {
-    let timer = setInterval(() => setTime(new Date()), 1000);
-    return () => { clearInterval(timer); };
-  })
+    console.log("jdncsjn")
+    const timer = setInterval(() => {
+      setTime(new Date());
+      fetchBackTimer();
+    }, 1000);
+    console.log("jd==csjn")
+    fetchBackTimer();
+    console.log("jdncinininijninsjn")
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+  const formatTime = (time) => {
+    const hours = Math.floor(time / 3600000);
+    const minutes = Math.floor((time % 3600000) / 60000);
+    const seconds = Math.floor((time % 60000) / 1000);
+    console.log("Time: ", `${hours.toString().padStart(2, '0')}:${minutes
+      .toString()
+      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`)
+    return `${hours.toString().padStart(2, '0')}:${minutes
+      .toString()
+      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
+  const fetchBackTimer = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:4000/api/back-timer",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json(); // Parse the response JSON
+      const { remainingTime } = data;
+      console.log(data)
+      setBackTimer(remainingTime);
+    } catch (error) {
+      console.error('Error fetching back timer:', error);
+    }
+  };
   return (
     <header className="text-gray-400 bg-blue-600 body-font">
       <div className="container mx-auto flex flex-wrap p-3 flex-col md:flex-row items-center">
@@ -55,9 +96,9 @@ export default function Header() {
               {name}
             </Link>
           ))}
-          <Link key={10} className="mr-5 hover:text-white" href={"/"}>
-            {time.toTimeString().substring(0, 8)}
-          </Link>
+          <div className="mr-5 hover:text-white">
+          {backTimer && formatTime(backTimer)}
+          </div>
         </nav>
         {/* <button className="inline-flex items-center bg-blue-500 border-0 py-1 px-3 focus:outline-none hover:bg-orange-700 rounded text-white mt-4 md:mt-0">
           Logout
