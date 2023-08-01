@@ -54,8 +54,18 @@ export default function FirstPageHeader() {
         }
       );
       console.log(response);
+    //   {
+    //     "username": "jainrjk9199",
+    //     "role": "user",
+    //     "email": "jainrjk9199@gmail.com",
+    //     "token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjRjOTkyYjg1YjcwM2I5NzU5MTUxNDk4Iiwicm9sZSI6InVzZXIiLCJ1c2VybmFtZSI6ImphaW5yams5MTk5IiwiZW1haWwiOiJqYWlucmprOTE5OUBnbWFpbC5jb20iLCJpYXQiOjE2OTA5MzE4OTYsImV4cCI6MTY5MTUzNjY5Nn0.8u1Hy-mw6A9Rv8P0mRtFMe5xJEOOBJEVOSoIczKzcWc",
+    //     "expiresIn": "100",
+    //     "message": "You are successfully logged in.",
+    //     "success": true
+    // }
       if (response.status === 200){
-        sessionStorage.setItem("cookie", response.data.token)
+        const data = await response.json();
+        sessionStorage.setItem("cookie", data.token)
         router.push({
           pathname: "/student/examselect",
         });
