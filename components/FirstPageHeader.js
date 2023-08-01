@@ -54,9 +54,16 @@ export default function FirstPageHeader() {
         }
       );
       console.log(response);
-      router.push({
-        pathname: "/homenew",
-      });
+      if (response.status === 200){
+        sessionStorage.setItem("cookie", response.data.token)
+        router.push({
+          pathname: "/homenew",
+        });
+      }
+      else {
+        alert("Login Error")
+      }
+      
     } catch (e) {
       console.log(e);
     }
