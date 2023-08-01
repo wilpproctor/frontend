@@ -43,22 +43,23 @@ export default function FirstPageHeader() {
     console.log('credval',credval);
     try {
       const response = await fetch(
-        "https://exambackend-khqy.onrender.com/api/auth/googlelogin",
+        "https://exambackend-khqy.onrender.com/api/auth/googleLogin",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: {credval},
+          body: {credentialResponse},
         }
       );
       console.log(response);
+      router.push({
+        pathname: "/homenew",
+      });
     } catch (e) {
       console.log(e);
     }
-    router.push({
-      pathname: "/homenew",
-    });
+    
   };
   useEffect(() => {
     let timer = setInterval(() => setTime(new Date()), 1000);
