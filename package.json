@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 8000",
+    "dev": "next dev -p 5000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -20,6 +20,7 @@
     "disable-devtool": "^0.3.6",
     "firebase": "^9.23.0",
     "html-to-image": "^1.11.11",
+    "jwt-decode": "^3.1.2",
     "mathjs": "^11.8.2",
     "mhchemparser": "^4.2.1",
     "monaco-themes": "^0.4.4",
@@ -41,7 +42,6 @@
     "socket.io-client": "^4.7.1",
     "tailwindcss": "3.3.2",
     "use-immer": "^0.9.0",
-    "zustand": "^4.3.9",
-    "jwt-decode": "^3.1.2"
+    "zustand": "^4.3.9"
   }
 }
