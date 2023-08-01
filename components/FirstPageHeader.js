@@ -57,7 +57,7 @@ export default function FirstPageHeader() {
       if (response.status === 200){
         sessionStorage.setItem("cookie", response.data.token)
         router.push({
-          pathname: "/homenew",
+          pathname: "/student/examselect",
         });
       }
       else {
