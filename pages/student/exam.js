@@ -19,6 +19,9 @@ import StudentFeed from "../../components/proctor/StudentFeed";
 import FlowComponent from "../../components/flowchart/FlowComponent";
 import InputViewer from "../../components/chem/InputViewer";
 import Quiz from "../../components/student/mcqQuiz";
+import Header from "../../components/Header";
+import { useState, useEffect } from "react";
+import StudyMaterial from "./material";
 
 const useStreamStore = create((set, get) => ({
   frontcam: false,
@@ -53,6 +56,11 @@ const useStreamStore = create((set, get) => ({
 export default function ExamPage() {
   const backend = createBackendSocket("/student");
   const getImages = useStreamStore((state) => state.getImages);
+  const [text, setText] = useState("");
+
+  const handleTextChange = (event) => {
+    setText(event.target.value);
+  };
 
   function sendAlert(reason) {
     const images = getImages();
@@ -76,6 +84,7 @@ export default function ExamPage() {
 
   return (
     <StudentContext.Provider value={{ backend, useStreamStore, sendAlert }}>
+      <Header />
       <ToastContainer
         position="top-right"
         autoClose={2000}
@@ -98,7 +107,8 @@ export default function ExamPage() {
             question={{ heading: "MCQ 1", text: "What is the best option?" }}
             options={["First", "Second", "Third", "Fourth"]}
           /> */}
-          <Quiz /> 
+          <Quiz />
+          <StudyMaterial /> {/* Place the StudyMaterial component here */}
           {/* <Dictaphone /> */}
           {/* <FlowComponent /> */}
           {/* <div className="h-[800px] w-[950x] flex items-center justify-center">
@@ -109,6 +119,28 @@ export default function ExamPage() {
           <div>
             <Calculator />
           </div>
+          <div style={{ /* Inline styling for card container */
+          backgroundColor: "#ffffff",
+          border: "1px solid #ccc",
+          borderRadius: "4px",
+          padding: "10px",
+          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+          width: "100%" /* Make the card span the entire width */
+        }}>
+          <textarea
+            value={text}
+            onChange={handleTextChange}
+            placeholder="Click 'Start Recording' to begin"
+            style={{
+              border: "none",
+              width: "100%", /* Make the textarea span the entire width */
+              flexGrow: 1,
+              resize: "vertical",
+              padding: "10px"
+            }}
+          />
+          <Dictaphone outputUpdater={setText} answer="" />
+        </div>
           <div>
             <StudentChat />
           </div>

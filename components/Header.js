@@ -2,27 +2,27 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
 const headerURLs = [
-  {
-    name: "Compiler",
-    url: "/proctor/compiler",
-  },
+  // {
+  //   name: "Compiler",
+  //   url: "/proctor/compiler",
+  // },
   // {
   //   name: "Dashboard",
   //   url: "/proctor/dashboard",
   // },
-  {
-    name: "Exam",
-    url: "/student/exam",
-  },
-  {
-    name: "speech2text",
-    // should connect to the Speect2Text component
-    url: "/student/speech2text",
-  },
-  {
-    name: "Material",
-    url: "/student/material",
-  },
+  // {
+  //   name: "Exam",
+  //   url: "/student/exam",
+  // },
+  // {
+  //   name: "speech2text",
+  //   // should connect to the Speect2Text component
+  //   url: "/student/speech2text",
+  // },
+  // {
+  //   name: "PDFs",
+  //   url: "/student/material",
+  // },
 ];
 
 export default function Header() {
