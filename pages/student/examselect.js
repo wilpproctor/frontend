@@ -8,8 +8,58 @@ import { useRouter } from "next/router";
 import { useContext, useState, useRef, useEffect } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import Card from "../../components/Card/Card";
 
 export default function ExamSelect() {
+  // const [arr, setArr] = useState([]);
+
+  // // Function to fetch data from the API
+  // const fetchDataFromAPI = async () => {
+  //   try {
+  //     const response = await axios.get("YOUR_API_ENDPOINT");
+  //     // Assuming the API returns an array of exam data in response.data
+  //     setArr(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching data from the API:", error);
+  //   }
+  // };
+  const arr=[
+    {
+      company: "Cummins",
+      subject: "Engineering Materials",
+      exam_type: "EC1",
+      time: "10:30 am",
+      date: "07/08/2023"
+    },
+    {
+      company: "Cummins",
+      subject: "Engineering Materials",
+      exam_type: "EC1",
+      time: "10:30 am",
+      date: "07/08/2023"
+    },
+    {
+      company: "Cummins",
+      subject: "Engineering Materials",
+      exam_type: "EC1",
+      time: "10:30 am",
+      date: "07/08/2023"
+    },
+    {
+      company: "Cummins",
+      subject: "Engineering Materials",
+      exam_type: "EC1",
+      time: "10:30 am",
+      date: "07/08/2023"
+    },
+    {
+      company: "Cummins",
+      subject: "Engineering Materials",
+      exam_type: "EC1",
+      time: "10:30 am",
+      date: "07/08/2023"
+    },
+  ]
   const router = useRouter();
   return (
     <>
@@ -22,6 +72,30 @@ export default function ExamSelect() {
           justifyContent: "center",
         }}
       >
+      {arr.map((ele)=>{
+        return(
+          <>
+          <div onClick={() => {
+            router.push({
+                pathname: "/student/examstart",
+                //query: { returnUrl: router.asPath },
+              });
+          }}
+          // onClick={fetchDataFromAPI}
+          >
+          <Card company={ele.company} subject={ele.subject} exam_type={ele.exam_type} time={ele.time} date={ele.date}/></div>
+            {/* <div style={{display: "flex", flexDirection: "row"}}>
+              <div>{ele.company}</div>
+              <div>{ele.company}</div>
+              <div>{ele.company}</div>
+              <div>{ele.company}</div>
+              <div>{ele.company}</div>
+            </div> */}
+          </>
+        )
+         
+      })}
+{/* 
         <div
           style={{
             fontSize: "30px",
@@ -192,8 +266,9 @@ export default function ExamSelect() {
             (10)
           </div>
           <div style={{marginLeft: "25%", marginTop: "5%"}}>Avail NOW!!</div>
-        </div>
-      </div>
+        </div>*/}
+      </div> 
+
       <Footer />
     </>
   );
