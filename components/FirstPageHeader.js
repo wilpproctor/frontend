@@ -36,7 +36,8 @@ export default function FirstPageHeader() {
     },
   ];
   const handleGoogleSignInSuccess = async (credentialResponse) => {
-    console.log(credentialResponse);
+    console.log(credentialResponse.json());
+    const credentialResponse = credentialResponse.json()
     const creds = jwtDecode(credentialResponse.credential);
     const credval=credentialResponse.credential;
     console.log(creds);
