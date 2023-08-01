@@ -56,7 +56,7 @@ export default function Header() {
   const fetchBackTimer = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/back-timer`,
+        `https://exambackend-khqy.onrender.com/api/back-timer`,
         {
           method: "GET",
           headers: {

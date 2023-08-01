@@ -120,7 +120,7 @@ const Quiz = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:4000/api/exams",
+          "https://exambackend-khqy.onrender.com/api/exams",
           {
             method: "GET",
             headers: {
@@ -137,7 +137,7 @@ const Quiz = () => {
           let questionid=questiondata[currInd];
           setNextid(questiondata[1]);
           const response1 = await fetch(
-            "http://localhost:4000/api/question/"+questionid,
+            "https://exambackend-khqy.onrender.com/api/question/"+questionid,
             {
               method: "GET",
               headers: {
@@ -212,7 +212,7 @@ const Quiz = () => {
          setLoading(true);
           let questionid=examdata[currInd];
           const response1 = await fetch(
-            "http://localhost:4000/api/question/"+questionid,
+            "https://exambackend-khqy.onrender.com/api/question/"+questionid,
             {
               method: "GET",
               headers: {
@@ -247,7 +247,7 @@ const Quiz = () => {
     setLoading(true);
      let questionid=examdata[currInd];
      const response1 = await fetch(
-       "http://localhost:4000/api/question/"+questionid,
+       "https://exambackend-khqy.onrender.com/api/question/"+questionid,
        {
          method: "GET",
          headers: {
