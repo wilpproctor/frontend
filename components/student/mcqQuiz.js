@@ -125,6 +125,7 @@ const Quiz = () => {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
+              "authorization": sessionStorage.getItem("cookie")
             },
           }
         );
@@ -142,6 +143,7 @@ const Quiz = () => {
               method: "GET",
               headers: {
                 "Content-Type": "application/json",
+                "authorization": sessionStorage.getItem("cookie")
               },
             }
           );
@@ -217,6 +219,7 @@ const Quiz = () => {
               method: "GET",
               headers: {
                 "Content-Type": "application/json",
+                "authorization": sessionStorage.getItem("cookie")
               },
             }
           );
@@ -252,6 +255,7 @@ const Quiz = () => {
          method: "GET",
          headers: {
            "Content-Type": "application/json",
+           "authorization": sessionStorage.getItem("cookie")
          },
        }
      );
