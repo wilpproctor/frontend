@@ -44,7 +44,7 @@ export default function FirstPageHeader() {
     console.log('credval',credval);
     try {
       const response = await fetch(
-        "https://exambackend-khqy.onrender.com/api/auth/googleLogin",
+        "https://exambackend-khqy.onrender.com/api/auth/google-login",
         {
           method: "POST",
           headers: {
@@ -65,7 +65,7 @@ export default function FirstPageHeader() {
     // }
       if (response.status === 200){
         const data = await response.json();
-        sessionStorage.setItem("cookie", data.token)
+        sessionStorage.setItem("cookie", 'Bearer ' + data.token)
         router.push({
           pathname: "/student/examselect",
         });
