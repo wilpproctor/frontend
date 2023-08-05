@@ -36,12 +36,9 @@ export default function FirstPageHeader() {
     },
   ];
   const handleGoogleSignInSuccess = async (credentialResponse) => {
-    console.log(credentialResponse);
     const credResp = JSON.stringify(credentialResponse)
     const creds = jwtDecode(credentialResponse.credential);
     const credval=credentialResponse.credential;
-    console.log(creds);
-    console.log('credval',credval);
     try {
       const response = await fetch(
         "https://exambackend-khqy.onrender.com/api/auth/google-login",
@@ -65,7 +62,12 @@ export default function FirstPageHeader() {
     // }
       if (response.status === 200){
         const data = await response.json();
-        sessionStorage.setItem("cookie", 'Bearer ' + data.token)
+        sessionStorage.setItem("cookie", 'Bearer ' + data.sessionToken)
+        const user = {
+          "email": data.email,
+          "username": data.username
+        }
+        sessionStorage.setItem("user", user)
         router.push({
           pathname: "/student/examselect",
         });
