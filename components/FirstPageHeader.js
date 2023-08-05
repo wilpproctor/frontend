@@ -67,7 +67,7 @@ export default function FirstPageHeader() {
           "email": data.email,
           "username": data.username
         }
-        sessionStorage.setItem("user", user)
+        sessionStorage.setItem("user", JSON.stringify(user))
         router.push({
           pathname: "/student/examselect",
         });
