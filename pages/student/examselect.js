@@ -66,12 +66,12 @@ export default function ExamSelect() {
 
   useEffect(() => {
     const url = "https://exambackend-khqy.onrender.com/api/student/examFromUser/wilpproctor@gmail.com";
-    const bearerToken = "YOUR_BEARER_TOKEN";
+    const bearerToken = sessionStorage.getItem("cookie");
 
     fetch(url, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${bearerToken}`
+        'Authorization': bearerToken
       }
     })
     .then(response => response.json())
