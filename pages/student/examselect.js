@@ -23,49 +23,51 @@ export default function ExamSelect() {
   //     console.error("Error fetching data from the API:", error);
   //   }
   // };
-  const arr=[
-    {
-      company: "Cummins",
-      subject: "Engineering Materials",
-      exam_type: "EC1",
-      time: "10:30 am",
-      date: "07/08/2023"
-    },
-    {
-      company: "Cummins",
-      subject: "Engineering Materials",
-      exam_type: "EC1",
-      time: "10:30 am",
-      date: "07/08/2023"
-    },
-    {
-      company: "Cummins",
-      subject: "Engineering Materials",
-      exam_type: "EC1",
-      time: "10:30 am",
-      date: "07/08/2023"
-    },
-    {
-      company: "Cummins",
-      subject: "Engineering Materials",
-      exam_type: "EC1",
-      time: "10:30 am",
-      date: "07/08/2023"
-    },
-    {
-      company: "Cummins",
-      subject: "Engineering Materials",
-      exam_type: "EC1",
-      time: "10:30 am",
-      date: "07/08/2023"
-    },
-  ]
+  // const arr=[
+  //   {
+  //     company: "Cummins",
+  //     subject: "Engineering Materials",
+  //     exam_type: "EC1",
+  //     time: "10:30 am",
+  //     date: "07/08/2023"
+  //   },
+  //   {
+  //     company: "Cummins",
+  //     subject: "Engineering Materials",
+  //     exam_type: "EC1",
+  //     time: "10:30 am",
+  //     date: "07/08/2023"
+  //   },
+  //   {
+  //     company: "Cummins",
+  //     subject: "Engineering Materials",
+  //     exam_type: "EC1",
+  //     time: "10:30 am",
+  //     date: "07/08/2023"
+  //   },
+  //   {
+  //     company: "Cummins",
+  //     subject: "Engineering Materials",
+  //     exam_type: "EC1",
+  //     time: "10:30 am",
+  //     date: "07/08/2023"
+  //   },
+  //   {
+  //     company: "Cummins",
+  //     subject: "Engineering Materials",
+  //     exam_type: "EC1",
+  //     time: "10:30 am",
+  //     date: "07/08/2023"
+  //   },
+  // ]
 
   const router = useRouter();
   const [data, setData] = useState(null);
-
+  const storedUserJSON = sessionStorage.getItem("user");
+  const storedUser = JSON.parse(storedUserJSON);
+  const email=storedUser.email;
   useEffect(() => {
-    const url = "https://exambackend-khqy.onrender.com/api/student/examFromUser/wilpproctor@gmail.com";
+    const url = `https://exambackend-khqy.onrender.com/api/student/examFromUser/${email}`;
     const bearerToken = sessionStorage.getItem("cookie");
 
     fetch(url, {
