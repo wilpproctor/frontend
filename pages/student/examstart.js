@@ -33,7 +33,7 @@ export default function ExamStart() {
           }}
           onClick={() => {
             router.push({
-                pathname: `/student/exam${examId}`,
+                pathname: `/student/exam`,
                 //query: { returnUrl: router.asPath },
               });
           }}

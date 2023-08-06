@@ -9,6 +9,7 @@ import { useContext, useState, useRef, useEffect } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Card from "../../components/Card/Card";
+import { useDispatch } from 'react-redux';
 
 export default function ExamSelect() {
   // const [arr, setArr] = useState([]);
@@ -60,7 +61,7 @@ export default function ExamSelect() {
   //     date: "07/08/2023"
   //   },
   // ]
-
+  const dispatch = useDispatch();
   const router = useRouter();
   const [data, setData] = useState(null);
   const storedUserJSON = sessionStorage.getItem("user");
@@ -81,6 +82,14 @@ export default function ExamSelect() {
     .catch(error => console.error('Error fetching data:', error));
   }, []);
   console.log('data',data);
+  const handleExamStart = (examId) => {
+    dispatch({ type: 'SET_EXAM_ID', payload: examId });
+    router.push({
+      pathname: `/student/examstart`,
+      //query: { returnUrl: router.asPath },
+    });
+    // Other logic or navigation
+  };
   return (
     <>
       <Header />
@@ -96,10 +105,7 @@ export default function ExamSelect() {
         return(
           <>
           <div onClick={() => {
-            router.push({
-                pathname: `/student/examstart${ele._id}`,
-                //query: { returnUrl: router.asPath },
-              });
+           handleExamStart(ele._id)
           }}
           // onClick={fetchDataFromAPI}
           >
