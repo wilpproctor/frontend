@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { useRouter } from "next/router";
 import AnswerInput from '../AnswerInput';
+import { useSelector } from 'react-redux';
 
 // const questions = [
 //   {
@@ -97,7 +98,7 @@ import AnswerInput from '../AnswerInput';
 
 const Quiz = () => {
   const router = useRouter();
-  const { examId } = router.query;
+  // const { examId } = router.query;
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
   const [currentid, setCurrentid]=useState("");
@@ -111,7 +112,8 @@ const Quiz = () => {
   const [question, setQuestion]=useState("");
   const [options, setOptions]=useState("");
   const [answer, setAnswer] = useState('');
-
+  const examId = useSelector((state) => state.examId);
+  console.log(examId,"examId");
   const handleAnswerChange = (text) => {
     setAnswer(text);
   };
