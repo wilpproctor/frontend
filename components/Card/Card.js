@@ -46,9 +46,9 @@ export default function Card(props) {
           }}
         >
             <div style={{zIndex: "2", marginTop: "-180px", ...reflectionStyle1}}>
-            <div style={{marginTop:"30px", marginLeft: "-60px", fontSize: "25px", padding: "5px", fontFamily: "fantasy"}}>{props.company}</div>
-              <div style={{marginBottom: "-20px", marginLeft: "-120px", fontSize: "25px",  padding: "5px", whiteSpace: "nowrap"}}>{props.subject}</div>
-              <div style={{marginTop: "20px",marginBottom: "40px", marginLeft: "-20px", fontSize: "20px",  padding: "5px"}}>{props.exam_type}</div>
+            <div style={{marginTop:"30px", marginLeft: "-40px", fontSize: "25px", padding: "5px", fontFamily: "fantasy"}}>{props.company}</div>
+              <div style={{marginBottom: "-20px", marginLeft: "-40px", fontSize: "25px",  padding: "5px", whiteSpace: "nowrap"}}>{props.subject}</div>
+              <div style={{marginTop: "20px",marginBottom: "40px", marginLeft: "-40px", fontSize: "20px",  padding: "5px"}}>{props.exam_type}</div>
               </div>
           <div style={{ padding: "20px" }}>
             
