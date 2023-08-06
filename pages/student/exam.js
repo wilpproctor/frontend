@@ -22,6 +22,7 @@ import Quiz from "../../components/student/mcqQuiz";
 import Header from "../../components/Header";
 import { useState, useEffect } from "react";
 import StudyMaterial from "./material";
+import { useRouter } from 'next/router';
 
 const useStreamStore = create((set, get) => ({
   frontcam: false,
@@ -54,6 +55,8 @@ const useStreamStore = create((set, get) => ({
 }));
 
 export default function ExamPage() {
+  const router = useRouter();
+  const { examId } = router.query;
   const backend = createBackendSocket("/student");
   const getImages = useStreamStore((state) => state.getImages);
   const [text, setText] = useState("");
@@ -107,7 +110,7 @@ export default function ExamPage() {
             question={{ heading: "MCQ 1", text: "What is the best option?" }}
             options={["First", "Second", "Third", "Fourth"]}
           /> */}
-          <Quiz />
+          <Quiz examId={examId}/>
           <StudyMaterial /> {/* Place the StudyMaterial component here */}
           {/* <Dictaphone /> */}
           {/* <FlowComponent /> */}
