@@ -97,7 +97,7 @@ export default function ExamSelect() {
           <>
           <div onClick={() => {
             router.push({
-                pathname: "/student/examstart",
+                pathname: `/student/examstart${ele._id}`,
                 //query: { returnUrl: router.asPath },
               });
           }}

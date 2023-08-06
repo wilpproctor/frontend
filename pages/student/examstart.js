@@ -11,6 +11,7 @@ import Footer from "../../components/Footer";
 
 export default function ExamStart() {
   const router = useRouter();
+  const { examId } = router.query;
   return (
     <>
       <Header />
@@ -32,7 +33,7 @@ export default function ExamStart() {
           }}
           onClick={() => {
             router.push({
-                pathname: "/student/exam",
+                pathname: `/student/exam${examId}`,
                 //query: { returnUrl: router.asPath },
               });
           }}

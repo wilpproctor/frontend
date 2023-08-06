@@ -97,6 +97,7 @@ import AnswerInput from '../AnswerInput';
 
 const Quiz = () => {
   const router = useRouter();
+  const { examId } = router.query;
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
   const [currentid, setCurrentid]=useState("");
