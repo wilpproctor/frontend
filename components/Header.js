@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import axios from 'axios'
+import axios from 'axios';
+import { useRouter } from 'next/router';
 const headerURLs = [
   // {
   //   name: "Compiler",
@@ -28,7 +29,7 @@ const headerURLs = [
 export default function Header() {
   const [time, setTime] = useState(new Date());
   const [backTimer, setBackTimer] = useState(null);
-
+  const router = useRouter();
   useEffect(() => {
     console.log("jdncsjn")
     const timer = setInterval(() => {
@@ -53,6 +54,15 @@ export default function Header() {
       .toString()
       .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
+
+  const handleLogout = () =>{
+    router.push({
+      pathname: "/",
+    });
+    sessionStorage.removeItem("cookie");
+    sessionStorage.removeItem("user");
+  }
+
   const fetchBackTimer = async () => {
     try {
       const response = await fetch(
@@ -100,7 +110,9 @@ export default function Header() {
           {backTimer && formatTime(backTimer)}
           </div>
         </nav>
-        {/* <button className="inline-flex items-center bg-blue-500 border-0 py-1 px-3 focus:outline-none hover:bg-orange-700 rounded text-white mt-4 md:mt-0">
+        <button className="inline-flex items-center bg-blue-500 border-0 py-1 px-3 focus:outline-none hover:bg-orange-700 rounded text-white mt-4 md:mt-0"
+        onClick={handleLogout}
+        >
           Logout
           {
             //  <svg
@@ -115,7 +127,7 @@ export default function Header() {
             //   <path d="M5 12h14M12 5l7 7-7 7"></path>
             // </svg>
           }
-        </button> */}
+        </button>
       </div>
     </header>
     // <></>
