@@ -17,7 +17,7 @@ const ResultPage = () => {
     // Perform any necessary actions before submission
 
     router.push({
-      pathname: "/student/examselect",
+      pathname: "/",
     });
   };
   console.log("Questions",questions);
