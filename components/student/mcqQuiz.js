@@ -6,6 +6,7 @@ import AnswerInput from '../AnswerInput';
 const Quiz = (props) => {
 const dispatch = useDispatch();
 const examId = useSelector((state) => state.examId);
+const [examdata, setExamdata]=useState([]);
 // const examdata = [
 //   {
 //     questionType: "sub",
