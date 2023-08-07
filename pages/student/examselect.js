@@ -122,6 +122,7 @@ export default function ExamSelect() {
         )
          
       })}</div>:<div>Loading...</div>}
+      <Footer/>
       </>
   )
     }
