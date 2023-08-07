@@ -3,7 +3,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import AnswerInput from '../AnswerInput';
 
-const ExamComponent = () => {
+const Quiz = (props) => {
+const dispatch = useDispatch();
 const examId = useSelector((state) => state.examId);
 // const examdata = [
 //   {
@@ -71,12 +72,31 @@ const examId = useSelector((state) => state.examId);
 
   const handleOptionChange = (event) => {
     const selectedOption = event.target.value;
-    // Update user answers for multiple-choice questions
-    const updatedAnswers = [...userAnswers];
-    updatedAnswers[currentindex] = selectedOption;
-    setUserAnswers(updatedAnswers);
+    
+    // For 'Multiple-Correct' type, handle multiple selected options
+    if (questionType === "Multiple-Correct") {
+      const updatedAnswers = [...userAnswers[currentindex] || []];
+      const optionIndex = updatedAnswers.indexOf(selectedOption);
+      
+      if (optionIndex !== -1) {
+        updatedAnswers.splice(optionIndex, 1);
+      } else {
+        updatedAnswers.push(selectedOption);
+      }
+      
+      setUserAnswers((prevAnswers) => {
+        const updatedUserAnswers = [...prevAnswers];
+        updatedUserAnswers[currentindex] = updatedAnswers;
+        return updatedUserAnswers;
+      });
+    } else {
+      // For 'MCQ' type, handle single selected option
+      const updatedAnswers = [...userAnswers];
+      updatedAnswers[currentindex] = selectedOption;
+      setUserAnswers(updatedAnswers);
+    }
   };
-
+  
   const handleAnswerChange = (event) => {
     const textAnswer = event.target.value;
     // Update user answers for text-based questions
@@ -121,7 +141,10 @@ const examId = useSelector((state) => state.examId);
 
       if (response.ok) {
         alert(`Your response has been saved`);
-        window.location = "/student/examselect";
+        dispatch({ type: 'SET_RESPONSE', payload: userResponseData });
+        props.handleQuizSubmit();
+
+        //window.location = "/student/examselect";
         // Handle successful response, maybe show a success message
       } else {
         // Handle error response, maybe show an error message
@@ -146,17 +169,17 @@ const examId = useSelector((state) => state.examId);
       </Head>
 
       <h2 className="text-xl font-semibold mb-4">{question}</h2>
-      {questionType === "mcc" ? (
+      {questionType === "mcq" && (
         <ul>
-          {Object.values(options).map((option, index) => (
-            <li key={index}>
+          {Object.entries(options).map(([key, option]) => (
+            <li key={key}>
               <label className="flex items-center">
                 <input
-                  type="checkbox"
+                  type="radio"
                   name={`question-${currentindex}`}
-                  value={option}
+                  value={key}
                   onChange={handleOptionChange}
-                  checked={userAnswers[currentindex] === option}
+                  checked={userAnswers[currentindex] === key}
                   className="mr-2"
                 />
                 {option}
@@ -164,7 +187,9 @@ const examId = useSelector((state) => state.examId);
             </li>
           ))}
         </ul>
-      ) : (
+      )}
+      
+      {questionType === "shortanswer" && (
         <div>
           <h1>Write Your Answer</h1>
           <input
@@ -173,6 +198,26 @@ const examId = useSelector((state) => state.examId);
             value={userAnswers[currentindex] || ""}
           />
         </div>
+      )}
+      
+      {questionType === "mqq" && (
+        <ul>
+          {Object.entries(options).map(([key, option]) => (
+            <li key={key}>
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  name={`question-${currentindex}`}
+                  value={key}
+                  onChange={handleOptionChange}
+                  checked={userAnswers[currentindex]?.includes(key)}
+                  className="mr-2"
+                />
+                {option}
+              </label>
+            </li>
+          ))}
+        </ul>
       )}
 
       <div className="mt-8">
@@ -203,7 +248,7 @@ const examId = useSelector((state) => state.examId);
   );
 };
 
-export default ExamComponent;
+export default Quiz;
 
 
 
@@ -236,3 +281,32 @@ export default ExamComponent;
 //     negMarks: 4,
 //   },
 // ];
+
+// {questionType === "mcc" ? (
+//   <ul>
+//     {Object.values(options).map((option, index) => (
+//       <li key={index}>
+//         <label className="flex items-center">
+//           <input
+//             type="checkbox"
+//             name={`question-${currentindex}`}
+//             value={option}
+//             onChange={handleOptionChange}
+//             checked={userAnswers[currentindex] === option}
+//             className="mr-2"
+//           />
+//           {option}
+//         </label>
+//       </li>
+//     ))}
+//   </ul>
+// ) : (
+//   <div>
+//     <h1>Write Your Answer</h1>
+//     <input
+//       type="text"
+//       onChange={handleAnswerChange}
+//       value={userAnswers[currentindex] || ""}
+//     />
+//   </div>
+// )}
