@@ -4,6 +4,8 @@ import FirstPageFooter from "../components/FirstPageFooter";
 import Footer from "../components/Footer";
 import campus from "../assets/campus.png";
 import Image from "next/image";
+import ExamPage from "./student/exam";
+
 export default function Home() {
   return (<>
     <FirstPageHeader/>
@@ -30,3 +32,13 @@ export default function Home() {
     </>
   );
 }
+
+
+// export default function Home() {
+//   return (<>
+//     <FirstPageHeader/>
+//    <ExamPage/>
+//     <FirstPageFooter/>
+//     </>
+//   );
+// }
