@@ -1,6 +1,6 @@
 import Head from "next/head";
 import React, { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import AnswerInput from '../AnswerInput';
 
 const Quiz = (props) => {
@@ -96,7 +96,7 @@ const examId = useSelector((state) => state.examId);
       setUserAnswers(updatedAnswers);
     }
   };
-  
+
   const handleAnswerChange = (event) => {
     const textAnswer = event.target.value;
     // Update user answers for text-based questions
