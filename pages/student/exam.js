@@ -87,6 +87,13 @@ export default function ExamPage() {
     });
   }
 
+  const handleQuizSubmit = ()=>{
+    router.push({
+      pathname: `/student/result`,
+      //query: { returnUrl: router.asPath },
+    });
+  } 
+
   return (
     <StudentContext.Provider value={{ backend, useStreamStore, sendAlert }}>
       <Header />
@@ -113,7 +120,7 @@ export default function ExamPage() {
             options={["First", "Second", "Third", "Fourth"]}
           /> */}
           {/* <Quiz examId={examId}/> */}
-          <Quiz/>
+          <Quiz handleQuizSubmit={handleQuizSubmit}/>
           <StudyMaterial /> {/* Place the StudyMaterial component here */}
           {/* <Dictaphone /> */}
           {/* <FlowComponent /> */}
