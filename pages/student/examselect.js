@@ -9,7 +9,7 @@ import { useContext, useState, useRef, useEffect } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import Card from "../../components/Card/Card";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function ExamSelect() {
   // const [arr, setArr] = useState([]);
@@ -65,6 +65,7 @@ export default function ExamSelect() {
   const router = useRouter();
   const [data, setData] = useState(null);
   const storedUserJSON = sessionStorage.getItem("user");
+  
   const storedUser = JSON.parse(storedUserJSON);
   const email=storedUser.email;
   useEffect(() => {

@@ -5,6 +5,7 @@ import { createStore } from "redux";
 const initialState = {
   examId: null,
   response: null,
+  questions: null
 };
 
 // Reducer
@@ -14,6 +15,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, examId: action.payload };
     case "SET_RESPONSE":
       return { ...state, response: action.payload };
+    case "SET_QUESTION":
+      return { ...state, questions: action.payload };
     default:
       return state;
   }
