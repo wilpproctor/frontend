@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { useRouter } from "next/router";
 import AnswerInput from '../AnswerInput';
+import { useSelector } from 'react-redux';
 
 // const questions = [
 //   {
@@ -95,7 +96,7 @@ import AnswerInput from '../AnswerInput';
 //   }
 // ];
 
-const Quiz = () => {
+const Quiz = (props) => {
   const router = useRouter();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
@@ -110,7 +111,8 @@ const Quiz = () => {
   const [question, setQuestion]=useState("");
   const [options, setOptions]=useState("");
   const [answer, setAnswer] = useState('');
-
+  const examId = useSelector((state) => state.examId);
+  console.log(examId,"examId");
   const handleAnswerChange = (text) => {
     setAnswer(text);
   };
@@ -271,8 +273,37 @@ const Quiz = () => {
    }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     let score = 0;
+    // Prepare user response data
+    const userResponseData = userAnswers.map((response, index) => ({
+      quesId: examdata[index].quesId, // Replace with your question ID property
+      response: response,
+    }));
+
+    const requestData = {
+      examId: examId,
+      userResponse: userResponseData,
+    };
+
+    try {
+      const response = await fetch("https://exambackend-khqy.onrender.com/api/student/submitResponse", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (response.ok) {
+        // Handle successful response, maybe show a success message
+      } else {
+        // Handle error response, maybe show an error message
+      }
+    } catch (error) {
+      console.error("Error submitting response:", error);
+      // Handle error
+    }
     // userAnswers.forEach((userAnswer) => {
     //   const question = questions.find(
     //     (q) => q.id === userAnswer.questionId
@@ -292,7 +323,8 @@ const Quiz = () => {
     //   //query: { returnUrl: router.asPath },
     // });
     alert(`Your response has been saved`);
-    window.location = "/student/examselect";
+    props.handleQuizAns({})
+    router.push("student/result", { query: { responseData } });
   };
 
   useEffect(() => {

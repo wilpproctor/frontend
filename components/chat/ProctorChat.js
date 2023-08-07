@@ -7,6 +7,7 @@ import { useChatStore } from "../proctor/StudentFeeds";
 import { db } from "../../lib/firestore";
 import { query, collection, where } from "firebase/firestore";
 import ProctorContext from "../../lib/ProctorContext";
+import { createBackendSocket } from "../../lib/sockets";
 
 export default function ProctorChat() {
   const currentUser = getUserDetails();
@@ -25,9 +26,26 @@ export default function ProctorChat() {
 
   useEffect(() => {
     (async () => {
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
       backend.on("student-feeds", (obj) => {
         connect(currentUser.email, obj.email);
       });
+=======
+=======
+>>>>>>> Stashed changes
+      const backend =await createBackendSocket("/proctor");
+      if (backend) {
+        backend.addEventListener("message", (event) => {
+          const data = JSON.parse(event.data);
+          if (data.type === "proctor-connected") {
+            const { email } = data;
+            console.log("Proctor logged in", email);
+            setCurrentProctor(email); // Assuming setCurrentProctor is a state setter function
+          }
+        });
+      }
+>>>>>>> Stashed changes
       const q = query(
         collection(db, "chat"),
         where("proctor", "==", currentUser.email)

@@ -107,7 +107,7 @@ export default function ExamPage() {
             question={{ heading: "MCQ 1", text: "What is the best option?" }}
             options={["First", "Second", "Third", "Fourth"]}
           /> */}
-          <Quiz />
+          <Quiz handleQuizAns={handleQuizAns}/>
           <StudyMaterial /> {/* Place the StudyMaterial component here */}
           {/* <Dictaphone /> */}
           {/* <FlowComponent /> */}
