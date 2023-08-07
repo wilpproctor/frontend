@@ -7,48 +7,15 @@ const Quiz = (props) => {
 const dispatch = useDispatch();
 const examId = useSelector((state) => state.examId);
 const [examdata, setExamdata]=useState([]);
-// const examdata = [
-//   {
-//     questionType: "sub",
-//     content: "What is the diameter of Venus?",
-//     imageUrl: "https://picsum.photos/id/237/200/300",
-//     marks: 10,
-//     negMarks: 4,
-//   },
-//   {
-//     questionType: "mcc",
-//     content: "What is the diameter of Venus?",
-//     options: {
-//       A: "3000km",
-//       B: "4000km",
-//       C: "5000km",
-//       D: "6000km",
-//     },
-//     imageUrl: "https://picsum.photos/id/237/200/300",
-//     marks: 10,
-//     negMarks: 4,
-//   },
-//   {
-//     questionType: "mcc",
-//     content: "What is the diameter of balls?",
-//     options: {
-//       A: "3000km",
-//       B: "4000km",
-//       C: "5000km",
-//       D: "6000km",
-//     },
-//     imageUrl: "https://picsum.photos/id/237/200/300",
-//     marks: 10,
-//     negMarks: 4,
-//   },
-// ];
 
-  const [currentindex, setCurrentindex] = useState(0);
+  const [currentindex, setCurrentindex] = useState(-1);
   const [userAnswers, setUserAnswers] = useState([]); // Store user answers here
   const optionsRef = useRef([]);
+  const [questionData,setquestionData]=useState({});
 
-  useEffect(() => {
+  useEffect( ()=> {
     const fetchData = async () => {
+      console.log("examId: ", examId)
       try {
         const response = await fetch(
           `https://exambackend-khqy.onrender.com/api/exams/questionsForExam/${examId}`,
@@ -60,8 +27,14 @@ const [examdata, setExamdata]=useState([]);
             },
           }
         );
-        const data = await response.json(); // Parse the response JSON
+        const data = await response.json();
+        console.log("data: ", data["questions"]) // Parse the response JSON
         setExamdata(data["questions"]);
+        dispatch({ type: 'SET_QUESTION', payload: data["questions"] });
+        if (currentindex == -1){
+          setCurrentindex(0)
+          setquestionData(data["questions"][0])
+        }
       } catch (e) {   
         // setLoading(false);
         console.log(e);
@@ -69,13 +42,17 @@ const [examdata, setExamdata]=useState([]);
     };
   
     fetchData();
-  }, []);
+  }, [examId]);
+
+  useEffect(()=>{
+    setquestionData(examdata[currentindex]);
+  },[currentindex]);
 
   const handleOptionChange = (event) => {
     const selectedOption = event.target.value;
     
     // For 'Multiple-Correct' type, handle multiple selected options
-    if (questionType === "Multiple-Correct") {
+    if (questionData["questionType"] === "mcc") {
       const updatedAnswers = [...userAnswers[currentindex] || []];
       const optionIndex = updatedAnswers.indexOf(selectedOption);
       
@@ -120,10 +97,13 @@ const [examdata, setExamdata]=useState([]);
 
   const handleSubmit = async () => {
     // Prepare user response data
+    console.log(userAnswers,"userAnswers");
     const userResponseData = userAnswers.map((response, index) => ({
+    
       quesId: examdata[index].quesId, // Replace with your question ID property
-      response: response,
+      response: typeof(response) == 'object'?response.join(""):response,
     }));
+    console.log(userResponseData,"userResponse");
 
     const requestData = {
       examId: examId,
@@ -136,6 +116,7 @@ const [examdata, setExamdata]=useState([]);
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": sessionStorage.getItem("cookie")
         },
         body: JSON.stringify(requestData),
       });
@@ -156,10 +137,11 @@ const [examdata, setExamdata]=useState([]);
     }
   };
 
-  const questionData = examdata[currentindex];
-  const { content: question, questionType, options } = questionData;
+  console.log(questionData,"holla");
+  //const {questionType, questionType, options } = questionData;
 
   return (
+    questionData?
     <div className="max-w-md mx-auto bg-white p-8 border border-gray-300 rounded shadow">
       <Head>
         <script
@@ -169,10 +151,10 @@ const [examdata, setExamdata]=useState([]);
         />
       </Head>
 
-      <h2 className="text-xl font-semibold mb-4">{question}</h2>
-      {questionType === "mcq" && (
+      <h2 className="text-xl font-semibold mb-4">{questionData["content"]}</h2>
+      {questionData["questionType"] === "mcq" && (
         <ul>
-          {Object.entries(options).map(([key, option]) => (
+          {Object.entries(questionData["options"]).map(([key, option]) => (
             <li key={key}>
               <label className="flex items-center">
                 <input
@@ -190,20 +172,22 @@ const [examdata, setExamdata]=useState([]);
         </ul>
       )}
       
-      {questionType === "shortanswer" && (
-        <div>
-          <h1>Write Your Answer</h1>
-          <input
-            type="text"
-            onChange={handleAnswerChange}
-            value={userAnswers[currentindex] || ""}
-          />
-        </div>
+      {questionData["questionType"] === "shortanswer" && (
+        <div style={{ display: "flex", justifyContent: "left", marginTop: "20px"}}>
+        <textarea
+          style={{width: "100%"}}
+          placeholder="Write Your Answer"
+          onChange={handleAnswerChange}
+          value={userAnswers[currentindex] || ""}
+          className="answer-input"
+        />
+      </div>
+
       )}
       
-      {questionType === "mqq" && (
+      {questionData["questionType"] === "mcc" && (
         <ul>
-          {Object.entries(options).map(([key, option]) => (
+          {Object.entries(questionData["options"]).map(([key, option]) => (
             <li key={key}>
               <label className="flex items-center">
                 <input
@@ -245,7 +229,7 @@ const [examdata, setExamdata]=useState([]);
           </button>
         )}
       </div>
-    </div>
+    </div>:<div>Loading...</div>
   );
 };
 
