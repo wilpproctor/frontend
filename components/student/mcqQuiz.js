@@ -111,7 +111,7 @@ const examId = useSelector((state) => state.examId);
     console.log(userResponseData,"userResponse");
 
     try {
-      const response = await fetch("http://localhost:4000/api/student/submitResponse", {
+      const response = await fetch("https://exambackend-khqy.onrender.com/api/student/submitResponse", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
