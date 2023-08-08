@@ -1,63 +1,76 @@
 import { useRouter } from "next/router";
 import FirstPageFooter from "../../components/FirstPageFooter";
-import ProctorHeaderFirstPage from "../../components/ProctorHeaderFirstPage";
-import { useContext, useState, useRef, useEffect } from "react";
+import SuperProctorHeaderFirstPage from "../../components/SuperProctorHeaderFirstPage";
+import { useState } from "react";
 
-export default function LoginPage() {
+export default function RegistrationPage() {
   const router = useRouter();
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleInputFullNameChange = (event) => {
+    setFullName(event.target.value);
+  };
 
   const handleInputEmailChange = (event) => {
     setEmail(event.target.value);
   };
-  const [password, setPassword] = useState("");
+
+  const handleInputUsernameChange = (event) => {
+    setUsername(event.target.value);
+  };
 
   const handleInputPasswordChange = (event) => {
     setPassword(event.target.value);
   };
-  const handleRegister = () => {
-    router.push("/superproctor/register"); // Redirect to registration page
-  };
-  const handleLogin = async () => {
-    //event.preventDefault();
-    // You can perform any action here with the email, such as submitting it to a backend or performing validation.
-    console.log("Email submitted:", email, password);
+
+  const handleRegister = async () => {
     try {
-      //put hosted url exambackend
+      // Replace with your registration API endpoint
       const response = await fetch(
-        "https://exambackend-khqy.onrender.com/api/auth/login-superadmin",
+        "https://exambackend-khqy.onrender.com/api/auth/signup-superadmin",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ username: email, password: password }),
+          body: JSON.stringify({ "name":fullName, email, username, password }),
         }
       );
 
       const data = await response.json();
       if (data.success) {
-        sessionStorage.setItem("cookie",data.token);
-          router.push({
-            pathname: "/superproctor/dashboard",
-            //query: { returnUrl: router.asPath },
-          })}
-        else {
-        alert("Check Credentials");
+        router.push("/superproctor/login");
+      } else {
+        alert("Registration failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error during registration:", error);
     }
   };
 
   return (
     <>
-      <ProctorHeaderFirstPage firstpage={false}/>
+      <SuperProctorHeaderFirstPage firstpage={false} />
       <div
         className="flex justify-center items-center h-screen"
         style={{ maxHeight: "75vh", backgroundColor: "#E5E4E2" }}
       >
         <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ fontSize: "20px", fontWeight: "600" }}>
+            Full Name
+          </div>
+          <div style={{ marginTop: "20px", marginBottom: "20px" }}>
+            <input
+              type="text"
+              value={fullName}
+              onChange={handleInputFullNameChange}
+              placeholder="Enter your full name"
+              style={{ height: "40px", width: "500px", padding: "20px" }}
+            />
+          </div>
           <div style={{ fontSize: "20px", fontWeight: "600" }}>
             Email Address
           </div>
@@ -70,30 +83,26 @@ export default function LoginPage() {
               style={{ height: "40px", width: "500px", padding: "20px" }}
             />
           </div>
+          <div style={{ fontSize: "20px", fontWeight: "600" }}>Username</div>
+          <div style={{ marginTop: "20px", marginBottom: "20px" }}>
+            <input
+              type="text"
+              value={username}
+              onChange={handleInputUsernameChange}
+              placeholder="Choose a username"
+              style={{ height: "40px", width: "500px", padding: "20px" }}
+            />
+          </div>
           <div style={{ fontSize: "20px", fontWeight: "600" }}>Password</div>
           <div style={{ marginTop: "20px", marginBottom: "20px" }}>
             <input
               type="password"
               value={password}
               onChange={handleInputPasswordChange}
-              placeholder="Enter your password"
+              placeholder="Choose a password"
               style={{ height: "40px", width: "500px", padding: "20px" }}
             />
           </div>
-          <button
-            onClick={handleLogin}
-            style={{
-              backgroundColor: "blue",
-              color: "white",
-              padding: "10px 20px",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-              fontSize: "16px",
-            }}
-          >
-            Login
-          </button>
           <button
             onClick={handleRegister}
             style={{
@@ -104,15 +113,13 @@ export default function LoginPage() {
               borderRadius: "5px",
               cursor: "pointer",
               fontSize: "16px",
-              marginTop: "20px"
             }}
           >
-            Not a member? Register here
+            Register
           </button>
         </div>
       </div>
       <FirstPageFooter />
     </>
-
   );
 }
