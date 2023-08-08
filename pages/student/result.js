@@ -13,6 +13,11 @@ const ResultPage = () => {
     return <div>Loading...</div>;
   }
 
+  const findResponseForQuestion = (quesId) => {
+    const responseItem = response.find((item) => item.quesId === quesId);
+    return responseItem ? responseItem.response : ''; // Return an empty string if no response
+  }; 
+
   const handleSubmit = () => {
     // Perform any necessary actions before submission
 
@@ -20,7 +25,7 @@ const ResultPage = () => {
       pathname: "/",
     });
   };
-  console.log("Questions",questions);
+
   return (
     questions&&response&&
     <>
@@ -36,19 +41,23 @@ const ResultPage = () => {
             </tr>
           </thead>
           <tbody>
-            {response.map((item, index) => (
-              <tr key={item.quesId}>
-                <td style={{ border: "1px solid black", padding: "8px" }}>{questions[index]["content"]}</td>
-                <td style={{ border: "1px solid black", padding: "8px" }}>
-                  {/* Extract and render options */}
-                  {questions[index]["options"]&&Object.keys(questions[index]["options"]).map(optionKey => (
-                    <div key={optionKey}>{optionKey}: {questions[index]["options"][optionKey]}</div>
+          {questions.map((question, index) => (
+            <tr key={question.quesId}>
+              <td style={{ border: "1px solid black", padding: "8px" }}>{question.content}</td>
+              <td style={{ border: "1px solid black", padding: "8px" }}>
+                {question.options &&
+                  Object.keys(question.options).map((optionKey) => (
+                    <div key={optionKey}>
+                      {optionKey}: {question.options[optionKey]}
+                    </div>
                   ))}
-                </td>
-                <td style={{ border: "1px solid black", padding: "8px" }}>{item.response}</td>
-              </tr>
-            ))}
-          </tbody>
+              </td>
+              <td style={{ border: "1px solid black", padding: "8px" }}>
+                {findResponseForQuestion(question.quesId)}
+              </td>
+            </tr>
+          ))}
+        </tbody>
         </table>
 
         {/* Centered Submit Button */}
