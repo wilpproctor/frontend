@@ -172,7 +172,7 @@ const [examdata, setExamdata]=useState([]);
         </ul>
       )}
       
-      {questionData["questionType"] === "shortanswer" && (
+      {(questionData["questionType"] === "longAnswer" || questionData["questionType"] === "shortAnswer")&& (
         <div style={{ display: "flex", justifyContent: "left", marginTop: "20px"}}>
         <textarea
           style={{width: "100%"}}
