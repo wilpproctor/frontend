@@ -38,6 +38,11 @@ export default function LoginPage() {
       const data = await response.json();
       if (data.success) {
         sessionStorage.setItem("cookie",data.token);
+        const user = {
+            "email": data.email,
+            "username": data.username
+          }
+          sessionStorage.setItem("user",JSON.stringify(user));
           router.push({
             pathname: "/superproctor/dashboard",
             //query: { returnUrl: router.asPath },
