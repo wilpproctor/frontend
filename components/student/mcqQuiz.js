@@ -2,6 +2,7 @@ import Head from "next/head";
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import AnswerInput from '../AnswerInput';
+import Loader from "../loader/Loader";
 
 const Quiz = (props) => {
 const dispatch = useDispatch();
@@ -229,7 +230,7 @@ const [examdata, setExamdata]=useState([]);
           </button>
         )}
       </div>
-    </div>:<div>Loading...</div>
+    </div>:<div><Loader/></div>
   );
 };
 
