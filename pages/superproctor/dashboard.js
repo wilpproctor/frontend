@@ -5,6 +5,8 @@ import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import ProctorCards from "../../components/superproctor/ProctorCards";
 import SuperproctorContext from "../../lib/SuperproctorContext";
+import SuperProctorHeaderFirstPage from "../../components/SuperProctorHeaderFirstPage";
+import FirstPageFotter from "../../components/FirstPageFooter";
 
 export const useProctorsStore = create(
   immer((set) => ({
@@ -59,6 +61,8 @@ export default function DashboardPage() {
   }, []);
 
   return (
+    <>
+    <SuperProctorHeaderFirstPage buttonAvailable={"logout"}/>
     <SuperproctorContext.Provider value={{ useProctorsStore, backend }}>
       <div className="flex flex-row min-h-screen gap-2">
         <div className="grow">
@@ -94,5 +98,7 @@ export default function DashboardPage() {
         </div>
       </div>
     </SuperproctorContext.Provider>
+    <FirstPageFotter/>
+    </>
   );
 }

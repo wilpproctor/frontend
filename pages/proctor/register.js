@@ -53,7 +53,7 @@ export default function RegistrationPage() {
 
   return (
     <>
-      <ProctorHeaderFirstPage firstpage={false} />
+      <ProctorHeaderFirstPage buttonAvailable={"none"} />
       <div
         className="flex justify-center items-center h-screen"
         style={{ maxHeight: "75vh", backgroundColor: "#E5E4E2" }}

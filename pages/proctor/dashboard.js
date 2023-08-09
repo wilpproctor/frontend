@@ -11,6 +11,8 @@ import Webcam from "../../components/proctor/Webcam";
 import Screen from "../../components/proctor/Screen";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProctorHeaderFirstPage from "../../components/ProctorHeaderFirstPage";
+import Footer from "../../components/Footer";
 
 const useStudentsStore = create(
   immer((set) => ({
@@ -110,6 +112,8 @@ export default function DashboardPage() {
   };
 
   return (
+    <>
+    <ProctorHeaderFirstPage buttonAvailable={"logout"}/>
     <ProctorContext.Provider
       value={{
         useStudentsStore,
@@ -140,5 +144,7 @@ export default function DashboardPage() {
       <Webcam />
       <Screen />
     </ProctorContext.Provider>
+    <Footer/>
+    </>
   );
 }

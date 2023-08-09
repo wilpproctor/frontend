@@ -7,7 +7,7 @@ import ProctorHeaderFirstPage from "../../components/ProctorHeaderFirstPage";
 
 export default function Home() {
   return (<>
-    <ProctorHeaderFirstPage firstpage={true}/>
+    <ProctorHeaderFirstPage buttonAvailable={"login"} />
     <div className="flex justify-center items-center h-screen" style={{maxHeight: "75vh"}}>
       {/* <div className="flex gap-4">
         You are a:

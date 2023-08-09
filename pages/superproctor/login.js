@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import FirstPageFooter from "../../components/FirstPageFooter";
-import ProctorHeaderFirstPage from "../../components/ProctorHeaderFirstPage";
 import { useContext, useState, useRef, useEffect } from "react";
+import SuperProctorHeaderFirstPage from "../../components/SuperProctorHeaderFirstPage";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -57,7 +57,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <ProctorHeaderFirstPage firstpage={false}/>
+      <SuperProctorHeaderFirstPage buttonAvailable={"none"}/>
       <div
         className="flex justify-center items-center h-screen"
         style={{ maxHeight: "75vh", backgroundColor: "#E5E4E2" }}

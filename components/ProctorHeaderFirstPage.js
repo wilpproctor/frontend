@@ -15,6 +15,11 @@ export default function ProctorHeaderFirstPage(props) {
   const login = ()=>{
     router.push("/proctor/login");
   }
+  const logout = ()=>{
+    router.push("/proctor/login");
+    sessionStorage.removeItem("cookie");
+    sessionStorage.removeItem("user");
+  }
 
 
   return (
@@ -55,7 +60,7 @@ export default function ProctorHeaderFirstPage(props) {
             {time.toTimeString().substring(0, 8)}
           </Link> */}
         </nav>
-        {props.firstpage&&<button className="inline-flex items-center bg-blue-500 border-0 focus:outline-none hover:bg-orange-700 rounded text-white mt-4 md:mt-0">
+        {(props.buttonAvailable==="login")&&<button className="inline-flex items-center bg-blue-500 border-0 focus:outline-none hover:bg-orange-700 rounded text-white mt-4 md:mt-0">
           {/* <Link
             className="px-4 py-2 text-lg bg-rose-600 text-white rounded drop-shadow"
             href="/proctor/login"
@@ -68,6 +73,35 @@ export default function ProctorHeaderFirstPage(props) {
           onClick={login}
         >
           Login
+        </button>
+            {
+              //  <svg
+              //   fill="none"
+              //   stroke="currentColor"
+              //   strokeLinecap="round"
+              //   strokeLinejoin="round"
+              //   strokeWidth="2"
+              //   className="w-4 h-4 ml-1"
+              //   viewBox="0 0 24 24"
+              // >
+              //   <path d="M5 12h14M12 5l7 7-7 7"></path>
+              // </svg>
+            }
+          {/* </Link> */}
+        </button>}
+        {(props.buttonAvailable==="logout")&&<button className="inline-flex items-center bg-blue-500 border-0 focus:outline-none hover:bg-orange-700 rounded text-white mt-4 md:mt-0">
+          {/* <Link
+            className="px-4 py-2 text-lg bg-rose-600 text-white rounded drop-shadow"
+            href="/proctor/login"
+          > */}
+          {/* <Link href="/homenew">
+            <div>Hi</div>
+            </Link> */}
+            <button
+          className="px-6 py-3 rounded bg-blue-300 font-semibold"
+          onClick={logout}
+        >
+          Logout
         </button>
             {
               //  <svg

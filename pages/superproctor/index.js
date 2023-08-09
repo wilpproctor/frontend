@@ -7,7 +7,7 @@ import SuperProctorHeaderFirstPage from "../../components/SuperProctorHeaderFirs
 
 export default function Home() {
   return (<>
-    <SuperProctorHeaderFirstPage firstpage={true}/>
+    <SuperProctorHeaderFirstPage buttonAvailable={"login"}/>
     <div className="flex justify-center items-center h-screen" style={{maxHeight: "75vh"}}>
       {/* <div className="flex gap-4">
         You are a:
