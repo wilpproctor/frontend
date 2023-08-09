@@ -131,7 +131,7 @@ export default function Webcam() {
         console.log("images emitted: ", newImage)
         const cheating = isStudentCheating(imageInfo.detected);
 
-        if (cheating) {
+        if (cheating && window.sessionStorage.length) {
 
           sendAlert(cheating);
         }
