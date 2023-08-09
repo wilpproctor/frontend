@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 export default function FirstPageHeader() {
   const router = useRouter();
   const [time, setTime] = useState(new Date());
+  const [loading, setLoading] = useState(false);
   const headerURLs = [
     {
       name: "Compiler",
@@ -40,6 +41,7 @@ export default function FirstPageHeader() {
     const creds = jwtDecode(credentialResponse.credential);
     const credval=credentialResponse.credential;
     try {
+      setLoading(true); 
       const response = await fetch(
         "https://exambackend-khqy.onrender.com/api/auth/google-login",
         {
@@ -51,6 +53,7 @@ export default function FirstPageHeader() {
         }
       );
       console.log(response);
+      setLoading(false); // Stop loading
     //   {
     //     "username": "jainrjk9199",
     //     "role": "user",
@@ -77,6 +80,7 @@ export default function FirstPageHeader() {
       }
       
     } catch (e) {
+      setLoading(false); 
       console.log(e);
     }
     
@@ -159,6 +163,11 @@ export default function FirstPageHeader() {
           {/* </Link> */}
         </button>
       </div>
+      {loading && ( // Conditionally render the loader
+        <div className="w-full h-2 bg-blue-500">
+          {/* Customize the loader appearance */}
+        </div>
+      )}
     </header>
     // <></>
   );

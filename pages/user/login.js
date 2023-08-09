@@ -9,8 +9,11 @@ import styles from "../../styles/Display.module.css";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useContext, useState, useRef, useEffect } from "react";
+import Loader from "../../components/loader/Loader";
+
 export default function Login() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
 
   const handleInputEmailChange = (event) => {
@@ -28,6 +31,7 @@ export default function Login() {
     console.log("Email submitted:", email, password);
     try {
       //put hosted url exambackend
+      setLoading(true);
       const response = await fetch(
         "https://exambackend-khqy.onrender.com/api/auth/login",
         {
@@ -61,8 +65,11 @@ export default function Login() {
       } else {
         alert("Check Credentials");
       }
+      setLoading(false);
     } catch (error) {
       console.error("Error during login:", error);
+      setLoading(false);
+
     }
   };
 

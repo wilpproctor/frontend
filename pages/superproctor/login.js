@@ -1,13 +1,13 @@
 import { useRouter } from "next/router";
 import FirstPageFooter from "../../components/FirstPageFooter";
-import { useContext, useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import SuperProctorHeaderFirstPage from "../../components/SuperProctorHeaderFirstPage";
 import Loader from "../../components/loader/Loader";
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
-  const [loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
 
   const handleInputEmailChange = (event) => {
@@ -17,16 +17,17 @@ export default function LoginPage() {
   const handleInputPasswordChange = (event) => {
     setPassword(event.target.value);
   };
+
   const handleRegister = () => {
     router.push("/superproctor/register"); // Redirect to registration page
   };
+
   const handleLogin = async () => {
     //event.preventDefault();
     // You can perform any action here with the email, such as submitting it to a backend or performing validation.
     console.log("Email submitted:", email, password);
     try {
-      //put hosted url exambackend
-      setLoading(true); 
+      setLoading(true);
       const response = await fetch(
         "https://exambackend-khqy.onrender.com/api/auth/login-superadmin",
         {
@@ -40,38 +41,46 @@ export default function LoginPage() {
 
       const data = await response.json();
       if (data.success) {
-        sessionStorage.setItem("cookie",data.token);
+        sessionStorage.setItem("cookie", data.token);
         const user = {
-            "email": data.email,
-            "username": data.username
-          }
-          sessionStorage.setItem("user",JSON.stringify(user));
-          router.push({
-            pathname: "/superproctor/dashboard",
-            //query: { returnUrl: router.asPath },
-          })}
-        else {
+          email: data.email,
+          username: data.username,
+        };
+        sessionStorage.setItem("user", JSON.stringify(user));
+        router.push({
+          pathname: "/superproctor/dashboard",
+          //query: { returnUrl: router.asPath },
+        });
+      } else {
         alert("Check Credentials");
       }
       setLoading(false);
     } catch (error) {
       console.error("Error during login:", error);
       setLoading(false);
-
     }
   };
 
   return (
-    <>
-      {!loading&&<SuperProctorHeaderFirstPage buttonAvailable={"none"}/>}
-      {!loading&&<div
-        className="flex justify-center items-center h-screen"
-        style={{ maxHeight: "75vh", backgroundColor: "#E5E4E2" }}
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+      }}
+    >
+      <SuperProctorHeaderFirstPage buttonAvailable="none" />
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#E5E4E2",
+        }}
       >
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ fontSize: "20px", fontWeight: "600" }}>
-            Email Address
-          </div>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <div style={{ fontSize: "20px", fontWeight: "600" }}>Email Address</div>
           <div style={{ marginTop: "20px", marginBottom: "20px" }}>
             <input
               type="email"
@@ -115,16 +124,15 @@ export default function LoginPage() {
               borderRadius: "5px",
               cursor: "pointer",
               fontSize: "16px",
-              marginTop: "20px"
+              marginTop: "20px",
             }}
           >
             Not a member? Register here
           </button>
         </div>
-      </div>}
-      {loading&&<Loader/>}
-      {!loading&&<FirstPageFooter />}
-    </>
-
+        {loading && <Loader />}
+      </div>
+      <FirstPageFooter />
+    </div>
   );
 }

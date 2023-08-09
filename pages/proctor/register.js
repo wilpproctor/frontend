@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import FirstPageFooter from "../../components/FirstPageFooter";
 import ProctorHeaderFirstPage from "../../components/ProctorHeaderFirstPage";
 import { useState } from "react";
+import Loader from "../../components/loader/Loader"; // Import the Loader component
+
 
 export default function RegistrationPage() {
   const router = useRouter();
@@ -9,6 +11,7 @@ export default function RegistrationPage() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const handleInputFullNameChange = (event) => {
     setFullName(event.target.value);
@@ -28,6 +31,8 @@ export default function RegistrationPage() {
 
   const handleRegister = async () => {
     try {
+      setLoading(true); // Activate loader during registration process
+
       // Replace with your registration API endpoint
       const response = await fetch(
         "https://exambackend-khqy.onrender.com/api/auth/signup-admin",
@@ -46,8 +51,10 @@ export default function RegistrationPage() {
       } else {
         alert("Registration failed. Please try again.");
       }
+      setLoading(false); // Deactivate loader after registration process
     } catch (error) {
       console.error("Error during registration:", error);
+      setLoading(false); // Deactivate loader in case of error
     }
   };
 
@@ -57,7 +64,9 @@ export default function RegistrationPage() {
       <div
         className="flex justify-center items-center h-screen"
         style={{ maxHeight: "75vh", backgroundColor: "#E5E4E2" }}
-      >
+      > {loading ? (
+        <Loader /> // Display the loader while loading
+      ) : (
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: "20px", fontWeight: "600" }}>
             Full Name
@@ -118,6 +127,7 @@ export default function RegistrationPage() {
             Register
           </button>
         </div>
+         )}
       </div>
       <FirstPageFooter />
     </>
