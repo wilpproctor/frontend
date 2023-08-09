@@ -63,8 +63,8 @@ export default function LoginPage() {
 
   return (
     <>
-      <SuperProctorHeaderFirstPage buttonAvailable={"none"}/>
-      {!loading?<div
+      {!loading&&<SuperProctorHeaderFirstPage buttonAvailable={"none"}/>}
+      {!loading&&<div
         className="flex justify-center items-center h-screen"
         style={{ maxHeight: "75vh", backgroundColor: "#E5E4E2" }}
       >
@@ -121,8 +121,9 @@ export default function LoginPage() {
             Not a member? Register here
           </button>
         </div>
-      </div>:<Loader/>}
-      <FirstPageFooter />
+      </div>}
+      {loading&&<Loader/>}
+      {!loading&&<FirstPageFooter />}
     </>
 
   );
