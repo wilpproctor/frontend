@@ -29,7 +29,7 @@ const ResultPage = () => {
   return (
     questions&&response&&
     <>
-      <Header />
+      <Header countertimer={false}/>
       <div>
         <h1 style={{ marginTop: "5%", textAlign: "center", fontSize: "40px", color: "black" }}>Exam Result</h1>
         <table style={{ marginLeft: "auto", marginRight: "auto", width: "70%", borderCollapse: "collapse", border: "1px solid black" }}>

@@ -14,7 +14,7 @@ export default function ExamStart() {
   const { examId } = router.query;
   return (
     <>
-      <Header />
+      <Header countertimer={false}/>
       <div style={{}}>
       <Image
         src={Instruction}

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
+import CountdownTimer from "./CountdownTimer";
 const headerURLs = [
   // {
   //   name: "Compiler",
@@ -26,34 +28,11 @@ const headerURLs = [
   // },
 ];
 
-export default function Header() {
-  const [time, setTime] = useState(new Date());
-  const [backTimer, setBackTimer] = useState(null);
+export default function Header(props) {
   const router = useRouter();
-  useEffect(() => {
-    console.log("jdncsjn")
-    const timer = setInterval(() => {
-      setTime(new Date());
-      fetchBackTimer();
-    }, 1000);
-    console.log("jd==csjn")
-    fetchBackTimer();
-    console.log("jdncinininijninsjn")
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-  const formatTime = (time) => {
-    const hours = Math.floor(time / 3600000);
-    const minutes = Math.floor((time % 3600000) / 60000);
-    const seconds = Math.floor((time % 60000) / 1000);
-    console.log("Time: ", `${hours.toString().padStart(2, '0')}:${minutes
-      .toString()
-      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`)
-    return `${hours.toString().padStart(2, '0')}:${minutes
-      .toString()
-      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  };
+  const examDate = useSelector((state) => state.examDate);
+  const examTime = useSelector((state) => state.examTime);
+  const examDuration = useSelector((state)=>state.examDuration);
 
   const handleLogout = () =>{
     router.push({
@@ -63,25 +42,6 @@ export default function Header() {
     sessionStorage.removeItem("user");
   }
 
-  const fetchBackTimer = async () => {
-    try {
-      const response = await fetch(
-        `https://exambackend-khqy.onrender.com/api/back-timer`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const data = await response.json(); // Parse the response JSON
-      const { remainingTime } = data;
-      console.log(data)
-      setBackTimer(remainingTime);
-    } catch (error) {
-      console.error('Error fetching back timer:', error);
-    }
-  };
   return (
     <header className="text-gray-400 bg-blue-600 body-font">
       <div className="container mx-auto flex flex-wrap p-3 flex-col md:flex-row items-center">
@@ -106,9 +66,10 @@ export default function Header() {
               {name}
             </Link>
           ))}
-          <div className="mr-5 hover:text-white">
-          {backTimer && formatTime(backTimer)}
-          </div>
+          {props.countertimer&&<div className="mr-5 hover:text-white">
+          <CountdownTimer examDate="09/08/2023" examTime="06:26 PM" totalTimeInSeconds={5400}/>
+          {/* <CountdownTimer examDate={examDate} examTime={examTime} totalTimeInSeconds={examDuration}/> */}
+          </div>}
         </nav>
         <button className="inline-flex items-center bg-blue-500 border-0 py-1 px-3 focus:outline-none hover:bg-orange-700 rounded text-white mt-4 md:mt-0"
         onClick={handleLogout}

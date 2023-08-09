@@ -36,8 +36,11 @@ export default function ExamSelect() {
       });
   }, []);
 
-  const handleExamStart = (examId) => {
+  const handleExamStart = (examId,time,date,duration) => {
     dispatch({ type: "SET_EXAM_ID", payload: examId });
+    dispatch({ type: "SET_EXAM_TIME", payload: time});
+    dispatch({type: "SET_EXAM_DATE", payload: date})
+    dispatch({type:"SET_EXAM_DURATION", payload: duration})
     router.push({
       pathname: `/student/examstart`,
     });
@@ -45,7 +48,7 @@ export default function ExamSelect() {
 
   return (
     <>
-      <Header />
+      <Header countertimer={false}/>
       <div
         style={{
           display: "flex",
@@ -58,7 +61,7 @@ export default function ExamSelect() {
           <Loader />
         ) : data ? (
           data.map((ele) => (
-            <div key={ele._id} onClick={() => handleExamStart(ele._id)}>
+            <div key={ele._id} onClick={() => handleExamStart(ele._id, ele.time, ele.date,ele.total_time)}>
               <Card
                 company={ele.company}
                 subject={ele.subject}

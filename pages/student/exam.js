@@ -96,7 +96,7 @@ export default function ExamPage() {
 
   return (
     <StudentContext.Provider value={{ backend, useStreamStore, sendAlert }}>
-      <Header />
+      <Header countertimer={true}/>
       <ToastContainer
         position="top-right"
         autoClose={2000}
