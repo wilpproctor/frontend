@@ -9,7 +9,6 @@ import styles from "../../styles/Display.module.css";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useContext, useState, useRef, useEffect } from "react";
-
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");

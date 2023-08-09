@@ -2,15 +2,17 @@ import { useRouter } from "next/router";
 import FirstPageFooter from "../../components/FirstPageFooter";
 import { useContext, useState, useRef, useEffect } from "react";
 import SuperProctorHeaderFirstPage from "../../components/SuperProctorHeaderFirstPage";
+import Loader from "../../components/loader/Loader";
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
+  const [loading,setLoading]=useState(false);
+  const [password, setPassword] = useState("");
 
   const handleInputEmailChange = (event) => {
     setEmail(event.target.value);
   };
-  const [password, setPassword] = useState("");
 
   const handleInputPasswordChange = (event) => {
     setPassword(event.target.value);
@@ -24,6 +26,7 @@ export default function LoginPage() {
     console.log("Email submitted:", email, password);
     try {
       //put hosted url exambackend
+      setLoading(true); 
       const response = await fetch(
         "https://exambackend-khqy.onrender.com/api/auth/login-superadmin",
         {
@@ -50,15 +53,18 @@ export default function LoginPage() {
         else {
         alert("Check Credentials");
       }
+      setLoading(false);
     } catch (error) {
       console.error("Error during login:", error);
+      setLoading(false);
+
     }
   };
 
   return (
     <>
       <SuperProctorHeaderFirstPage buttonAvailable={"none"}/>
-      <div
+      {!loading?<div
         className="flex justify-center items-center h-screen"
         style={{ maxHeight: "75vh", backgroundColor: "#E5E4E2" }}
       >
@@ -115,7 +121,7 @@ export default function LoginPage() {
             Not a member? Register here
           </button>
         </div>
-      </div>
+      </div>:<Loader/>}
       <FirstPageFooter />
     </>
 
