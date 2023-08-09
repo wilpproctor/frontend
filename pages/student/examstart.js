@@ -8,10 +8,24 @@ import { useRouter } from "next/router";
 import { useContext, useState, useRef, useEffect } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import { useSelector } from 'react-redux';
 
 export default function ExamStart() {
   const router = useRouter();
   const { examId } = router.query;
+  const isExamStarted = useSelector((state)=>state.isExamStarted);
+
+  const handleAccept = ()=>{
+    if(isExamStarted){
+      router.push({
+        pathname: `/student/exam`,
+        //query: { returnUrl: router.asPath },
+      });
+    }else{
+      alert("Exam not yet started");
+    }
+    
+  }
   return (
     <>
       <Header countertimer={false}/>
@@ -31,12 +45,7 @@ export default function ExamStart() {
             backgroundColor: "#007fff",
             cursor: "pointer"
           }}
-          onClick={() => {
-            router.push({
-                pathname: `/student/exam`,
-                //query: { returnUrl: router.asPath },
-              });
-          }}
+          onClick={handleAccept}
         >
           Accept
         </button>

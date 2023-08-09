@@ -48,7 +48,7 @@ export default function ExamSelect() {
 
   return (
     <>
-      <Header countertimer={false}/>
+      <Header countertimer={true}/>
       <div
         style={{
           display: "flex",

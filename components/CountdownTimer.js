@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const CountdownTimer = ({ examDate, examTime, totalTimeInSeconds }) => {
+const CountdownTimer = ({ examDate, examTime, totalTimeInSeconds, dispatch }) => {
   const [remainingTime, setRemainingTime] = useState(null);
 
   useEffect(() => {
@@ -29,14 +29,22 @@ const CountdownTimer = ({ examDate, examTime, totalTimeInSeconds }) => {
         const seconds = totalSeconds % 60;
 
         setRemainingTime({ hours, minutes, seconds });
+
+        // Dispatch action when exam starts
+        if (totalSeconds === totalTimeInSeconds) {
+          dispatch({ type: 'SET_IS_EXAM_STARTED', payload: true });
+        }
       } else {
         clearInterval(interval);
         setRemainingTime({ hours: 0, minutes: 0, seconds: 0 });
+
+        // Dispatch action when exam ends
+        dispatch({ type: 'SET_IS_EXAM_OVER', payload: true });
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [examDate, examTime]);
+  }, [examDate, examTime, totalTimeInSeconds, dispatch]);
 
   if (!remainingTime) {
     return <div>Exam has ended!</div>;

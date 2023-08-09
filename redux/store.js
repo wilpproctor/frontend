@@ -9,6 +9,8 @@ const initialState = {
   examTime: null,
   examDate: null,
   examDuration: null,
+  isExamOver: false,
+  isExamStarted: false,
 };
 
 // Reducer
@@ -26,6 +28,10 @@ const reducer = (state = initialState, action) => {
       return { ...state, response: action.payload };
     case "SET_QUESTION":
       return { ...state, questions: action.payload };
+    case "SET_IS_EXAM_OVER":
+      return { ...state, isExamOver: action.payload };
+    case "SET_IS_EXAM_STARTED":
+      return { ...state, isExamStarted: action.payload };
     default:
       return state;
   }

@@ -13,8 +13,9 @@ const [examdata, setExamdata]=useState([]);
   const [userAnswers, setUserAnswers] = useState([]); // Store user answers here
   const optionsRef = useRef([]);
   const [questionData,setquestionData]=useState({});
+  const isExamOver =useSelector((state)=>state.isExamOver);
 
-  useEffect( ()=> {
+  useEffect( ()=> { 
     const fetchData = async () => {
       console.log("examId: ", examId)
       try {
@@ -48,6 +49,11 @@ const [examdata, setExamdata]=useState([]);
   useEffect(()=>{
     setquestionData(examdata[currentindex]);
   },[currentindex]);
+
+  useEffect(()=>{
+    if(isExamOver)
+      handleSubmit();
+  },[isExamOver]);
 
   const handleOptionChange = (event) => {
     const selectedOption = event.target.value;
