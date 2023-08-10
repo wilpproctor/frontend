@@ -71,7 +71,8 @@ export default function ExamSelect() {
                 subject={ele.subject}
                 exam_type={ele.year+", Sem: "+ele.sem+", "+ele.examType}
                 time={ele.totalTime + " minutes"}
-                date={ele.date+" "+ele.time}
+                date={ele.date}
+                timing={ele.time}
               />
             </div>
           ))
