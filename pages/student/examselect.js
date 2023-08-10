@@ -16,7 +16,7 @@ export default function ExamSelect() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const url = `https://exambackend-khqy.onrender.com/api/student/examFromUser/${email}`;
+    const url = `https://exambackend-khqy.onrender.com/api/student/examFromUser`;
     const bearerToken = sessionStorage.getItem("cookie");
 
     fetch(url, {

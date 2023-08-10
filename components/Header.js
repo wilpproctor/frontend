@@ -67,8 +67,8 @@ export default function Header(props) {
             </Link>
           ))}
           {props.countertimer&&<div className="mr-5 hover:text-white">
-          <CountdownTimer examDate="09/08/2023" examTime="06:26 PM" totalTimeInSeconds={5400}/>
-          {/* <CountdownTimer examDate={examDate} examTime={examTime} totalTimeInSeconds={examDuration}/> */}
+          {/* <CountdownTimer examDate="09/08/2023" examTime="06:26 PM" totalTimeInSeconds={5400}/> */}
+          <CountdownTimer examDate={examDate} examTime={examTime} totalTimeInSeconds={examDuration}/>
           </div>}
         </nav>
         <button className="inline-flex items-center bg-blue-500 border-0 py-1 px-3 focus:outline-none hover:bg-orange-700 rounded text-white mt-4 md:mt-0"
