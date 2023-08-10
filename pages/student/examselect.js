@@ -36,11 +36,15 @@ export default function ExamSelect() {
       });
   }, []);
 
-  const handleExamStart = (examId,time,date,duration) => {
+  const handleExamStart = (examId,time,date,duration,openBook,compiler,excel,calculator) => {
     dispatch({ type: "SET_EXAM_ID", payload: examId });
     dispatch({ type: "SET_EXAM_TIME", payload: time});
-    dispatch({type: "SET_EXAM_DATE", payload: date})
-    dispatch({type:"SET_EXAM_DURATION", payload: duration})
+    dispatch({type: "SET_EXAM_DATE", payload: date});
+    dispatch({type:"SET_EXAM_DURATION", payload: duration});
+    dispatch({type:"SET_OPEN_BOOK", payload: openBook});
+    dispatch({type:"SET_COMPILER", payload: compiler});
+    dispatch({type:"SET_EXCEL", payload: excel});
+    dispatch({type:"SET_CALCULATOR", payload: calculator});
     router.push({
       pathname: `/student/examstart`,
     });
@@ -61,13 +65,13 @@ export default function ExamSelect() {
           <Loader />
         ) : data ? (
           data.map((ele) => (
-            <div key={ele._id} onClick={() => handleExamStart(ele._id, ele.time, ele.date,ele.total_time)}>
+            <div key={ele._id} onClick={() => handleExamStart(ele._id, ele.time, ele.date,ele.totalTime,ele.openBook,ele.compiler,ele.excel,ele.calculator)}>
               <Card
                 company={ele.company}
                 subject={ele.subject}
-                exam_type={ele.exam_type}
-                time={ele.time + " minutes"}
-                date={ele.date}
+                exam_type={ele.year+", Sem: "+ele.sem+", "+ele.examType}
+                time={ele.totalTime + " minutes"}
+                date={ele.date+" "+ele.time}
               />
             </div>
           ))
