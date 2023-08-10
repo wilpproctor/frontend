@@ -3,7 +3,9 @@ import Link from "next/link";
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-import CountdownTimer from "./CountdownTimer";
+import CountdownTimer from "./CountdownTimerEnd";
+import CountdownTimerStart from "./CountdownTimerStart";
+import CountdownTimerEnd from "./CountdownTimerEnd";
 const headerURLs = [
   // {
   //   name: "Compiler",
@@ -41,7 +43,7 @@ export default function Header(props) {
     sessionStorage.removeItem("cookie");
     sessionStorage.removeItem("user");
   }
-
+  console.log(examDate,examTime,examDuration);
   return (
     <header className="text-gray-400 bg-blue-600 body-font">
       <div className="container mx-auto flex flex-wrap p-3 flex-col md:flex-row items-center">
@@ -66,10 +68,13 @@ export default function Header(props) {
               {name}
             </Link>
           ))}
-          {props.countertimer&&<div className="mr-5 hover:text-white">
-          {/* <CountdownTimer examDate="09/08/2023" examTime="06:26 PM" totalTimeInSeconds={5400}/> */}
-          <CountdownTimer examDate={examDate} examTime={examTime} totalTimeInSeconds={examDuration}/>
-          </div>}
+          {props.countertimer==="start"?<div className="mr-5 hover:text-white">
+          <CountdownTimerStart examDate="10-08-2023" examTime="04:26 PM" totalTimeInSeconds={5400}/>
+          {/* <CountdownTimer examDate={examDate} examTime={examTime} totalTimeInSeconds={examDuration}/> */}
+          </div>:props.countertimer==="end"?<div className="mr-5 hover:text-white">
+          <CountdownTimerEnd examDate="10-08-2023" examTime="04:26 PM" totalTimeInSeconds={5400}/>
+          {/* <CountdownTimer examDate={examDate} examTime={examTime} totalTimeInSeconds={examDuration}/> */}
+          </div>:<></>}
         </nav>
         <button className="inline-flex items-center bg-blue-500 border-0 py-1 px-3 focus:outline-none hover:bg-orange-700 rounded text-white mt-4 md:mt-0"
         onClick={handleLogout}

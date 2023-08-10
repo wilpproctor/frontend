@@ -28,7 +28,7 @@ export default function ExamStart() {
   }
   return (
     <>
-      <Header countertimer={true}/>
+      <Header countertimer={"start"}/>
       <div style={{}}>
       <Image
         src={Instruction}

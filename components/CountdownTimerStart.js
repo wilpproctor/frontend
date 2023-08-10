@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
-const CountdownTimer = ({ examDate, examTime, totalTimeInSeconds, dispatch }) => {
+const CountdownTimerStart = ({ examDate, examTime, totalTimeInSeconds }) => {
   const [remainingTime, setRemainingTime] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
 
-      const [day, month, year] = examDate.split('/').map(Number);
+      const [day, month, year] = examDate.split('-').map(Number);
       const [time, period] = examTime.split(' ');
       const [hours, minutes] = time.split(':').map(Number);
 
@@ -19,11 +21,10 @@ const CountdownTimer = ({ examDate, examTime, totalTimeInSeconds, dispatch }) =>
         targetDate.setHours(0);
       }
 
-      const examEndTime = new Date(targetDate.getTime() + totalTimeInSeconds * 1000);
-      const timeDiff = examEndTime - now;
-      
-      if (timeDiff > 0) {
-        const totalSeconds = Math.floor(timeDiff / 1000);
+      const timeDiffStart = targetDate - now; // Calculate time difference until exam starts
+
+      if (timeDiffStart > 0) {
+        const totalSeconds = Math.floor(timeDiffStart / 1000);
         const hours = Math.floor(totalSeconds / 3600);
         const minutes = Math.floor((totalSeconds % 3600) / 60);
         const seconds = totalSeconds % 60;
@@ -31,7 +32,7 @@ const CountdownTimer = ({ examDate, examTime, totalTimeInSeconds, dispatch }) =>
         setRemainingTime({ hours, minutes, seconds });
 
         // Dispatch action when exam starts
-        if (totalSeconds === totalTimeInSeconds) {
+        if (totalSeconds === 0) {
           dispatch({ type: 'SET_IS_EXAM_STARTED', payload: true });
         }
       } else {
@@ -39,22 +40,27 @@ const CountdownTimer = ({ examDate, examTime, totalTimeInSeconds, dispatch }) =>
         setRemainingTime({ hours: 0, minutes: 0, seconds: 0 });
 
         // Dispatch action when exam ends
-        dispatch({ type: 'SET_IS_EXAM_OVER', payload: true });
+        // dispatch({ type: 'SET_IS_EXAM_OVER', payload: true });
       }
     }, 1000);
 
     return () => clearInterval(interval);
   }, [examDate, examTime, totalTimeInSeconds, dispatch]);
 
-  if (!remainingTime) {
-    return <div>Exam has ended!</div>;
-  }
-
   return (
     <div>
-      <div>Exam ends in: {remainingTime.hours}:{remainingTime.minutes}:{remainingTime.seconds}</div>
+      {remainingTime ? (
+        <div>
+          <div>
+            Time until exam starts: {remainingTime.hours}:
+            {remainingTime.minutes}:{remainingTime.seconds}
+          </div>
+        </div>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 };
 
-export default CountdownTimer;
+export default CountdownTimerStart;
