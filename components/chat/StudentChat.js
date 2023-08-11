@@ -32,6 +32,8 @@ export default function StudentChat() {
             const unsub = onSnapshot(q, (querySnapshot) => {
                 console.log("I am in unsub: ", querySnapshot)
                 querySnapshot.forEach((doc) => {
+                    console.log("doc.data(): ", doc.data())
+                    console.log("currentProctor: ", doc.id.substring(0, doc.id.indexOf(",")))
                     // if (doc.id == currentProctor + "," + currentUser.email)
                     setCurrentProctor(doc.id.substring(0, doc.id.indexOf(",")));
                     setChatMessages(doc.data().messages);
