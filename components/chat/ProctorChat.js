@@ -24,53 +24,56 @@ export default function ProctorChat() {
   const maxTimerRef = useRef(null);
 
   useEffect(() => {
-    (async () => {
-      console.log("currentStudent: ", currentStudent  )
-      console.log("I am outside unsub: ",)
-      backend.on("student-feeds", (obj) => {
-        connect(currentUser.email, obj.email);
-      });
-      const q = query(
+    const q = query(
         collection(db, "chat"),
         where("proctor", "==", currentUser.email)
-      );
-      
-      const unsub = onSnapshot(q, (querySnapshot) => {
-        console.log("I am in unsub: ", querySnapshot)
+    );
+
+    const unsub = onSnapshot(q, (querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          if (doc.id == currentUser.email + "," + currentStudent)
-            setChatMessages(doc.data().messages);
-          if (doc.data().messages.length === 0) return;
-          const lastMessage =
-            doc.data().messages[doc.data().messages.length - 1];
-          if (lastMessage !== (lastMessages[doc.id] ?? {})) {
-            if (lastMessage.from != currentUser.email)
-              setUnread(lastMessage.from);
-            else setRead(lastMessage.to);
-          }
-          clearTimeout(warnTimerRef.current);
-          clearTimeout(maxTimerRef.current);
-          if (
-            lastMessage.from != currentUser.email &&
-            lastMessage !== (lastMessages[doc.id] ?? {})
-          ) {
-            warnTimerRef.current = setTimeout(
-              () => sendReplyWarning(doc.data().student),
-              warnReplyTime
-            );
-            maxTimerRef.current = setTimeout(
-              () => sendReplyAction(doc.data().student, lastMessage),
-              maxReplyTime
-            );
-            let temp = lastMessages;
-            temp[doc.id] = lastMessage;
-            setLastMessages(temp);
-          }
+            if (doc.id === currentUser.email + "," + currentStudent) {
+                setChatMessages(doc.data().messages);
+            }
+            
+            if (doc.data().messages.length === 0) return;
+            
+            const lastMessage = doc.data().messages[doc.data().messages.length - 1];
+            
+            if (lastMessage !== (lastMessages[doc.id] ?? {})) {
+                if (lastMessage.from !== currentUser.email) {
+                    setUnread(lastMessage.from);
+                } else {
+                    setRead(lastMessage.to);
+                }
+            }
+
+            clearTimeout(warnTimerRef.current);
+            clearTimeout(maxTimerRef.current);
+
+            if (
+                lastMessage.from !== currentUser.email &&
+                lastMessage !== (lastMessages[doc.id] ?? {})
+            ) {
+                warnTimerRef.current = setTimeout(
+                    () => sendReplyWarning(doc.data().student),
+                    warnReplyTime
+                );
+                maxTimerRef.current = setTimeout(
+                    () => sendReplyAction(doc.data().student, lastMessage),
+                    maxReplyTime
+                );
+                let temp = lastMessages;
+                temp[doc.id] = lastMessage;
+                setLastMessages(temp);
+            }
         });
-      });
-      
-    })();
-  }, [currentStudent]);
+    });
+
+    return () => {
+        unsub(); // Unsubscribe the onSnapshot listener when the component unmounts
+    };
+}, [currentStudent]);
+
 
   const newMessage = async (msg) => {
     if (!msg) return;
