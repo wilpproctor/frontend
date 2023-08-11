@@ -26,7 +26,7 @@ export default function ProctorChat() {
   useEffect(() => {
     const q = query(
         collection(db, "chat"),
-        where("proctor", "==", currentUser.email)
+        where("Document ID", "==", `${currentUser.email},${currentStudent}`)
     );
 
     const unsub = onSnapshot(q, (querySnapshot) => {

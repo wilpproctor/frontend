@@ -26,7 +26,7 @@ export default function StudentChat() {
             
             const q = query(
                 collection(db, "chat"),
-                where("student", "==", currentUser.email)
+                where("Document ID", "==", `${currentProctor},${currentUser.email}`)
             );
     
             const unsub = onSnapshot(q, (querySnapshot) => {
