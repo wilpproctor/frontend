@@ -19,15 +19,19 @@ export default function StudentChat() {
 
     useEffect(() => {
         (async () => {
+            console.log("chat messages = ", chatMessages)
             if (currentProctor) {
                 try {
+                    console.log("current proctor = ", currentProctor)
                     const connection = await connect(
                         currentUser.email,
                         currentProctor + "," + currentUser.email
                     );
 
                     const messagesData = await readMessages(connection);
+                    console.log("messages data = ", messagesData)
                     if (messagesData) {
+
                         setChatMessages(messagesData.messages);
                     }
                 } catch (error) {
