@@ -30,16 +30,16 @@ const CountdownTimerStart = ({ examDate, examTime, totalTimeInSeconds }) => {
         const seconds = totalSeconds % 60;
 
         setRemainingTime({ hours, minutes, seconds });
-        console.log('bholla112');
+        //console.log('bholla112');
         // Dispatch action when exam starts
-        if (totalSeconds === 0) {
-            console.log('bholla111');
-          dispatch({ type: 'SET_IS_EXAM_STARTED', payload: true });
-        }
+            //console.log('bholla111');
+          
+        
       } else {
+        //console.log("I am here right")
         clearInterval(interval);
         setRemainingTime({ hours: 0, minutes: 0, seconds: 0 });
-
+        dispatch({ type: 'SET_IS_EXAM_STARTED', payload: true });
         // Dispatch action when exam ends
         // dispatch({ type: 'SET_IS_EXAM_OVER', payload: true });
       }

@@ -17,6 +17,7 @@ export default function ExamStart() {
   const isExamEnded = useSelector((state)=>state.isExamEnded);
 
   const handleAccept = ()=>{
+    console.log(isExamStarted,"isExamStarted",isExamEnded,"isExamEnded");
     if(isExamStarted && !isExamEnded){
       router.push({
         pathname: `/student/exam`,

@@ -28,7 +28,7 @@ const CountdownTimerEnd = ({ examDate, examTime, totalTimeInSeconds }) => {
       const timeDiff = examEndTime - now;
       //console.log('timeDiff',timeDiff);
       if (timeDiff > 0) {
-        dispatch({ type: 'SET_IS_EXAM_STARTED', payload: true });
+        // dispatch({ type: 'SET_IS_EXAM_STARTED', payload: true });
         const totalSeconds = Math.floor(timeDiff / 1000);
         const hours = Math.floor(totalSeconds / 3600);
         const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -36,22 +36,31 @@ const CountdownTimerEnd = ({ examDate, examTime, totalTimeInSeconds }) => {
 
         setRemainingTime({ hours, minutes, seconds });
       } else {
+        console.log("I am in less than timeDiff")
         clearInterval(interval);
         setRemainingTime({ hours: 0, minutes: 0, seconds: 0 });
 
         // Dispatch action when exam ends
-        dispatch({ type: 'SET_IS_EXAM_OVER', payload: true });
+        dispatch({ type: 'SET_IS_EXAM_ENDED', payload: true });
       }
     }, 1000);
 
     return () => clearInterval(interval);
   }, [examDate, examTime, totalTimeInSeconds]);
 
-  if (!remainingTime) {
-    dispatch({ type: 'SET_IS_EXAM_ENDED', payload: true });
-    return <div>Exam has ended!</div>;
-  }
+  useEffect(()=>{
+    //console.log("remaining time is : ", remainingTime)
+    if (remainingTime!==null&&!remainingTime) {
+      //console.log("I am in not remaining time")
+      dispatch({ type: 'SET_IS_EXAM_ENDED', payload: true });
+    }else{
+      dispatch({ type: 'SET_IS_EXAM_ENDED', payload: false });
+    }
+  
+  },[remainingTime]);
 
+  
+  
   return (
     <div>
       {remainingTime?<div>Time until exam ends: {remainingTime.hours}:{remainingTime.minutes}:{remainingTime.seconds}</div>:<div>Exam has ended!</div>}

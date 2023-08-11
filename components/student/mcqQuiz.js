@@ -13,7 +13,7 @@ const [examdata, setExamdata]=useState([]);
   const [userAnswers, setUserAnswers] = useState([]); // Store user answers here
   const optionsRef = useRef([]);
   const [questionData,setquestionData]=useState({});
-  const isExamOver =useSelector((state)=>state.isExamOver);
+  const isExamEnded =useSelector((state)=>state.isExamEnded);
 
   useEffect( ()=> { 
     const fetchData = async () => {
@@ -51,9 +51,9 @@ const [examdata, setExamdata]=useState([]);
   },[currentindex]);
 
   useEffect(()=>{
-    if(isExamOver)
+    if(isExamEnded)
       handleSubmit();
-  },[isExamOver]);
+  },[isExamEnded]);
 
   const handleOptionChange = (event) => {
     const selectedOption = event.target.value;
