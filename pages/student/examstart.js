@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { useContext, useState, useRef, useEffect } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 
 export default function ExamStart() {
   const router = useRouter();
@@ -32,12 +32,19 @@ export default function ExamStart() {
   }
   return (
     <>
-      <Header countertimer={"start"}/>
+      {isExamStarted && !isExamEnded ? (
+        <Header countertimer={"end"} />
+      ) : !isExamStarted ? (
+        <Header countertimer={"start"} />
+      ) : (
+        <Header countertimer={"end"} />
+      )}
+
       <div style={{}}>
-      <Image
-        src={Instruction}
-        // style={{ width: "80%", marginLeft: "100px", marginTop: "100px" }}
-      />
+        <Image
+          src={Instruction}
+          // style={{ width: "80%", marginLeft: "100px", marginTop: "100px" }}
+        />
       </div>
       <div style={{ marginTop: "50px", marginLeft: "50%" }}>
         <button
@@ -47,7 +54,7 @@ export default function ExamStart() {
             padding: "10px",
             color: "white",
             backgroundColor: "#007fff",
-            cursor: "pointer"
+            cursor: "pointer",
           }}
           onClick={handleAccept}
         >
