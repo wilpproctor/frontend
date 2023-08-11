@@ -14,15 +14,19 @@ export default function ExamStart() {
   const router = useRouter();
   const { examId } = router.query;
   const isExamStarted = useSelector((state)=>state.isExamStarted);
+  const isExamEnded = useSelector((state)=>state.isExamEnded);
 
   const handleAccept = ()=>{
-    if(isExamStarted){
+    if(isExamStarted && !isExamEnded){
       router.push({
         pathname: `/student/exam`,
         //query: { returnUrl: router.asPath },
       });
-    }else{
+    }else if (!isExamStarted){
       alert("Exam not yet started");
+    }
+    else {
+      alert("Exam has ended");
     }
     
   }

@@ -48,12 +48,14 @@ const CountdownTimerEnd = ({ examDate, examTime, totalTimeInSeconds }) => {
   }, [examDate, examTime, totalTimeInSeconds]);
 
   if (!remainingTime) {
+    dispatch({ type: 'SET_IS_EXAM_ENDED', payload: true });
     return <div>Exam has ended!</div>;
   }
 
   return (
     <div>
-      <div>Time until exam ends: {remainingTime.hours}:{remainingTime.minutes}:{remainingTime.seconds}</div>
+      {remainingTime?<div>Time until exam ends: {remainingTime.hours}:{remainingTime.minutes}:{remainingTime.seconds}</div>:<div>Exam has ended!</div>}
+      
     </div>
   );
 };
