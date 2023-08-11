@@ -59,7 +59,7 @@ const [examdata, setExamdata]=useState([]);
     const selectedOption = event.target.value;
     
     // For 'Multiple-Correct' type, handle multiple selected options
-    if (questionData["questionType"] === "mcc") {
+    if (questionData["questionType"] === "multi_mcq") {
       const updatedAnswers = [...userAnswers[currentindex] || []];
       const optionIndex = updatedAnswers.indexOf(selectedOption);
       
@@ -161,7 +161,7 @@ const [examdata, setExamdata]=useState([]);
       <h2 className="text-xl font-semibold mb-4">{questionData["content"]}</h2>
       {questionData["questionType"] === "mcq" && (
         <ul>
-          {Object.entries(questionData["options"]).map(([key, option]) => (
+          {Object.entries(JSON.parse(questionData["options"])).map(([key, option]) => (
             <li key={key}>
               <label className="flex items-center">
                 <input
@@ -179,7 +179,7 @@ const [examdata, setExamdata]=useState([]);
         </ul>
       )}
       
-      {(questionData["questionType"] === "longAnswer" || questionData["questionType"] === "shortAnswer")&& (
+      {(questionData["questionType"] === "long" || questionData["questionType"] === "short")&& (
         <div style={{ display: "flex", justifyContent: "left", marginTop: "20px"}}>
         <textarea
           style={{width: "100%"}}
@@ -192,9 +192,9 @@ const [examdata, setExamdata]=useState([]);
 
       )}
       
-      {questionData["questionType"] === "mcc" && (
+      {questionData["questionType"] === "multi_mcq" && (
         <ul>
-          {Object.entries(questionData["options"]).map(([key, option]) => (
+          {Object.entries(JSON.parse(questionData["options"])).map(([key, option]) => (
             <li key={key}>
               <label className="flex items-center">
                 <input

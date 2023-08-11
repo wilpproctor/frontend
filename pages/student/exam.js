@@ -35,14 +35,14 @@ const useStreamStore = create((set, get) => ({
   getImages: () => {
     const { frontcam, screen: screenFeed } = get();
     console.log(frontcam);
-    const frontcamImage = frontcam.canvas
-      .toDataURL("image/jpeg")
+    const frontcamImage = frontcam?.canvas
+      ?.toDataURL("image/jpeg")
       .slice("data:image/jpeg;base64,".length);
-    screenFeed.canvas
-      .getContext("2d")
+    screenFeed?.canvas
+      ?.getContext("2d")
       .drawImage(screenFeed.video, 0, 0, 320, 180);
-    const screenImage = screenFeed.canvas
-      .toDataURL("image/jpeg")
+    const screenImage = screenFeed?.canvas
+      ?.toDataURL("image/jpeg")
       .slice("data:image/jpeg;base64,".length);
     return {
       frontcam: frontcamImage,

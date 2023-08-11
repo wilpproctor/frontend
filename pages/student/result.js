@@ -45,10 +45,10 @@ const ResultPage = () => {
             <tr key={question.quesId}>
               <td style={{ border: "1px solid black", padding: "8px" }}>{question.content}</td>
               <td style={{ border: "1px solid black", padding: "8px" }}>
-                {question.options &&
-                  Object.keys(question.options).map((optionKey) => (
+                {JSON.parse(question.options) &&
+                  Object.keys(JSON.parse(question.options)).sort().map((optionKey) => (
                     <div key={optionKey}>
-                      {optionKey}: {question.options[optionKey]}
+                      {optionKey}: {JSON.parse(question.options)[optionKey]}
                     </div>
                   ))}
               </td>

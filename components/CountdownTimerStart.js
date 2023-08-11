@@ -22,7 +22,7 @@ const CountdownTimerStart = ({ examDate, examTime, totalTimeInSeconds }) => {
       }
 
       const timeDiffStart = targetDate - now; // Calculate time difference until exam starts
-
+      //console.log('timeDiffStart',timeDiffStart);
       if (timeDiffStart > 0) {
         const totalSeconds = Math.floor(timeDiffStart / 1000);
         const hours = Math.floor(totalSeconds / 3600);
@@ -30,9 +30,10 @@ const CountdownTimerStart = ({ examDate, examTime, totalTimeInSeconds }) => {
         const seconds = totalSeconds % 60;
 
         setRemainingTime({ hours, minutes, seconds });
-
+        console.log('bholla112');
         // Dispatch action when exam starts
         if (totalSeconds === 0) {
+            console.log('bholla111');
           dispatch({ type: 'SET_IS_EXAM_STARTED', payload: true });
         }
       } else {
