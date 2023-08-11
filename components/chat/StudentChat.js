@@ -21,12 +21,15 @@ export default function StudentChat() {
     }, []);
 
     useEffect(() => {
+        console.log("currentProctor: ", currentProctor  )
         (async () => {
             const q = query(
                 collection(db, "chat"),
                 where("student", "==", currentUser.email)
             );
+            console.log("I am outside unsub: ")
             const unsub = onSnapshot(q, (querySnapshot) => {
+                console.log("I am in unsub: ", querySnapshot)
                 querySnapshot.forEach((doc) => {
                     // if (doc.id == currentProctor + "," + currentUser.email)
                     setCurrentProctor(doc.id.substring(0, doc.id.indexOf(",")));
