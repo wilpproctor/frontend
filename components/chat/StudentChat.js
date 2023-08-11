@@ -43,7 +43,7 @@ export default function StudentChat() {
                 unsub(); // Unsubscribe the onSnapshot listener when the component unmounts
             };
         })();
-    }, []);
+    }, [currentProctor]);
     
 
     const newMessage = async (msg) => {
