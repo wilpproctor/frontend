@@ -25,6 +25,7 @@ export default function ProctorChat() {
 
   useEffect(() => {
     (async () => {
+      console.log("I am outside unsub: ", obj)
       backend.on("student-feeds", (obj) => {
         connect(currentUser.email, obj.email);
       });
@@ -32,7 +33,9 @@ export default function ProctorChat() {
         collection(db, "chat"),
         where("proctor", "==", currentUser.email)
       );
+      
       const unsub = onSnapshot(q, (querySnapshot) => {
+        console.log("I am in unsub: ", querySnapshot)
         querySnapshot.forEach((doc) => {
           if (doc.id == currentUser.email + "," + currentStudent)
             setChatMessages(doc.data().messages);
@@ -69,6 +72,7 @@ export default function ProctorChat() {
 
   const newMessage = async (msg) => {
     if (!msg) return;
+    console.log("msg: ", msg)
     document.getElementById("message-box").value = "";
     await sendMessage(
       currentUser.email,

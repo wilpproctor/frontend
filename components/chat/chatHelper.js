@@ -19,6 +19,7 @@ export const connect = async (proctor, student) => {
 }
 
 export const sendMessage = async (from, docName, message) => {
+    console.log("Sending chat message: ", message, docName)
     const newMessage = {
         'from': from,
         'timestamp': Date.now(),
@@ -36,7 +37,9 @@ export const sendMessage = async (from, docName, message) => {
 
 export const readMessages = async (connection) => {
     try {
+        
         const messages = await getDoc(connection);
+        console.log("Reading chat message: ",messages.data())
         return messages.data();
     } catch (e) {
         console.error(e);
