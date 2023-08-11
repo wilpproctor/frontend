@@ -1,45 +1,50 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { connect, sendMessage, readMessages } from "./chatHelper";
 import { getUserDetails } from "../../lib/login";
+import { onSnapshot } from "firebase/firestore";
+import { query, collection, where } from "firebase/firestore";
 import { db } from "../../lib/firestore";
 import StudentContext from "../../lib/StudentContext";
 
 export default function StudentChat() {
     const currentUser = getUserDetails();
-    const { backend } = useContext(StudentContext);
     const [currentProctor, setCurrentProctor] = useState(null);
     const [chatMessages, setChatMessages] = useState([]);
     const [isWindowOpen, setWindowOpen] = useState(true);
+    const { backend } = useContext(StudentContext);
 
     useEffect(() => {
         backend.on("proctor-connected", ({ email }) => {
+            console.log(email);
             setCurrentProctor(email);
-        });
+        })
     }, []);
 
     useEffect(() => {
         (async () => {
-            console.log("chat messages = ", chatMessages)
-            if (currentProctor) {
-                try {
-                    console.log("current proctor = ", currentProctor)
-                    const connection = await connect(
-                        currentUser.email,
-                        currentProctor + "," + currentUser.email
-                    );
-
-                    const messagesData = await readMessages(connection);
-                    console.log("messages data = ", messagesData)
-                    if (messagesData) {
-
-                        setChatMessages(messagesData.messages);
-                    }
-                } catch (error) {
-                    console.error("Error fetching messages:", error);
-                }
-            }
+            console.log("currentProctor: ", currentProctor);
+            
+            const q = query(
+                collection(db, "chat"),
+                where("student", "==", currentUser.email)
+            );
+    
+            const unsub = onSnapshot(q, (querySnapshot) => {
+                console.log("I am in unsub: ", JSON.stringify(querySnapshot));
+                querySnapshot.forEach((doc) => {
+                    console.log("doc.data(): ", doc.data())
+                    console.log("currentProctor: ", doc.id.substring(0, doc.id.indexOf(",")))
+                    setCurrentProctor(doc.id.substring(0, doc.id.indexOf(",")));
+                    setChatMessages(doc.data().messages);
+                });
+            });
+    
+            return () => {
+                unsub(); // Unsubscribe the onSnapshot listener when the component unmounts
+            };
         })();
     }, [currentProctor]);
+    
 
     const newMessage = async (msg) => {
         if (!msg) return;
@@ -50,6 +55,7 @@ export default function StudentChat() {
             msg
         );
     };
+
     return (
         <div>
             {isWindowOpen && (

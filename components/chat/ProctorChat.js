@@ -1,73 +1,91 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import { connect, sendMessage, readMessages } from "./chatHelper";
 import { getUserDetails } from "../../lib/login";
-import { db } from "../../lib/firestore";
+import { onSnapshot } from "firebase/firestore";
 import { useChatStore } from "../proctor/StudentFeeds";
+import { db } from "../../lib/firestore";
+import { query, collection, where } from "firebase/firestore";
 import ProctorContext from "../../lib/ProctorContext";
 
 export default function ProctorChat() {
-    const currentUser = getUserDetails();
-    const { backend, sendReplyWarning, sendReplyAction, useStudentsStore } =
-        useContext(ProctorContext);
-    const currentStudent = useChatStore((state) => state.chatStudent);
-    const setUnread = useStudentsStore((state) => state.setUnread);
-    const setRead = useStudentsStore((state) => state.setRead);
-    const [chatMessages, setChatMessages] = useState([]);
-    const [isWindowOpen, setWindowOpen] = useState(true);
-    const [lastMessages, setLastMessages] = useState({});
-    const warnReplyTime = 10 * 1000;
-    const maxReplyTime = 20 * 1000;
-    const warnTimerRef = useRef(null);
-    const maxTimerRef = useRef(null);
+  const currentUser = getUserDetails();
+  const { backend, sendReplyWarning, sendReplyAction, useStudentsStore } =
+    useContext(ProctorContext);
+  const currentStudent = useChatStore((state) => state.chatStudent);
+  const setUnread = useStudentsStore((state) => state.setUnread);
+  const setRead = useStudentsStore((state) => state.setRead);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [isWindowOpen, setWindowOpen] = useState(true);
+  const [lastMessages, setLastMessages] = useState({});
+  const warnReplyTime = 10 * 1000;
+  const maxReplyTime = 20 * 1000;
+  const warnTimerRef = useRef(null);
+  const maxTimerRef = useRef(null);
 
-    useEffect(() => {
-        (async () => {
-            if (currentStudent) {
-                try {
-                    const connection = await connect(
-                        currentUser.email,
-                        currentUser.email + "," + currentStudent
-                    );
+  useEffect(() => {
+    const q = query(
+        collection(db, "chat"),
+        where("proctor", "==", currentUser.email)
+    );
 
-                    const messagesData = await readMessages(connection);
-                    if (messagesData) {
-                        setChatMessages(messagesData.messages);
-                    }
-
-                    const q = query(
-                        collection(db, "chat"),
-                        where("proctor", "==", currentUser.email)
-                    );
-
-                    const unsub = onSnapshot(q, (querySnapshot) => {
-                        querySnapshot.forEach((doc) => {
-                            if (doc.id === currentUser.email + "," + currentStudent) {
-                                setChatMessages(doc.data().messages);
-                            }
-
-                            // ... rest of the onSnapshot logic ...
-                        });
-                    });
-
-                    return () => {
-                        unsub(); // Unsubscribe the onSnapshot listener when the component unmounts
-                    };
-                } catch (error) {
-                    console.error("Error fetching messages:", error);
+    const unsub = onSnapshot(q, (querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            if (doc.id === currentUser.email + "," + currentStudent) {
+                setChatMessages(doc.data().messages);
+            }
+            
+            if (doc.data().messages.length === 0) return;
+            
+            const lastMessage = doc.data().messages[doc.data().messages.length - 1];
+            
+            if (lastMessage !== (lastMessages[doc.id] ?? {})) {
+                if (lastMessage.from !== currentUser.email) {
+                    setUnread(lastMessage.from);
+                } else {
+                    setRead(lastMessage.to);
                 }
             }
-        })();
-    }, [currentStudent]);
 
-    const newMessage = async (msg) => {
-        if (!msg) return;
-        document.getElementById("message-box").value = "";
-        await sendMessage(
-            currentUser.email,
-            currentUser.email + "," + currentStudent,
-            msg
-        );
+            clearTimeout(warnTimerRef.current);
+            clearTimeout(maxTimerRef.current);
+
+            if (
+                lastMessage.from !== currentUser.email &&
+                lastMessage !== (lastMessages[doc.id] ?? {})
+            ) {
+                warnTimerRef.current = setTimeout(
+                    () => sendReplyWarning(doc.data().student),
+                    warnReplyTime
+                );
+                maxTimerRef.current = setTimeout(
+                    () => sendReplyAction(doc.data().student, lastMessage),
+                    maxReplyTime
+                );
+                let temp = lastMessages;
+                temp[doc.id] = lastMessage;
+                setLastMessages(temp);
+            }
+        });
+    });
+
+    return () => {
+        unsub(); // Unsubscribe the onSnapshot listener when the component unmounts
     };
+}, [currentStudent]);
+
+
+  const newMessage = async (msg) => {
+    if (!msg) return;
+    console.log("msg: ", msg)
+    document.getElementById("message-box").value = "";
+    await sendMessage(
+      currentUser.email,
+      currentUser.email + "," + currentStudent,
+      msg
+    );
+  };
+
   return (
     <div>
       {isWindowOpen && (
