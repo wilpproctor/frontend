@@ -3,7 +3,6 @@ import Link from "next/link";
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-import CountdownTimer from "./CountdownTimerEnd";
 import CountdownTimerStart from "./CountdownTimerStart";
 import CountdownTimerEnd from "./CountdownTimerEnd";
 const headerURLs = [
@@ -70,10 +69,10 @@ export default function Header(props) {
           ))}
           {props.countertimer==="start"?<div className="mr-5 hover:text-white">
           {/* <CountdownTimerStart examDate="10-08-2023" examTime="04:26 PM" totalTimeInSeconds={5400}/> */}
-          <CountdownTimer examDate={examDate} examTime={examTime} totalTimeInSeconds={examDuration*60}/>
+          <CountdownTimerStart examDate={examDate} examTime={examTime} totalTimeInSeconds={examDuration*60}/>
           </div>:props.countertimer==="end"?<div className="mr-5 hover:text-white">
           {/* <CountdownTimerEnd examDate="10-08-2023" examTime="04:26 PM" totalTimeInSeconds={5400}/> */}
-          <CountdownTimer examDate={examDate} examTime={examTime} totalTimeInSeconds={examDuration*60}/>
+          <CountdownTimerEnd examDate={examDate} examTime={examTime} totalTimeInSeconds={examDuration*60}/>
           </div>:<></>}
         </nav>
         <button className="inline-flex items-center bg-blue-500 border-0 py-1 px-3 focus:outline-none hover:bg-orange-700 rounded text-white mt-4 md:mt-0"
