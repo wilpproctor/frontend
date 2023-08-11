@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import StudentContext from "../lib/StudentContext";
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
@@ -32,13 +31,12 @@ const headerURLs = [
 
 export default function Header(props) {
   const router = useRouter();
-  const { backend } = useContext(StudentContext);
   const examDate = useSelector((state) => state.examDate);
   const examTime = useSelector((state) => state.examTime);
   const examDuration = useSelector((state)=>state.examDuration);
 
   const handleLogout = () =>{
-    backend.emit("disconnect-student", "call disconnected by student");
+    
     router.push({
       pathname: "/",
     });
