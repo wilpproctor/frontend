@@ -24,8 +24,8 @@ export default function ProctorChat() {
   const maxTimerRef = useRef(null);
 
   useEffect(() => {
-    console.log("currentStudent: ", currentStudent  )
     (async () => {
+      console.log("currentStudent: ", currentStudent  )
       console.log("I am outside unsub: ",)
       backend.on("student-feeds", (obj) => {
         connect(currentUser.email, obj.email);
@@ -68,6 +68,7 @@ export default function ProctorChat() {
           }
         });
       });
+      unsub();
     })();
   }, [currentStudent]);
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { createBackendSocket } from "../lib/sockets";
 import wilpimage from "../assets/wilpimage.jpg";
 import bitslogo from "../assets/bitslogo.jpeg";
 import wilplogo from "../assets/wilplogo.png";
@@ -11,11 +12,12 @@ import { useRouter } from "next/router";
 
 export default function ProctorHeaderFirstPage(props) {
   const router = useRouter();
-
+  const backend = createBackendSocket("/proctor");
   const login = ()=>{
     router.push("/proctor/login");
   }
   const logout = ()=>{
+    backend.emit("disconnect-proctor", "Closing from proctor side");
     router.push("/proctor/login");
     sessionStorage.removeItem("cookie");
     sessionStorage.removeItem("user");
