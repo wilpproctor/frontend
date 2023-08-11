@@ -6,6 +6,7 @@ export const connect = async (proctor, student) => {
         const connectionName = proctor + "," + student;
         const connection = doc(db, 'chat', connectionName);
         const check = await getDoc(connection);
+        console.log("check: ", check)
         if (!check.exists())
             await setDoc(connection, {
                 'student': student,
