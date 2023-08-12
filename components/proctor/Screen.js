@@ -1,44 +1,73 @@
 import ProctorContext from "../../lib/ProctorContext";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 export default function Screen() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const { useStreamStore } = useContext(ProctorContext);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
   const width = 320;
   const height = (screen.height * width) / screen.width;
+
+  const monitorDisplay = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        preferCurrentTab: true,
+        audio: false,
+        video: {
+          cursor: "always",
+          displaySurface: "monitor",
+        },
+      });
+
+      let displaySurface = stream.getVideoTracks()[0].getSettings().displaySurface;
+      if (displaySurface !== "monitor") {
+        alert("Choose Full screen to continue");
+        return;
+      }
+
+      videoRef.current.srcObject = stream;
+      await videoRef.current.play();
+
+      useStreamStore.setState({
+        screen: {
+          canvas: canvasRef.current,
+          video: videoRef.current,
+        },
+      });
+
+    } catch (error) {
+      console.error("Error accessing screen sharing:", error);
+    }
+  };
+
+  const toggleFullscreen = () => {
+    if (!isFullscreen) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.log("Error attempting to enable full-screen mode:", err);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
   useEffect(() => {
-    const monitorDisplay = () => {
-      navigator.mediaDevices
-        .getDisplayMedia({
-          preferCurrentTab: true,
-          audio: false,
-          video: {
-            cursor: "always",
-            displaySurface: "monitor",
-          },
-        })
-        .then((stream) => {
-          let displaySurface = stream
-            .getVideoTracks()[0]
-            .getSettings().displaySurface;
-          if (displaySurface !== "monitor") {
-            alert("Choose Full screen to continue");
-            return monitorDisplay();
-          }
-          videoRef.current.srcObject = stream;
-          videoRef.current.play();
-          return;
-        });
-    };
     monitorDisplay();
-    useStreamStore.setState({
-      screen: {
-        canvas: canvasRef.current,
-        video: videoRef.current,
-      },
-    });
   }, []);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(document.fullscreenElement !== null);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
   return (
     <div className="hidden">
       <video
@@ -48,6 +77,9 @@ export default function Screen() {
         height={height}
       />
       <canvas ref={canvasRef} width={width} height={height} />
+      <button onClick={toggleFullscreen}>
+        {isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+      </button>
     </div>
   );
 }
