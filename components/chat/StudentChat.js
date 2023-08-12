@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { connect, sendMessage, readMessages } from "./chatHelper";
 import { getUserDetails } from "../../lib/login";
-import { onSnapshot } from "firebase/firestore";
+import { onSnapshot, getDoc } from "firebase/firestore";
 import { query, collection, where } from "firebase/firestore";
 import { db } from "../../lib/firestore";
 import StudentContext from "../../lib/StudentContext";
