@@ -23,7 +23,8 @@ export default function StudentChat() {
     useEffect(() => {
         (async () => {
             console.log("currentProctor: ", currentProctor);
-            
+            const messages = await getDoc(doc(db, "chat", `${currentProctor},${currentUser.email}`))
+            console.log("messages are: ", messages)
             const q = query(
                 collection(db, "chat"),
                 where("Document ID", "==", `${currentProctor},${currentUser.email}`)
