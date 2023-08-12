@@ -25,76 +25,55 @@ export default function ProctorChat() {
 
   useEffect(() => {
     (async () => {
-    const connection = `${currentUser.email},${currentStudent}`
-
-    const messagesData = await getDoc(doc(db, "chat", connection));
-    if (messagesData.data().messages.length === 0) return;
-    const lastMessage = messagesData.data().messages[messagesData.data().messages.length - 1];
-    if (lastMessage !== (lastMessages[messagesData.id] ?? {})) {
-      if (lastMessage.from !== currentUser.email) {
-        setUnread(lastMessage.from);
-      } else {
-        setRead(lastMessage.to);
-      }
-
-    }
-    clearTimeout(warnTimerRef.current);
-    clearTimeout(maxTimerRef.current);
-
-    if (
-      lastMessage.from !== currentUser.email &&
-      lastMessage !== (lastMessages[doc.id] ?? {})
-    ) {
-      warnTimerRef.current = setTimeout(
-        () => sendReplyWarning(messagesData.data().student),
-        warnReplyTime
-      );
-      maxTimerRef.current = setTimeout(
-        () => sendReplyAction(messagesData.data().student, lastMessage),
-        maxReplyTime
-      );
-      let temp = lastMessages;
-      temp[messagesData.id] = lastMessage;
-      setLastMessages(temp);
-    }})();
-      // const unsub = onSnapshot(q, (querySnapshot) => {
-      //   querySnapshot.forEach((doc) => {
-
-
-      //     const lastMessage = doc.data().messages[doc.data().messages.length - 1];
-
-      //     if (lastMessage !== (lastMessages[doc.id] ?? {})) {
-      //       if (lastMessage.from !== currentUser.email) {
-      //         setUnread(lastMessage.from);
-      //       } else {
-      //         setRead(lastMessage.to);
-      //       }
-      //     }
-
-      //     clearTimeout(warnTimerRef.current);
-      //     clearTimeout(maxTimerRef.current);
-
-      //     if (
-      //       lastMessage.from !== currentUser.email &&
-      //       lastMessage !== (lastMessages[doc.id] ?? {})
-      //     ) {
-      //       warnTimerRef.current = setTimeout(
-      //         () => sendReplyWarning(doc.data().student),
-      //         warnReplyTime
-      //       );
-      //       maxTimerRef.current = setTimeout(
-      //         () => sendReplyAction(doc.data().student, lastMessage),
-      //         maxReplyTime
-      //       );
-      //       let temp = lastMessages;
-      //       temp[doc.id] = lastMessage;
-      //       setLastMessages(temp);
-      //     }
-      //   });
-      // });
-
-      }, [currentStudent]);
-
+      const connection = `${currentUser.email},${currentStudent}`;
+      const docRef = doc(db, 'chat', connection);
+  
+      const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const messagesData = docSnapshot.data();
+          console.log("docsnap: ", docSnapshot.data())
+          if (messagesData.messages.length === 0) return;
+  
+          const lastMessage = messagesData.messages[messagesData.messages.length - 1];
+  
+          if (lastMessage !== (lastMessages[docSnapshot.id] ?? {})) {
+            if (lastMessage.from !== currentUser.email) {
+              setUnread(lastMessage.from);
+            } else {
+              setRead(lastMessage.to);
+            }
+          }
+  
+          clearTimeout(warnTimerRef.current);
+          clearTimeout(maxTimerRef.current);
+  
+          if (
+            lastMessage.from !== currentUser.email &&
+            lastMessage !== (lastMessages[docSnapshot.id] ?? {})
+          ) {
+            warnTimerRef.current = setTimeout(
+              () => sendReplyWarning(messagesData.student),
+              warnReplyTime
+            );
+            maxTimerRef.current = setTimeout(
+              () => sendReplyAction(messagesData.student, lastMessage),
+              maxReplyTime
+            );
+            let temp = lastMessages;
+            temp[docSnapshot.id] = lastMessage;
+            setLastMessages(temp);
+          }
+        } else {
+          console.log('No messages data found');
+        }
+      });
+  
+      return () => {
+        unsubscribe(); // Unsubscribe the listener when the component unmounts
+      };
+    })();
+  }, [currentStudent]);
+  
 
   const newMessage = async (msg) => {
     if (!msg) return;

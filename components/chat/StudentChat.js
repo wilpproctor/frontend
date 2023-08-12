@@ -1,9 +1,10 @@
 import { useState, useEffect, useContext } from "react";
 import { connect, sendMessage, readMessages } from "./chatHelper";
 import { getUserDetails } from "../../lib/login";
-import { onSnapshot, getDoc, doc } from "firebase/firestore";
+import { onSnapshot, getDoc, doc, getDocs } from "firebase/firestore";
 import { query, collection, where } from "firebase/firestore";
 import StudentContext from "../../lib/StudentContext";
+import { db } from "../../lib/firestore";
 
 export default function StudentChat() {
     const currentUser = getUserDetails();
@@ -24,24 +25,30 @@ export default function StudentChat() {
             console.log("chat messages =", chatMessages);
             if (currentProctor) {
                 try {
-                    console.log("current proctor =", currentProctor);
                     const connection = `${currentProctor},${currentUser.email}`
+                    const docRef = doc(db, 'chat', connection);
+                    const unsubscribe = onSnapshot(docRef, (docSnapshot) => {
+                        if (docSnapshot.exists()) {
+                            setChatMessages(docSnapshot.data().messages);
+                          } else {
+                            console.log('No messages data found');
+                          }
+                    })
+                    // const messagesData = await readMessages(connection);
+                    // console.log("messages data =", messagesData.data());
     
-                    const messagesData = await readMessages(connection);
-                    console.log("messages data =", messagesData.data());
-    
-                    if (messagesData.data()) {
-                        console.log("Fetched messages =", messagesData.data().messages);
-                        setChatMessages(messagesData.data().messages);
-                    } else {
-                        console.log("No messages data found.");
-                    }
+                    // if (messagesData.data()) {
+                    //     console.log("Fetched messages =", messagesData.data().messages);
+                    //     setChatMessages(messagesData.data().messages);
+                    // } else {
+                    //     console.log("No messages data found.");
+                    // }
                 } catch (error) {
                     console.error("Error fetching messages:", error);
                 }
             }
         })();
-    }, [currentProctor]);
+    }, [currentProctor ]);
     
 
     const newMessage = async (msg) => {
