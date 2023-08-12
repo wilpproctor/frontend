@@ -33,7 +33,8 @@ export default function ProctorChat() {
           const messagesData = docSnapshot.data();
           console.log("docsnap: ", docSnapshot.data())
           if (messagesData.messages.length === 0) return;
-  
+          //manish changes
+          setChatMessages(docSnapshot.data().messages);
           const lastMessage = messagesData.messages[messagesData.messages.length - 1];
   
           if (lastMessage !== (lastMessages[docSnapshot.id] ?? {})) {
