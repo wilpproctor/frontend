@@ -5,7 +5,7 @@ import { getUserDetails } from "../../lib/login";
 import { onSnapshot } from "firebase/firestore";
 import { useChatStore } from "../proctor/StudentFeeds";
 import { db } from "../../lib/firestore";
-import { query, collection, where } from "firebase/firestore";
+import { query, collection, where, getDoc, doc } from "firebase/firestore";
 import ProctorContext from "../../lib/ProctorContext";
 
 export default function ProctorChat() {
@@ -24,13 +24,10 @@ export default function ProctorChat() {
   const maxTimerRef = useRef(null);
 
   useEffect(() => {
-    const q = query(
-      collection(db, "chat"),
-      where("Document ID", "==", `${currentUser.email},${currentStudent}`)
-    );
+    (async () => {
     const connection = `${currentUser.email},${currentStudent}`
 
-    const messagesData = readMessages(db, "chat", connection);
+    const messagesData = await getDoc(doc(db, "chat", connection));
     if (messagesData.data().messages.length === 0) return;
     const lastMessage = messagesData.data().messages[messagesData.data().messages.length - 1];
     if (lastMessage !== (lastMessages[messagesData.id] ?? {})) {
@@ -59,7 +56,7 @@ export default function ProctorChat() {
       let temp = lastMessages;
       temp[messagesData.id] = lastMessage;
       setLastMessages(temp);
-    }
+    }})();
       // const unsub = onSnapshot(q, (querySnapshot) => {
       //   querySnapshot.forEach((doc) => {
 

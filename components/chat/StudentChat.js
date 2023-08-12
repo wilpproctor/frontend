@@ -3,7 +3,6 @@ import { connect, sendMessage, readMessages } from "./chatHelper";
 import { getUserDetails } from "../../lib/login";
 import { onSnapshot, getDoc, doc } from "firebase/firestore";
 import { query, collection, where } from "firebase/firestore";
-import { db } from "../../lib/firestore";
 import StudentContext from "../../lib/StudentContext";
 
 export default function StudentChat() {
@@ -28,7 +27,7 @@ export default function StudentChat() {
                     console.log("current proctor =", currentProctor);
                     const connection = `${currentProctor},${currentUser.email}`
     
-                    const messagesData = await readMessages(db, "chat", connection);
+                    const messagesData = await readMessages(connection);
                     console.log("messages data =", messagesData.data());
     
                     if (messagesData.data()) {

@@ -38,8 +38,8 @@ export const sendMessage = async (from, docName, message) => {
 
 export const readMessages = async (connection) => {
     try {
-        
-        const messages = await getDoc(connection);
+        console.log("Will be Reading chat message: ")
+        const messages = await getDoc(doc(db, "chat", connection));
         console.log("Reading chat message: ",messages)
         return messages;
     } catch (e) {
