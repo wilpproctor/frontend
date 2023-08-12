@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { connect, sendMessage, readMessages } from "./chatHelper";
 import { getUserDetails } from "../../lib/login";
-import { onSnapshot, getDoc } from "firebase/firestore";
+import { onSnapshot, getDoc, doc } from "firebase/firestore";
 import { query, collection, where } from "firebase/firestore";
 import { db } from "../../lib/firestore";
 import StudentContext from "../../lib/StudentContext";
@@ -22,27 +22,25 @@ export default function StudentChat() {
 
     useEffect(() => {
         (async () => {
-            console.log("currentProctor: ", currentProctor);
-            const messages = await getDoc(doc(db, "chat", `${currentProctor},${currentUser.email}`))
-            console.log("messages are: ", messages)
-            const q = query(
-                collection(db, "chat"),
-                where("Document ID", "==", `${currentProctor},${currentUser.email}`)
-            );
+            console.log("chat messages =", chatMessages);
+            if (currentProctor) {
+                try {
+                    console.log("current proctor =", currentProctor);
+                    const connection = `${currentProctor},${currentUser.email}`
     
-            const unsub = onSnapshot(q, (querySnapshot) => {
-                console.log("I am in unsub: ", JSON.stringify(querySnapshot));
-                querySnapshot.forEach((doc) => {
-                    console.log("doc.data(): ", doc.data())
-                    console.log("currentProctor: ", doc.id.substring(0, doc.id.indexOf(",")))
-                    setCurrentProctor(doc.id.substring(0, doc.id.indexOf(",")));
-                    setChatMessages(doc.data().messages);
-                });
-            });
+                    const messagesData = await readMessages(db, "chat", connection);
+                    console.log("messages data =", messagesData.data());
     
-            return () => {
-                unsub(); // Unsubscribe the onSnapshot listener when the component unmounts
-            };
+                    if (messagesData.data()) {
+                        console.log("Fetched messages =", messagesData.data().messages);
+                        setChatMessages(messagesData.data().messages);
+                    } else {
+                        console.log("No messages data found.");
+                    }
+                } catch (error) {
+                    console.error("Error fetching messages:", error);
+                }
+            }
         })();
     }, [currentProctor]);
     

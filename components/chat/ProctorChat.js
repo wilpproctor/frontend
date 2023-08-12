@@ -25,54 +25,78 @@ export default function ProctorChat() {
 
   useEffect(() => {
     const q = query(
-        collection(db, "chat"),
-        where("Document ID", "==", `${currentUser.email},${currentStudent}`)
+      collection(db, "chat"),
+      where("Document ID", "==", `${currentUser.email},${currentStudent}`)
     );
+    const connection = `${currentUser.email},${currentStudent}`
 
-    const unsub = onSnapshot(q, (querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            if (doc.id === currentUser.email + "," + currentStudent) {
-                setChatMessages(doc.data().messages);
-            }
-            
-            if (doc.data().messages.length === 0) return;
-            
-            const lastMessage = doc.data().messages[doc.data().messages.length - 1];
-            
-            if (lastMessage !== (lastMessages[doc.id] ?? {})) {
-                if (lastMessage.from !== currentUser.email) {
-                    setUnread(lastMessage.from);
-                } else {
-                    setRead(lastMessage.to);
-                }
-            }
+    const messagesData = readMessages(db, "chat", connection);
+    if (messagesData.data().messages.length === 0) return;
+    const lastMessage = messagesData.data().messages[messagesData.data().messages.length - 1];
+    if (lastMessage !== (lastMessages[messagesData.id] ?? {})) {
+      if (lastMessage.from !== currentUser.email) {
+        setUnread(lastMessage.from);
+      } else {
+        setRead(lastMessage.to);
+      }
 
-            clearTimeout(warnTimerRef.current);
-            clearTimeout(maxTimerRef.current);
+    }
+    clearTimeout(warnTimerRef.current);
+    clearTimeout(maxTimerRef.current);
 
-            if (
-                lastMessage.from !== currentUser.email &&
-                lastMessage !== (lastMessages[doc.id] ?? {})
-            ) {
-                warnTimerRef.current = setTimeout(
-                    () => sendReplyWarning(doc.data().student),
-                    warnReplyTime
-                );
-                maxTimerRef.current = setTimeout(
-                    () => sendReplyAction(doc.data().student, lastMessage),
-                    maxReplyTime
-                );
-                let temp = lastMessages;
-                temp[doc.id] = lastMessage;
-                setLastMessages(temp);
-            }
-        });
-    });
+    if (
+      lastMessage.from !== currentUser.email &&
+      lastMessage !== (lastMessages[doc.id] ?? {})
+    ) {
+      warnTimerRef.current = setTimeout(
+        () => sendReplyWarning(messagesData.data().student),
+        warnReplyTime
+      );
+      maxTimerRef.current = setTimeout(
+        () => sendReplyAction(messagesData.data().student, lastMessage),
+        maxReplyTime
+      );
+      let temp = lastMessages;
+      temp[messagesData.id] = lastMessage;
+      setLastMessages(temp);
+    }
+      // const unsub = onSnapshot(q, (querySnapshot) => {
+      //   querySnapshot.forEach((doc) => {
 
-    return () => {
-        unsub(); // Unsubscribe the onSnapshot listener when the component unmounts
-    };
-}, [currentStudent]);
+
+      //     const lastMessage = doc.data().messages[doc.data().messages.length - 1];
+
+      //     if (lastMessage !== (lastMessages[doc.id] ?? {})) {
+      //       if (lastMessage.from !== currentUser.email) {
+      //         setUnread(lastMessage.from);
+      //       } else {
+      //         setRead(lastMessage.to);
+      //       }
+      //     }
+
+      //     clearTimeout(warnTimerRef.current);
+      //     clearTimeout(maxTimerRef.current);
+
+      //     if (
+      //       lastMessage.from !== currentUser.email &&
+      //       lastMessage !== (lastMessages[doc.id] ?? {})
+      //     ) {
+      //       warnTimerRef.current = setTimeout(
+      //         () => sendReplyWarning(doc.data().student),
+      //         warnReplyTime
+      //       );
+      //       maxTimerRef.current = setTimeout(
+      //         () => sendReplyAction(doc.data().student, lastMessage),
+      //         maxReplyTime
+      //       );
+      //       let temp = lastMessages;
+      //       temp[doc.id] = lastMessage;
+      //       setLastMessages(temp);
+      //     }
+      //   });
+      // });
+
+      }, [currentStudent]);
 
 
   const newMessage = async (msg) => {
@@ -100,21 +124,19 @@ export default function ProctorChat() {
               .map((obj, i) => (
                 <div
                   key={i}
-                  className={`${
-                    obj.from == currentUser.email
+                  className={`${obj.from == currentUser.email
                       ? "self-end text-right mr-1.5"
                       : "self-start text-left"
-                  }`}
+                    }`}
                 >
                   <time className="text-xs opacity-70">
                     {new Date(obj.timestamp).toTimeString().substring(0, 8)}
                   </time>
                   <p
-                    className={`break-words max-w-[278px] rounded-lg p-1 pr-1.5 pl-1.5 text-slate-200 ${
-                      obj.from == currentUser.email
+                    className={`break-words max-w-[278px] rounded-lg p-1 pr-1.5 pl-1.5 text-slate-200 ${obj.from == currentUser.email
                         ? "bg-green-700"
                         : "bg-slate-800"
-                    }`}
+                      }`}
                   >
                     {obj.msg}
                   </p>
