@@ -77,7 +77,7 @@ export default function Webcam() {
     console.log("1", devices[0])
     console.log("2", devices[1])
     navigator.mediaDevices
-      .getUserMedia({ video: { width, height, frameRate: 24 }, audio: true })
+      .getUserMedia({ video: { width, height, frameRate: 24, deviceId: devices[0]?.deviceId}, audio: true })
       .then((stream) => {
         videoRef.current.srcObject = stream;
         videoRef.current.play();
