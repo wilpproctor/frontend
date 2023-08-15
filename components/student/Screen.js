@@ -11,18 +11,14 @@ export default function Screen() {
   const monitorDisplay = async () => {
     try {
       const stream = await navigator.mediaDevices.getDisplayMedia({
-        preferCurrentTab: true,
         audio: false,
-        video: {
-          cursor: "always",
-          displaySurface: "monitor",
-        },
+        video: true
       });
 
       let displaySurface = stream.getVideoTracks()[0].getSettings().displaySurface;
       if (displaySurface !== "monitor") {
         alert("Choose Full screen to continue");
-        return;
+        return monitorDisplay();
       }
 
       videoRef.current.srcObject = stream;
