@@ -14,13 +14,8 @@ useEffect(() => {
     const monitorDisplay = () => {
       navigator.mediaDevices
         .getDisplayMedia({
-          preferCurrentTab: true,
-          audio: false,
-          video: {
-            cursor: "always",
-            displaySurface: "monitor",
-          },
-        })
+          audio: false
+          )
         .then((stream) => {
           let displaySurface = stream
             .getVideoTracks()[0]
