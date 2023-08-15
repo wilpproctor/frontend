@@ -50,10 +50,10 @@ const [examdata, setExamdata]=useState([]);
     setquestionData(examdata[currentindex]);
   },[currentindex]);
 
-  useEffect(()=>{
-    if(isExamEnded)
-      handleSubmit();
-  },[isExamEnded]);
+  // useEffect(()=>{
+  //   if(isExamEnded)
+  //     handleSubmit();
+  // },[isExamEnded]);
 
   const handleOptionChange = (event) => {
     const selectedOption = event.target.value;
