@@ -10,37 +10,39 @@ export default function Screen() {
   const width = 320;
   const height = (screen.height * width) / screen.width;
 
-  const monitorDisplay = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getDisplayMedia({
-        preferCurrentTab: true,
-        audio: false,
-        video: {
-          cursor: "always",
-          displaySurface: "monitor",
-        },
-      });
-
-      let displaySurface = stream.getVideoTracks()[0].getSettings().displaySurface;
-      if (displaySurface !== "monitor") {
-        alert("Choose Full screen to continue");
-        return;
-      }
-
-      videoRef.current.srcObject = stream;
-      await videoRef.current.play();
-
-      useStreamStore.setState({
-        screen: {
-          canvas: canvasRef.current,
-          video: videoRef.current,
-        },
-      });
-
-    } catch (error) {
-      console.error("Error accessing screen sharing:", error);
-    }
-  };
+useEffect(() => {
+    const monitorDisplay = () => {
+      navigator.mediaDevices
+        .getDisplayMedia({
+          preferCurrentTab: true,
+          audio: false,
+          video: {
+            cursor: "always",
+            displaySurface: "monitor",
+          },
+        })
+        .then((stream) => {
+          let displaySurface = stream
+            .getVideoTracks()[0]
+            .getSettings().displaySurface;
+          if (displaySurface !== "monitor") {
+            alert("Choose Full screen to continue");
+            return monitorDisplay();
+          }
+          videoRef.current.srcObject = stream;
+          videoRef.current.play();
+          return;
+        });
+    };
+    monitorDisplay();
+    useStreamStore.setState({
+      screen: {
+        canvas: canvasRef.current,
+        video: videoRef.current,
+      },
+    });
+  }, []);
+  
   console.log(isFullscreen,"isFullscreen");
   const toggleFullscreen = () => {
     if (!isFullscreen) {
@@ -52,9 +54,9 @@ export default function Screen() {
     }
   };
 
-  useEffect(() => {
-    monitorDisplay();
-  }, []);
+  // useEffect(() => {
+  //   monitorDisplay();
+  // }, []);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
