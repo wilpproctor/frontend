@@ -13,9 +13,7 @@ export default function Screen() {
 useEffect(() => {
     const monitorDisplay = () => {
       navigator.mediaDevices
-        .getDisplayMedia({
-          audio: false
-          )
+        .getDisplayMedia()
         .then((stream) => {
           let displaySurface = stream
             .getVideoTracks()[0]
