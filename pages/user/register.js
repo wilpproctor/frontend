@@ -8,6 +8,7 @@ import styles from "../../styles/Display.module.css";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useContext, useState, useRef, useEffect } from "react";
+import { examBackendURL } from "..";
 
 export default function Register() {
   const router = useRouter();
@@ -37,7 +38,7 @@ export default function Register() {
     console.log("Email submitted:", email, password);
     try {
         //put hosted url exambackend
-        const response = await fetch('https://exambackend-khqy.onrender.com/api/auth/signup', {
+        const response = await fetch(examBackendURL + 'api/auth/signup', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

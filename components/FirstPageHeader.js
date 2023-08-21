@@ -7,6 +7,7 @@ import wilplogo from "../assets/wilplogo.png";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import jwtDecode from "jwt-decode";
 import { useRouter } from "next/router";
+import { examBackendURL } from "../pages";
 
 
 export default function FirstPageHeader() {
@@ -41,7 +42,7 @@ export default function FirstPageHeader() {
     const credval=credentialResponse.credential;
     try {
       const response = await fetch(
-        "https://exambackend-khqy.onrender.com/api/auth/google-login",
+        examBackendURL +"api/auth/google-login",
         {
           method: "POST",
           headers: {

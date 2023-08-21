@@ -3,6 +3,7 @@ import FirstPageFooter from "../../components/FirstPageFooter";
 import ProctorHeaderFirstPage from "../../components/ProctorHeaderFirstPage";
 import { useState } from "react";
 import Loader from "../../components/loader/Loader"; // Import the Loader component
+import { examBackendURL } from "..";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -27,7 +28,7 @@ export default function LoginPage() {
       setLoading(true); // Activate loader during login process
 
       const response = await fetch(
-        "https://exambackend-khqy.onrender.com/api/auth/login-admin",
+        examBackendURL + "api/auth/login-admin",
         {
           method: "POST",
           headers: {

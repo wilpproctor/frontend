@@ -3,6 +3,7 @@ import FirstPageFooter from "../../components/FirstPageFooter";
 import ProctorHeaderFirstPage from "../../components/ProctorHeaderFirstPage";
 import { useState } from "react";
 import Loader from "../../components/loader/Loader"; // Import the Loader component
+import { examBackendURL } from "..";
 
 
 export default function RegistrationPage() {
@@ -35,7 +36,7 @@ export default function RegistrationPage() {
 
       // Replace with your registration API endpoint
       const response = await fetch(
-        "https://exambackend-khqy.onrender.com/api/auth/signup-admin",
+        examBackendURL + "api/auth/signup-admin",
         {
           method: "POST",
           headers: {

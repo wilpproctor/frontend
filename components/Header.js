@@ -35,9 +35,9 @@ export default function Header(props) {
   const router = useRouter();
   const examDate = useSelector((state) => state.examDate);
   const examTime = useSelector((state) => state.examTime);
-  const examDuration = useSelector((state)=>state.examDuration);
+  const examDuration = useSelector((state) => state.examDuration);
 
-  const handleLogout = () =>{
+  const handleLogout = () => {
     backend.emit("disconnect-student", "call disconnected by student");
     router.push({
       pathname: "/",
@@ -45,7 +45,7 @@ export default function Header(props) {
     sessionStorage.removeItem("cookie");
     sessionStorage.removeItem("user");
   }
-  console.log(examDate,examTime,examDuration);
+  // console.log(examDate,examTime,examDuration);
   return (
     <header className="text-gray-400 bg-blue-600 body-font">
       <div className="container mx-auto flex flex-wrap p-3 flex-col md:flex-row items-center">
@@ -70,16 +70,19 @@ export default function Header(props) {
               {name}
             </Link>
           ))}
-          {props.countertimer==="start"?<div className="mr-5 hover:text-white">
-          {/* <CountdownTimerStart examDate="10-08-2023" examTime="04:26 PM" totalTimeInSeconds={5400}/> */}
-          <CountdownTimerStart examDate={examDate} examTime={examTime} totalTimeInSeconds={examDuration*60}/>
-          </div>:props.countertimer==="end"?<div className="mr-5 hover:text-white">
-          {/* <CountdownTimerEnd examDate="10-08-2023" examTime="04:26 PM" totalTimeInSeconds={5400}/> */}
-          <CountdownTimerEnd examDate={examDate} examTime={examTime} totalTimeInSeconds={examDuration*60}/>
-          </div>:<></>}
+          {
+            props.countertimer === "start"
+              ?
+              <div className="mr-5 hover:text-white">
+                <CountdownTimerStart examDate={examDate} examTime={examTime} totalTimeInSeconds={examDuration * 60} />
+              </div> 
+              : props.countertimer === "end" ? <div className="mr-5 hover:text-white">
+                {/* <CountdownTimerEnd examDate="10-08-2023" examTime="04:26 PM" totalTimeInSeconds={5400}/> */}
+                <CountdownTimerEnd examDate={examDate} examTime={examTime} totalTimeInSeconds={examDuration * 60} />
+              </div> : <></>}
         </nav>
         <button className="inline-flex items-center bg-blue-500 border-0 py-1 px-3 focus:outline-none hover:bg-orange-700 rounded text-white mt-4 md:mt-0"
-        onClick={handleLogout}
+          onClick={handleLogout}
         >
           Logout
           {

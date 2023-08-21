@@ -1,6 +1,7 @@
 import Head from "next/head";
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { examBackendURL } from "../../pages";
 import AnswerInput from '../AnswerInput';
 import Loader from "../loader/Loader";
 
@@ -20,7 +21,7 @@ const [examdata, setExamdata]=useState([]);
       console.log("examId: ", examId)
       try {
         const response = await fetch(
-          `https://exambackend-khqy.onrender.com/api/exams/questionsForExam/${examId}`,
+          `${examBackendURL}api/exams/questionsForExam/${examId}`,
           {
             method: "GET",
             headers: {
@@ -119,7 +120,7 @@ const [examdata, setExamdata]=useState([]);
     console.log(userResponseData,"userResponse");
 
     try {
-      const response = await fetch("https://exambackend-khqy.onrender.com/api/student/submitResponse", {
+      const response = await fetch(examBackendURL + "api/student/submitResponse", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
