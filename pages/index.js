@@ -13,6 +13,9 @@ import bitslogo from "../assets/bitslogo.jpeg";
 import wilplogo from "../assets/wilplogo.png";
 import Loader from "../components/loader/Loader";
 
+// export const examBackendURL = "http://localhost:4000/";
+export const examBackendURL = "https://exambackend-khqy.onrender.com/"
+
 export default function Home() {
   const router = useRouter();
   const [time, setTime] = useState(new Date());
@@ -46,7 +49,7 @@ export default function Home() {
     try {
       setLoading(true);
       const response = await fetch(
-        "https://exambackend-khqy.onrender.com/api/auth/google-login",
+        examBackendURL + "api/auth/google-login",
         {
           method: "POST",
           headers: {
@@ -102,6 +105,7 @@ export default function Home() {
             <GoogleOAuthProvider clientId="580012478864-r2u2irsnn7o9qog66r437lcrsuk4s0dl.apps.googleusercontent.com">
               <GoogleLogin
                 onSuccess={(credentialResponse) => {
+                  console.log("HERE: ")
                   handleGoogleSignInSuccess(credentialResponse);
                 }}
                 onError={() => {

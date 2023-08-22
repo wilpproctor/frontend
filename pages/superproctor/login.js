@@ -29,7 +29,7 @@ export default function LoginPage() {
     try {
       setLoading(true);
       const response = await fetch(
-        "https://exambackend-khqy.onrender.com/api/auth/login-superadmin",
+        examBackendURL + "api/auth/login-superadmin",
         {
           method: "POST",
           headers: {

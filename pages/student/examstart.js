@@ -9,8 +9,11 @@ import { useContext, useState, useRef, useEffect } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { useSelector } from "react-redux";
+import { useDispatch } from 'react-redux';
 
 export default function ExamStart() {
+  const dispatch = useDispatch();
+  
   const router = useRouter();
   const { examId } = router.query;
   const isExamStarted = useSelector((state)=>state.isExamStarted);
@@ -18,28 +21,35 @@ export default function ExamStart() {
 
   const handleAccept = ()=>{
     console.log(isExamStarted,"isExamStarted",isExamEnded,"isExamEnded");
-    if(isExamStarted && !isExamEnded){
-      router.push({
-        pathname: `/student/exam`,
-        //query: { returnUrl: router.asPath },
-      });
-    }else if (!isExamStarted){
-      alert("Exam not yet started");
-    }
-    else {
-      alert("Exam has ended");
-    }
+    dispatch({ type: 'SET_IS_EXAM_STARTED', payload: true });
+    router.push({
+      pathname: `/student/exam`,
+      //query: { returnUrl: router.asPath },
+    });
+    // if(isExamStarted && !isExamEnded){
+    //   router.push({
+    //     pathname: `/student/exam`,
+    //     //query: { returnUrl: router.asPath },
+    //   });
+    // }else if (!isExamStarted){
+    //   alert("Exam not yet started");
+    // }
+    // else {
+    //   alert("Exam has ended");
+    // }
     
   }
   return (
     <>
-      {isExamStarted && !isExamEnded ? (
+      {/* {isExamStarted && !isExamEnded ? (
         <Header countertimer={"end"} />
       ) : !isExamStarted ? (
         <Header countertimer={"start"} />
       ) : (
         <Header countertimer={"end"} />
-      )}
+      )} */}
+
+      <Header countertimer={"no"} />
 
       <div style={{}}>
         <Image

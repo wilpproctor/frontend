@@ -33,7 +33,7 @@ export default function Login() {
       //put hosted url exambackend
       setLoading(true);
       const response = await fetch(
-        "https://exambackend-khqy.onrender.com/api/auth/login",
+        examBackendURL + "api/auth/login",
         {
           method: "POST",
           headers: {
@@ -79,7 +79,7 @@ export default function Login() {
     console.log(creds);
     try{
       const response = await fetch(
-        "https://exambackend-khqy.onrender.com/api/auth/googlelogin",
+        examBackendURL + "api/auth/googlelogin",
         {
           method: "POST",
           headers: {

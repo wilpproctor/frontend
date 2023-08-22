@@ -33,7 +33,7 @@ export default function RegistrationPage() {
       setLoading(true); // Activate loader during registration process
 
       const response = await fetch(
-        "https://exambackend-khqy.onrender.com/api/auth/signup-superadmin",
+        examBackendURL + "/api/auth/signup-superadmin",
         {
           method: "POST",
           headers: {
