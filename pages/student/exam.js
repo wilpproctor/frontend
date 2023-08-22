@@ -161,7 +161,7 @@ export default function ExamPage() {
       </div>
 
       <Webcam />
-      {process.env.NEXT_PUBLIC_BROWSER_LOCK == "true" && <TabDetector />}
+      {process.env.NEXT_PUBLIC_BROWSER_LOCK == "true"/* && <TabDetector />*/}
       <Screen />
     </StudentContext.Provider>
   );
