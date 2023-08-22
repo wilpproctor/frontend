@@ -13,8 +13,8 @@ import bitslogo from "../assets/bitslogo.jpeg";
 import wilplogo from "../assets/wilplogo.png";
 import Loader from "../components/loader/Loader";
 
-export const examBackendURL = "http://192.168.137.103:4000/";
-// export const examBackendURL = "https://exambackend-khqy.onrender.com/"
+// export const examBackendURL = "http://localhost:4000/";
+export const examBackendURL = "https://exambackend-khqy.onrender.com/"
 
 export default function Home() {
   const router = useRouter();

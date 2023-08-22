@@ -43,7 +43,7 @@ export default function ExamSelect() {
     try{
       const response =  await fetch(tempUrl, {method: "GET", headers: { Authorization: bearerToken}})
       const currentTime = await response.json();
-      if(currentTime < time){
+      if(currentTime.time < parseInt(time)){
         alert("Exam not started yet")
         return
       }
@@ -52,7 +52,6 @@ export default function ExamSelect() {
       console.log("Error Validating Exam:", err);
     }
     dispatch({ type: "SET_EXAM_ID", payload: examId });
-    //dispatch({ type: "SET_EXAM_TIME", payload: new Date(time).toTimeString}); 
     dispatch({ type: "SET_EXAM_TIME", payload: time});
     dispatch({type: "SET_EXAM_DATE", payload: date});
     dispatch({type:"SET_EXAM_DURATION", payload: duration});
@@ -81,14 +80,14 @@ export default function ExamSelect() {
           <Loader />
         ) : data ? (
           data.map((ele) => (
-            <div key={ele._id} onClick={() => handleExamStart(ele._id, ele.time, ele.date,ele.totalTime,ele.openBook,ele.compiler,ele.excel,ele.calculator)}>
+            <div style={{margin: "10px"}} key={ele._id} onClick={() => handleExamStart(ele._id, ele.time, ele.date,ele.totalTime,ele.openBook,ele.compiler,ele.excel,ele.calculator)}>
               <Card
                 company={ele.company}
                 subject={ele.subject}
                 exam_type={ele.year+", Sem: "+ele.sem+", "+ele.examType}
                 time={ele.totalTime + " minutes"}
                 date={ele.date}
-                timing={ele.time}
+                timing={new Date(parseInt(ele.time)).toTimeString().slice(0, 8)}
               />
             </div>
           ))
