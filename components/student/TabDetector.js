@@ -15,7 +15,7 @@ export default function TabDetector() {
         sendAlert("Student tried to change tabs");
       }, 1000)
     }
-    window.addEventListener("blur", onWindowBlur);
+    // window.addEventListener("blur", onWindowBlur);
 
     function onFullscreenChange() {
       setFullscreen(document.fullscreenElement);
