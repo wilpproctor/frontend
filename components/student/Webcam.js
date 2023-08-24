@@ -172,7 +172,23 @@ export default function Webcam() {
       peerVideo.on("error", (error) => {
         console.log("error occured:", error);
       });
-       
+
+      peerVideo.on('close', () => {
+         peerVideo = new Peer(user.email.split("@")[0], { debug: 3 });
+      });
+
+      peerScreen.on('close', () => {
+         peerScreen = new Peer(user.email.split("@")[0] + "screen", {
+        debug: 3,
+      });
+      });
+
+      peerWeb.on('close', () => {
+         peerWeb = new Peer(user.email.split("@")[0] + "web", {
+        debug: 3,
+      });
+      });
+    
       peerVideo.on("call", (call) => {
         call.answer(screenStream().frontcam.video.srcObject);
         call1Ref.current = call
