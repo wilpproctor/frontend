@@ -3,7 +3,7 @@ import RandomFeed from "../../components/proctor/RandomFeed";
 import StudentFeeds from "../../components/proctor/StudentFeeds";
 import ProctorContext from "../../lib/ProctorContext";
 import { createBackendSocket } from "../../lib/sockets";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo} from "react";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { getUserDetails } from "../../lib/login";
@@ -76,7 +76,7 @@ const useStreamStore = create((set, get) => ({
 }));
 
 export default function DashboardPage() {
-  const backend = createBackendSocket("/proctor");
+  const backend = useMemo(() => createBackendSocket("/proctor"), []);
   const feeds = useStudentsStore((state) => state.feeds);
   const addFeed = useStudentsStore((state) => state.addFeed);
   const addAlert = useStudentsStore((state) => state.addAlert);

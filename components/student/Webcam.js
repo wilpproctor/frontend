@@ -1,5 +1,5 @@
 import StudentContext from "../../lib/StudentContext";
-import { useContext, useEffect, useRef, useState, useCallback } from "react";
+import { useContext, useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { getUserDetails } from "../../lib/login";
 import { createDetectorSocket } from "../../lib/sockets";
 import { ToastContainer, toast } from "react-toastify";
@@ -27,7 +27,7 @@ export default function Webcam() {
   const canvasRef = useRef(null);
   const audioRef = useRef(null);
   const { backend, useStreamStore, sendAlert } = useContext(StudentContext);
-  const detector = createDetectorSocket();
+  const detector = useMemo(() => createDetectorSocket(), []);
 
   const width = 320;
   const height = 240;

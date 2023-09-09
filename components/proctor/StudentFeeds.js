@@ -428,12 +428,12 @@ function Tile({ id, feed, onClick, onAnswer, calls }) {
 }
 
 export default function StudentFeeds() {
-  const { useStudentsStore } = useContext(ProctorContext);
-  const backend = createBackendSocket("/proctor");
+  const { useStudentsStore, backend} = useContext(ProctorContext);
   const feeds = useStudentsStore((state) => state.feeds);
   const [active, setActive] = useState(false);
   const [answer, setAnswer] = useState(false);
   const [calls, setCalls] = useState(new Set());
+  
   useEffect(() => {
     backend.on("call", ({ email }) => {
       let temp = new Set(calls);
@@ -453,6 +453,10 @@ export default function StudentFeeds() {
       setCalls(temp);
       setAnswer(false);
     });
+
+    return () => {
+      backend.removeAllListeners()
+    }
   }, []);
   const handleAnswer = (id) => {
     console.log("handle answer", calls, id);

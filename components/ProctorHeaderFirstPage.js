@@ -12,11 +12,11 @@ import { useRouter } from "next/router";
 
 export default function ProctorHeaderFirstPage(props) {
   const router = useRouter();
-  const backend = createBackendSocket("/proctor");
   const login = ()=>{
     router.push("/proctor/login");
   }
   const logout = ()=>{
+    const backend = createBackendSocket("/proctor");
     backend.emit("disconnect-proctor", "Closing from proctor side");
     router.push("/proctor/login");
     sessionStorage.removeItem("cookie");
