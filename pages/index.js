@@ -105,7 +105,6 @@ export default function Home() {
             <GoogleOAuthProvider clientId="580012478864-r2u2irsnn7o9qog66r437lcrsuk4s0dl.apps.googleusercontent.com">
               <GoogleLogin
                 onSuccess={(credentialResponse) => {
-                  console.log("HERE: ")
                   handleGoogleSignInSuccess(credentialResponse);
                 }}
                 onError={() => {
