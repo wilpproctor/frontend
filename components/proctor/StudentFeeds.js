@@ -53,7 +53,7 @@ const createEmptyVideoTrack = ({ width, height }) => {
 };
 
 function AlertsModal({ id, onClose }) {
-  const { useStudentsStore } = useContext(ProctorContext);
+  const { useStudentsStore,backend } = useContext(ProctorContext);
   const alerts = useStudentsStore((state) => state.alerts[id]);
   const removeAlert = useStudentsStore((state) => state.removeAlert);
   const remoteVideoRef = useRef({});
@@ -83,10 +83,7 @@ function AlertsModal({ id, onClose }) {
       peer.destroy();
     };
   }, []);
-  function handlePause() {
-    console.log("pausing test for id", id );
-    backend.emit("pause-test", ({ id }));
-  }
+  
 
   const makeCall = (event) => {
     console.log("calling 👉️", id.split("@")[0]);
@@ -162,7 +159,10 @@ function AlertsModal({ id, onClose }) {
   if (instance.loading) return <div>Loading ...</div>;
 
   if (instance.error) return <div>Something went wrong: {error}</div>;
-
+  function handlePause() {
+    console.log("pausing test for id", id );
+    backend.emit("pause-test", ({ id }));
+  }
   return (
     <div className="fixed inset-0 z-10 bg-black/30 flex justify-center items-center p-6">
       <div className="bg-white max-h-full overflow-y-auto w-full max-w-6xl text-black rounded p-4">
@@ -433,6 +433,7 @@ function Tile({ id, feed, onClick, onAnswer, calls }) {
 }
 
 export default function StudentFeeds() {
+  console.log("Newly Deployed");
   const { useStudentsStore, backend} = useContext(ProctorContext);
   const feeds = useStudentsStore((state) => state.feeds);
   const [active, setActive] = useState(false);
