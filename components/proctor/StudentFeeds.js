@@ -161,7 +161,9 @@ function AlertsModal({ id, onClose }) {
   if (instance.error) return <div>Something went wrong: {error}</div>;
   function handlePause() {
     console.log("pausing test for id", id );
-    backend.emit("pause-test", ({ id }));
+    let alpha = backend.emit("pause-test", ( id ));
+    console.log("alpha", alpha);
+
   }
   return (
     <div className="fixed inset-0 z-10 bg-black/30 flex justify-center items-center p-6">
