@@ -83,6 +83,10 @@ function AlertsModal({ id, onClose }) {
       peer.destroy();
     };
   }, []);
+  function handlePause() {
+    console.log("pausing test for id", id );
+    backend.emit("pause-test", ({ id }));
+  }
 
   const makeCall = (event) => {
     console.log("calling 👉️", id.split("@")[0]);
@@ -153,6 +157,7 @@ function AlertsModal({ id, onClose }) {
       </Document>
     );
   }, [alerts]);
+
 
   if (instance.loading) return <div>Loading ...</div>;
 
@@ -246,7 +251,7 @@ function AlertsModal({ id, onClose }) {
               Download
             </a>
           </button>
-          <button className="px-2 py-1 font-semibold bg-red-500 text-white">
+          <button className="px-2 py-1 font-semibold bg-red-500 text-white" onClick={handlePause}>
             Pause Test
           </button>
         </div>
