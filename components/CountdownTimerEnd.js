@@ -84,15 +84,12 @@ const CountdownTimerEnd = ({examDate, examTime, totalTimeInSeconds}) => {
   let pause_check = false;
   useEffect(()=>{
   let myInterval = setInterval(() => {
-      let tempCheck = true;
-      let em = currentUser.email;
-    backend.emit("check-pause", (em) => {
-        console.log("pause reached student side 1",em);
-        backend.on("check-pause2",function(tempCheck){
-            console.log("pause reached student side",tempCheck);
-          });
-    });
-          if(tempCheck){if (seconds > 0) {
+      
+    backend.on("pause-test", ({ check }) => {
+        console.log("pause-tests from student ", check);
+        pause_check = check;
+      })
+          if(!pause_check){if (seconds > 0) {
               setSeconds(seconds - 1);
           }
           if (seconds === 0) {
