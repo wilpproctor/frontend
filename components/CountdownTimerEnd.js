@@ -76,24 +76,23 @@ const CountdownTimerEnd = ({ examDate, examTime, totalTimeInSeconds }) => {
 
   const [minutes, setMinutes] = useState(totalTimeInSeconds / 60);
   const [seconds, setSeconds] = useState(totalTimeInSeconds % 60);
+  const [pause_check, setPauseCheck] = useState(false);
   const currentUser = getUserDetails();
   console.log("email here::", currentUser.email);
   const dispatch = useDispatch();
-  let pause_check = false;
   useEffect(() => {
     let myInterval = setInterval(() => {
       backend.on("pause-test", ( email ) => {
         console.log("pause-tests from student ", email);
         if (email === currentUser.email) {
-          pause_check = true;
+            setPauseCheck(!pause_check);
+            console.log("paused successfull !!")
         }
+        
       });
-      backend.on("resume-test", ({ email }) => {
-        console.log("resume-tests from student ", email);
-        if (email === currentUser.email) {
-          pause_check = false;
-        }
-      });
+      
+      console.log("pause_check is ", pause_check)
+      
       if (!pause_check) {
         if (seconds > 0) {
           setSeconds(seconds - 1);
@@ -108,6 +107,7 @@ const CountdownTimerEnd = ({ examDate, examTime, totalTimeInSeconds }) => {
           }
         }
       }
+      
     }, 1000);
     return () => {
       dispatch({ type: "SET_IS_EXAM_ENDED", payload: true });
