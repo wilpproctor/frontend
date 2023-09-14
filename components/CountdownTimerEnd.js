@@ -87,6 +87,7 @@ const CountdownTimerEnd = ({examDate, examTime, totalTimeInSeconds}) => {
       let tempCheck = true;
       let em = currentUser.email;
     backend.emit("check-pause", (em) => {
+        console.log("pause reached student side 1",em);
         backend.on("check-pause2",function(tempCheck){
             console.log("pause reached student side",tempCheck);
           });
