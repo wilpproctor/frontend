@@ -82,7 +82,7 @@ const CountdownTimerEnd = ({ examDate, examTime, totalTimeInSeconds }) => {
   let pause_check = false;
   useEffect(() => {
     let myInterval = setInterval(() => {
-      backend.on("pause-test", ({ email }) => {
+      backend.on("pause-test", ( email ) => {
         console.log("pause-tests from student ", email);
         if (email === currentUser.email) {
           pause_check = true;
