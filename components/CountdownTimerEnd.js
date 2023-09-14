@@ -1,14 +1,14 @@
-import { useDispatch } from 'react-redux';
-import  StudentContext  from '.././lib/StudentContext';
+import { useDispatch } from "react-redux";
+import StudentContext from ".././lib/StudentContext";
 import { useContext, useState, useRef, useEffect } from "react";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import { getUserDetails } from ".././lib/login";
 import { onSnapshot } from "firebase/firestore";
 import { db } from ".././lib/firestore";
 // const CountdownTimerEnd = ({ examDate, examTime, totalTimeInSeconds }) => {
 //   const [remainingTime, setRemainingTime] = useState(null);
 //   const dispatch = useDispatch();
-  
+
 //   useEffect(() => {
 //     //console.log("examDate",examDate,"examTime", examTime,"totalTimeInSeconds", totalTimeInSeconds);
 //     const interval = setInterval(() => {
@@ -60,62 +60,73 @@ import { db } from ".././lib/firestore";
 //     }else{
 //       dispatch({ type: 'SET_IS_EXAM_ENDED', payload: false });
 //     }
-  
+
 //   },[remainingTime]);
 
-  
-  
 //   return (
 //     <div>
 //       {remainingTime?<div>Time until exam ends: {remainingTime.hours}:{remainingTime.minutes}:{remainingTime.seconds}</div>:<div>Exam has ended!</div>}
-      
+
 //     </div>
 //   );
 // };
 
-const CountdownTimerEnd = ({examDate, examTime, totalTimeInSeconds}) => {
+const CountdownTimerEnd = ({ examDate, examTime, totalTimeInSeconds }) => {
   const { backend } = useContext(StudentContext);
 
-  const [ minutes, setMinutes ] = useState(totalTimeInSeconds/60);
-  const [seconds, setSeconds ] =  useState(totalTimeInSeconds%60);
+  const [minutes, setMinutes] = useState(totalTimeInSeconds / 60);
+  const [seconds, setSeconds] = useState(totalTimeInSeconds % 60);
   const currentUser = getUserDetails();
-  console.log("email here::",currentUser.email);
+  console.log("email here::", currentUser.email);
   const dispatch = useDispatch();
   let pause_check = false;
-  useEffect(()=>{
-  let myInterval = setInterval(() => {
-      
-    backend.on("pause-test", ({ check }) => {
-        console.log("pause-tests from student ", check);
-        pause_check = check;
-      })
-          if(!pause_check){if (seconds > 0) {
-              setSeconds(seconds - 1);
+  useEffect(() => {
+    let myInterval = setInterval(() => {
+      backend.on("pause-test", ({ email }) => {
+        console.log("pause-tests from student ", email);
+        if (email === currentUser.email) {
+          pause_check = true;
+        }
+      });
+      backend.on("resume-test", ({ email }) => {
+        console.log("resume-tests from student ", email);
+        if (email === currentUser.email) {
+          pause_check = false;
+        }
+      });
+      if (!pause_check) {
+        if (seconds > 0) {
+          setSeconds(seconds - 1);
+        }
+        if (seconds === 0) {
+          if (minutes === 0) {
+            dispatch({ type: "SET_IS_EXAM_ENDED", payload: true });
+            clearInterval(myInterval);
+          } else {
+            setMinutes(minutes - 1);
+            setSeconds(59);
           }
-          if (seconds === 0) {
-              if (minutes === 0) {
-                  dispatch({ type: 'SET_IS_EXAM_ENDED', payload: true })
-                  clearInterval(myInterval)
-              } else {
-                  setMinutes(minutes - 1);
-                  setSeconds(59);
-              }
-          } }
-      }, 1000)
-      return ()=> {
-          dispatch({ type: 'SET_IS_EXAM_ENDED', payload: true })
-          clearInterval(myInterval);
-        };
+        }
+      }
+    }, 1000);
+    return () => {
+      dispatch({ type: "SET_IS_EXAM_ENDED", payload: true });
+      clearInterval(myInterval);
+    };
   });
 
   return (
-      <div>
-      { minutes === 0 && seconds === 0
-          ? <h1>Exam has ended!</h1>
-          : <div>Time until exam ends: {minutes}:{seconds < 10 ?  `0${seconds}` : seconds}</div> 
-      }
-      </div>
-  )
-}
+    <div>
+      {minutes === 0 && seconds === 0 ? (
+        <h1>Exam has ended!</h1>
+      ) : (
+        <div>
+          Time until exam ends: {minutes}:
+          {seconds < 10 ? `0${seconds}` : seconds}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default CountdownTimerEnd;

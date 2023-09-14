@@ -167,6 +167,14 @@ function AlertsModal({ id, onClose }) {
     });
 
   }
+  function handleResume() {
+    console.log("Resuming test for id", id );
+    backend.emit("resume-test", ( id ));
+    backend.on("resume-test2",function(data){
+      console.log("resume reci test", data);
+    });
+
+  }
   return (
     <div className="fixed inset-0 z-10 bg-black/30 flex justify-center items-center p-6">
       <div className="bg-white max-h-full overflow-y-auto w-full max-w-6xl text-black rounded p-4">
@@ -257,6 +265,9 @@ function AlertsModal({ id, onClose }) {
           </button>
           <button className="px-2 py-1 font-semibold bg-red-500 text-white" onClick={handlePause}>
             Pause Test
+          </button>
+          <button className="px-2 py-1 font-semibold bg-red-500 text-white" onClick={handleResume}>
+            Resume Test
           </button>
         </div>
       </div>
