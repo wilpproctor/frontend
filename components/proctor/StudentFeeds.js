@@ -62,6 +62,7 @@ function AlertsModal({ id, onClose }) {
   const peerRef = useRef(null);
   const videoTrack = createEmptyVideoTrack({ width: 640, height: 480 });
   const mediaStream = new MediaStream([videoTrack]);
+  const [pause_or_resume,setPauseResume] = useState(true);
 
   useEffect(() => {
     let peer = null;
@@ -165,16 +166,10 @@ function AlertsModal({ id, onClose }) {
     backend.on("pause-test2",function(data){
       console.log("pause reci test", data);
     });
+    setPauseResume(!pause_or_resume);
 
   }
-  function handleResume() {
-    console.log("Resuming test for id", id );
-    backend.emit("resume-test", ( id ));
-    backend.on("resume-test2",function(data){
-      console.log("resume reci test", data);
-    });
-
-  }
+  
   return (
     <div className="fixed inset-0 z-10 bg-black/30 flex justify-center items-center p-6">
       <div className="bg-white max-h-full overflow-y-auto w-full max-w-6xl text-black rounded p-4">
@@ -263,12 +258,13 @@ function AlertsModal({ id, onClose }) {
               Download
             </a>
           </button>
-          <button className="px-2 py-1 font-semibold bg-red-500 text-white" onClick={handlePause}>
+          {pause_or_resume && <button className="px-2 py-1 font-semibold bg-red-500 text-white" onClick={handlePause} >
             Pause Test
-          </button>
-          <button className="px-2 py-1 font-semibold bg-red-500 text-white" onClick={handleResume}>
-            Resume Test
-          </button>
+          </button>}
+          {!pause_or_resume && <button className="px-2 py-1 font-semibold bg-green-500 text-white" onClick={handlePause} >
+            ResumeTest
+          </button>}
+          
         </div>
       </div>
     </div>
