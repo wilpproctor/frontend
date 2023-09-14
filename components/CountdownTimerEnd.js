@@ -1,6 +1,10 @@
-import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-
+import  StudentContext  from '.././lib/StudentContext';
+import { useContext, useState, useRef, useEffect } from "react";
+import { useSelector } from 'react-redux';
+import { getUserDetails } from ".././lib/login";
+import { onSnapshot } from "firebase/firestore";
+import { db } from ".././lib/firestore";
 // const CountdownTimerEnd = ({ examDate, examTime, totalTimeInSeconds }) => {
 //   const [remainingTime, setRemainingTime] = useState(null);
 //   const dispatch = useDispatch();
@@ -70,13 +74,23 @@ import { useDispatch } from 'react-redux';
 // };
 
 const CountdownTimerEnd = ({examDate, examTime, totalTimeInSeconds}) => {
+  const { backend } = useContext(StudentContext);
+
   const [ minutes, setMinutes ] = useState(totalTimeInSeconds/60);
   const [seconds, setSeconds ] =  useState(totalTimeInSeconds%60);
+  const currentUser = getUserDetails();
+  console.log("email here::",currentUser.email);
   const dispatch = useDispatch();
-
+  let pause_check = useRef(false);
   useEffect(()=>{
   let myInterval = setInterval(() => {
-          if (seconds > 0) {
+      let tempCheck = true;
+    backend.emit("check-pause", (currentUser) => {
+        backend.on("check-pause2",function(tempCheck){
+            console.log("pause reached student side",tempCheck);
+          });
+    });
+          if(tempCheck){if (seconds > 0) {
               setSeconds(seconds - 1);
           }
           if (seconds === 0) {
@@ -87,7 +101,7 @@ const CountdownTimerEnd = ({examDate, examTime, totalTimeInSeconds}) => {
                   setMinutes(minutes - 1);
                   setSeconds(59);
               }
-          } 
+          } }
       }, 1000)
       return ()=> {
           dispatch({ type: 'SET_IS_EXAM_ENDED', payload: true })
