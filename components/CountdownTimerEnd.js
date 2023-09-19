@@ -78,20 +78,16 @@ const CountdownTimerEnd = ({ examDate, examTime, totalTimeInSeconds }) => {
   const [seconds, setSeconds] = useState(totalTimeInSeconds % 60);
   const [pause_check, setPauseCheck] = useState(false);
   const currentUser = getUserDetails();
-  console.log("email here::", currentUser.email);
   const dispatch = useDispatch();
   useEffect(() => {
     let myInterval = setInterval(() => {
       backend.on("pause-test", ( email ) => {
-        console.log("pause-tests from student ", email);
         if (email === currentUser.email) {
             setPauseCheck(!pause_check);
-            console.log("paused successfull !!")
         }
         
       });
       
-      console.log("pause_check is ", pause_check)
       
       if (!pause_check) {
         if (seconds > 0) {

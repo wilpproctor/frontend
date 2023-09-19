@@ -52,7 +52,7 @@ const createEmptyVideoTrack = ({ width, height }) => {
   return Object.assign(track, { enabled: false });
 };
 
-function AlertsModal({ id, onClose }) {
+function AlertsModal({ id, onClose, mapOfPaused, setMapOfPaused }) {
   const { useStudentsStore,backend } = useContext(ProctorContext);
   const alerts = useStudentsStore((state) => state.alerts[id]);
   const removeAlert = useStudentsStore((state) => state.removeAlert);
@@ -62,7 +62,7 @@ function AlertsModal({ id, onClose }) {
   const peerRef = useRef(null);
   const videoTrack = createEmptyVideoTrack({ width: 640, height: 480 });
   const mediaStream = new MediaStream([videoTrack]);
-  const [pause_or_resume,setPauseResume] = useState(true);
+  const [pause, setPause] = useState(mapOfPaused.has(id) ? mapOfPaused.get(id) : false);
 
   useEffect(() => {
     let peer = null;
@@ -160,14 +160,10 @@ function AlertsModal({ id, onClose }) {
   if (instance.loading) return <div>Loading ...</div>;
 
   if (instance.error) return <div>Something went wrong: {error}</div>;
+  
   function handlePause() {
-    console.log("pausing test for id", id );
+    setPause(!pause)
     backend.emit("pause-test", ( id ));
-    backend.on("pause-test2",function(data){
-      console.log("pause reci test", data);
-    });
-    setPauseResume(!pause_or_resume);
-
   }
   
   return (
@@ -246,7 +242,7 @@ function AlertsModal({ id, onClose }) {
         <div className="flex justify-center gap-2">
           <button
             className="px-2 py-1 font-semibold bg-rose-500 text-white"
-            onClick={onClose}
+            onClick={() => {mapOfPaused.set(id, pause); setMapOfPaused(mapOfPaused); onClose()}}
           >
             Close
           </button>
@@ -258,10 +254,10 @@ function AlertsModal({ id, onClose }) {
               Download
             </a>
           </button>
-          {pause_or_resume && <button className="px-2 py-1 font-semibold bg-red-500 text-white" onClick={handlePause} >
+          {!pause && <button className="px-2 py-1 font-semibold bg-red-500 text-white" onClick={handlePause} >
             Pause Test
           </button>}
-          {!pause_or_resume && <button className="px-2 py-1 font-semibold bg-green-500 text-white" onClick={handlePause} >
+          {pause && <button className="px-2 py-1 font-semibold bg-green-500 text-white" onClick={handlePause} >
             ResumeTest
           </button>}
           
@@ -450,6 +446,8 @@ export default function StudentFeeds() {
   const [active, setActive] = useState(false);
   const [answer, setAnswer] = useState(false);
   const [calls, setCalls] = useState(new Set());
+  const [mapOfPaused, setMapOfPaused] = useState(new Map());
+
   
   useEffect(() => {
     backend.on("call", ({ email }) => {
@@ -461,6 +459,7 @@ export default function StudentFeeds() {
       toast(`We got a call from student via call from ${email}`);
     });
 
+
     backend.on("disconnect-student", ({ email }) => {
       console.log("call disconnect from student side", email);
       toast(`Call disconnected from ${email}`);
@@ -470,6 +469,7 @@ export default function StudentFeeds() {
       setCalls(temp);
       setAnswer(false);
     });
+    backend.emit("proctor-connected");
 
     return () => {
       backend.removeAllListeners()
@@ -513,7 +513,7 @@ export default function StudentFeeds() {
           />
         ))}
       </div>
-      {active && <AlertsModal id={active} onClose={() => setActive(false)} />}
+      {active && <AlertsModal id={active} onClose={() => setActive(false)} mapOfPaused = {mapOfPaused} setMapOfPaused = {setMapOfPaused}/>}
       {answer && <CallModal id={answer} onClose={handleClose} />}
     </>
   );

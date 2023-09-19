@@ -76,6 +76,7 @@ const useStreamStore = create((set, get) => ({
 }));
 
 export default function DashboardPage() {
+  
   const backend = useMemo(() => createBackendSocket("/proctor"), []);
   const feeds = useStudentsStore((state) => state.feeds);
   const addFeed = useStudentsStore((state) => state.addFeed);
@@ -85,7 +86,7 @@ export default function DashboardPage() {
   useEffect(() => {
     console.log("function called for student feeds fetch")
     backend.on("student-feeds", ({ email }, image) => {
-      console.log("email: ", email, ", image: ", image)
+      backend.emit("proctor-connected")
       addFeed(email, image);
     });
 
