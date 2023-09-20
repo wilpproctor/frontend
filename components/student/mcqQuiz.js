@@ -6,15 +6,25 @@ import AnswerInput from '../AnswerInput';
 import Loader from "../loader/Loader";
 
 const Quiz = (props) => {
-const dispatch = useDispatch();
-const examId = useSelector((state) => state.examId);
-const [examdata, setExamdata]=useState([]);
+  const dispatch = useDispatch();
+  const examId = useSelector((state) => state.examId);
+  const [examdata, setExamdata]=useState([]);
 
   const [currentindex, setCurrentindex] = useState(-1);
   const [userAnswers, setUserAnswers] = useState([]); // Store user answers here
   const optionsRef = useRef([]);
   const [questionData,setquestionData]=useState({});
   const isExamEnded =useSelector((state)=>state.isExamEnded);
+
+  function addClickableExamData(data){
+    for(let i = 0; i<data.length; i++){
+      let quesLink = data[i]["content"].split("http");
+      if(quesLink.length > 1){
+        data[i]["content"] = <div><p>{quesLink[0]}</p><a href={"http"+quesLink[1]} target="_blank"><u>{"http"+quesLink[1]}</u></a></div>
+      }
+    }
+    return data;
+  }
 
   useEffect( ()=> { 
     const fetchData = async () => {
@@ -32,7 +42,8 @@ const [examdata, setExamdata]=useState([]);
         );
         const data = await response.json();
         console.log("data: ", data["questions"]) // Parse the response JSON
-        setExamdata(data["questions"]);
+        data["questions"] = addClickableExamData(data["questions"])
+        setExamdata(data["questions"])
         dispatch({ type: 'SET_QUESTION', payload: data["questions"] });
         if (currentindex == -1){
           setCurrentindex(0)
