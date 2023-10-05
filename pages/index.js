@@ -1,3 +1,4 @@
+/*global chrome*/
 import Link from "next/link";
 import FirstPageFooter from "../components/FirstPageFooter";
 import Footer from "../components/Footer";
@@ -20,6 +21,7 @@ export default function Home() {
   const router = useRouter();
   const [time, setTime] = useState(new Date());
   const [loading, setLoading] = useState(false);
+  const [isExtensionEnabled, setIsExtensionEnabled] = useState(false);
   const headerURLs = [
     {
       url: "/proctor/compiler",
@@ -80,12 +82,10 @@ export default function Home() {
       console.log(e);
     }
   };
-  useEffect(() => {
-    let timer = setInterval(() => setTime(new Date()), 1000);
-    return () => {
-      clearInterval(timer);
-    };
-  });
+  useEffect(() => {    
+    console.log("HERE: ", isExtensionEnabled)
+  }, [isExtensionEnabled]);
+
   return (
     <>
       <header
@@ -129,6 +129,16 @@ export default function Home() {
           //   height="300px"
         />
       </div>
+        {!isExtensionEnabled ? (
+          <div className="fixed inset-0 bg-red-500 flex justify-center items-center">
+            <div className="bg-white px-6 py-4 rounded-lg text-center">
+              <p className="text-xl">Enable Extension and reload.</p>
+            </div>
+          </div>
+        ) : (<div></div>)}
+      <button className="detectExtension" display="none" onClick={() => setIsExtensionEnabled(true)}>
+
+      </button>
       <FirstPageFooter />
       </>
       )}
