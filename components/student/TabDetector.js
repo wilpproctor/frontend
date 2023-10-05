@@ -64,7 +64,6 @@ export default function TabDetector() {
       </div>
     )}
     <button className="tabChange" display="none" onClick={sendProctorAlert}>
-            Tab Change
       </button>
   </div>
   );
