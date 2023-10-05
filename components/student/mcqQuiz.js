@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { examBackendURL } from "../../pages";
 import AnswerInput from '../AnswerInput';
 import Loader from "../loader/Loader";
+import ImagesGallery from "./Images_gallery";
 
 const Quiz = (props) => {
   const dispatch = useDispatch();
@@ -112,6 +113,9 @@ const Quiz = (props) => {
     if (currentindex < examdata.length - 1) {
       setCurrentindex(currentindex + 1);
     }
+    // clear the images shown
+    setImages([]);
+    
   };
 
   const handleSubmit = async () => {
@@ -127,6 +131,7 @@ const Quiz = (props) => {
     const requestData = {
       examId: examId,
       userResponse: userResponseData,
+      images: imageUrls,
     };
     console.log(userResponseData,"userResponse");
 
@@ -155,6 +160,55 @@ const Quiz = (props) => {
       // Handle error
     }
   };
+  const [images, setImages] = useState([]);
+  const [toUpload,setToUpload]=useState([]);
+   const handleMultipleImages =(evnt)=>{
+      const selectedFIles =[];
+      const sel = [];
+      const targetFiles =evnt.target.files;
+      const targetFilesObject= [...targetFiles]
+      targetFilesObject.map((file)=>{
+         return selectedFIles.push(URL.createObjectURL(file))
+      })
+      setImages(selectedFIles);
+      for(let i = 0;i<targetFiles.length;i++){
+        sel.push(targetFiles[i]);
+      }
+      setToUpload(sel);
+
+    }
+  const [imageUrls,setImageUrls]=useState([]);
+  function handleImageChange(){
+    for(let i = 0;i<toUpload.length;i++){
+      const file = toUpload[i];
+    // upload image to cloudinary
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "wilp007");
+    formData.append("cloud_name", "drmjrtb8w");
+    fetch("https://api.cloudinary.com/v1_1/drmjrtb8w/image/upload", {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const url = data.url;
+        const index = imageUrls.findIndex((entry) => entry[0] === currentindex);
+        if (index === -1) {
+          setImageUrls((prevUrls) => [...prevUrls, [currentindex, [url]]]);
+        } else {
+          setImageUrls((prevUrls) => {
+            const updatedUrls = [...prevUrls];
+            updatedUrls[index][1].push(url);
+            return updatedUrls;
+          });
+        }
+          console.log("data in image ",data)
+          
+      })
+      .catch((err) => console.log(err));}
+      console.log("imageUrls",imageUrls)
+  }
 
   console.log(questionData,"holla");
   //const {questionType, questionType, options } = questionData;
@@ -200,7 +254,16 @@ const Quiz = (props) => {
           value={userAnswers[currentindex] || ""}
           className="answer-input"
         />
+        
+    <div className="form-group my-3 mx-3">
+    <input type="file" accept="image/*" onChange={handleMultipleImages} multiple/>
+    <button onClick={handleImageChange}>Submit</button>
+    </div>
+      
+   
+      
       </div>
+      
 
       )}
       
@@ -248,6 +311,11 @@ const Quiz = (props) => {
           </button>
         )}
       </div>
+      <ImagesGallery images={images} style={{display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: '10px',}}/>
     </div>:<div><Loader/></div>
   );
 };
