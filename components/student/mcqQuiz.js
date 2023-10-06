@@ -111,8 +111,6 @@ const Quiz = (props) => {
     if (currentindex > 0) {
       setCurrentindex(currentindex - 1);
     }
-    savedImages.set(currentindex,images);
-    setSavedImages(savedImages);
     setImages([]);
   };
 
@@ -120,10 +118,7 @@ const Quiz = (props) => {
     if (currentindex < examdata.length - 1) {
       setCurrentindex(currentindex + 1);
     }
-    savedImages.set(currentindex,images);
-    setSavedImages(savedImages);
     setImages([]);
-    
   };
 
   const handleSubmit = async () => {
@@ -163,7 +158,9 @@ const Quiz = (props) => {
         //window.location = "/student/examselect";
         // Handle successful response, maybe show a success message
       } else {
-        
+        alert(`Your response has been saved`);
+        dispatch({ type: 'SET_RESPONSE', payload: userResponseData });
+        props.handleQuizSubmit();
         // Handle error response, maybe show an error message
       }
     } catch (error) {
@@ -214,11 +211,13 @@ const Quiz = (props) => {
             return updatedUrls;
           });
         }
-          console.log("data in image ",data)
-          
+        console.log("data in image ",data) 
       })
-      .catch((err) => console.log(err));}
-      console.log("imageUrls",imageUrls)
+      .catch((err) => console.log(err));
+    }
+    savedImages.set(currentindex,images);
+    setSavedImages(savedImages);
+    console.log("imageUrls",imageUrls)
   }
 
   console.log(questionData,"holla");
@@ -226,7 +225,7 @@ const Quiz = (props) => {
 
   return (
     questionData?
-    <div className="max-w-md mx-auto bg-white p-8 border border-gray-300 rounded shadow">
+    <div className="mx-auto bg-white p-8 rounded shadow">
       <Head>
         <script
           type="text/javascript"
@@ -268,7 +267,7 @@ const Quiz = (props) => {
         
     <div className="form-group my-3 mx-3">
     <input type="file" accept="image/*" onChange={handleMultipleImages} multiple/>
-    <button onClick={handleImageChange}>Submit</button>
+    <button className="bg-green-500 hover:bg-green-600 text-white font-semibold py-1 px-7" onClick={handleImageChange}>Upload</button>
     </div>
       
    
@@ -322,7 +321,7 @@ const Quiz = (props) => {
           </button>
         )}
       </div>
-      <ImagesGallery images={images} style={{display: 'flex',
+      <ImagesGallery images={savedImages.has(currentindex) ? savedImages.get(currentindex) : images} style={{display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center',
     alignItems: 'center',

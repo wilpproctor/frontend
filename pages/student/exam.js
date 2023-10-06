@@ -109,7 +109,7 @@ export default function ExamPage() {
         pauseOnHover
       />
       <div className="flex h-screen">
-        <div className="justify-center items-start grow overflow-scroll">
+        <div className="justify-center items-start grow overflow-scroll resize-horizontal">
           {/* <ShortAnswer />
           <button onClick={() => sendAlert("Sample Reason")}>
             Send Sample Alert
@@ -128,7 +128,7 @@ export default function ExamPage() {
             <InputViewer />
           </div> */}
         </div>
-        <div className="flex flex-col gap-3 justify-between max-w-[370px] border-l-2 p-3">
+        <div className="flex flex-col gap-3 justify-between max-w-[370px] border-l-2 p-3" resize="horizontal">
           <div>
             <Calculator />
           </div>

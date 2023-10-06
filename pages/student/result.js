@@ -35,51 +35,58 @@ const ResultPage = () => {
     <>
       <Header countertimer={"no"}/>
       <div>
-        <h1 style={{ marginTop: "5%", textAlign: "center", fontSize: "40px", color: "black" }}>Exam Result</h1>
-        <table style={{ marginLeft: "auto", marginRight: "auto", width: "70%", borderCollapse: "collapse", border: "1px solid black" }}>
-          <thead>
-            <tr>
-              <th style={{ width: "50%", border: "1px solid black", padding: "8px", textAlign: "left" }}>Question</th>
-              <th style={{ width: "25%", border: "1px solid black", padding: "8px", textAlign: "left" }}>Options</th>
-              <th style={{ width: "25%", border: "1px solid black", padding: "8px", textAlign: "left" }}>Response</th>
-              <th style={{ width: "25%", border: "1px solid black", padding: "8px", textAlign: "left" }}>Images</th>
+  <h1 style={{ marginTop: "5%", textAlign: "center", fontSize: "40px", color: "black" }}>Exam Result</h1>
+  <table style={{ marginLeft: "auto", marginRight: "auto", width: "90%", borderCollapse: "collapse", border: "1px solid black" }}>
+    <thead>
+      <tr>
+        <th style={{ width: "50%", border: "1px solid black", padding: "8px", textAlign: "left" }}>Question</th>
+        <th style={{ width: "20%", border: "1px solid black", padding: "8px", textAlign: "left" }}>Options</th>
+        <th style={{ width: "15%", border: "1px solid black", padding: "8px", textAlign: "left" }}>Response</th>
+        <th style={{ width: "40%", border: "1px solid black", padding: "100px", textAlign: "left" }}>Images</th>
+      </tr>
+    </thead>
+    <tbody>
+      {questions.map((question, index) => (
+        <tr key={question.quesId}>
+          <td style={{ border: "1px solid black", padding: "8px" }}>{question.content}</td>
+          <td style={{ border: "1px solid black", padding: "8px" }}>
+            {JSON.parse(question.options) &&
+              Object.keys(JSON.parse(question.options)).sort().map((optionKey) => (
+                <div key={optionKey}>
+                  {optionKey}: {JSON.parse(question.options)[optionKey]}
+                </div>
+              ))}
+          </td>
+          <td style={{ border: "1px solid black", padding: "8px" }}>
+            {findResponseForQuestion(question.quesId)}
+          </td>
+          <td style={{ border: "1px solid black", padding: "1px" }}>
+            {images.has(index) && <ImagesGallery images={images.get(index)} />}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
 
-            </tr>
-          </thead>
-          <tbody>
-          {questions.map((question, index) => (
-            <tr key={question.quesId}>
-              <td style={{ border: "1px solid black", padding: "8px" }}>{question.content}</td>
-              <td style={{ border: "1px solid black", padding: "8px" }}>
-                {JSON.parse(question.options) &&
-                  Object.keys(JSON.parse(question.options)).sort().map((optionKey) => (
-                    <div key={optionKey}>
-                      {optionKey}: {JSON.parse(question.options)[optionKey]}
-                    </div>
-                  ))}
-              </td>
-              <td style={{ border: "1px solid black", padding: "8px" }}>
-                {findResponseForQuestion(question.quesId)}
-              </td>
+  {/* Centered Submit Button */}
+  <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+    <button
+      onClick={handleSubmit}
+      style={{
+        backgroundColor: "#4CAF50",
+        color: "white",
+        border: "none",
+        borderRadius: "4px",
+        padding: "10px 20px",
+        cursor: "pointer",
+        fontSize: "16px",
+      }}
+    >
+      Submit All the answers
+    </button>
+  </div>
+</div>
 
-              <td style={{ border: "1px solid black", padding: "8px" }}>
-                {images.has(index) && <ImagesGallery images={images.get(index)} />}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-        </table>
-
-        {/* Centered Submit Button */}
-        <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-          <button
-            onClick={handleSubmit}
-            style={{ backgroundColor: "#4CAF50", color: "white", border: "none", borderRadius: "4px", padding: "10px 20px", cursor: "pointer", fontSize: "16px" }}
-          >
-            Submit All the answers
-          </button>
-        </div>
-      </div>
       <Footer />
     </>
   );
