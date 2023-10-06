@@ -267,7 +267,7 @@ const Quiz = (props) => {
           style={{width: "100%"}}
           placeholder="Write Your Answer"
           onChange={handleAnswerChange}
-          value={userAnswers[currentindex] || "No Answer Written"}
+          value={userAnswers[currentindex] || ""}
           className="answer-input"
         />
         
