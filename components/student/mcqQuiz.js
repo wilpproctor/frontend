@@ -116,6 +116,7 @@ const Quiz = (props) => {
   };
 
   const handleNext = () => {
+    
     if (currentindex < examdata.length - 1) {
       setCurrentindex(currentindex + 1);
     }
@@ -129,8 +130,11 @@ const Quiz = (props) => {
     
       quesId: examdata[index].quesId, // Replace with your question ID property
       response: typeof(response) == 'object'?response.join(""):response,
+      image: imageUrls[index] ? imageUrls[index][1] : [],
+
     }));
-    const userAnswerUrls = 
+    
+
     console.log(userResponseData,"userResponse");
 
     const requestData = {
@@ -263,7 +267,7 @@ const Quiz = (props) => {
           style={{width: "100%"}}
           placeholder="Write Your Answer"
           onChange={handleAnswerChange}
-          value={userAnswers[currentindex] || ""}
+          value={userAnswers[currentindex] || "No Answer Written"}
           className="answer-input"
         />
         
