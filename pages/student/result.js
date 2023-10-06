@@ -61,7 +61,7 @@ const ResultPage = () => {
             {findResponseForQuestion(question.quesId)}
           </td>
           <td style={{ border: "1px solid black", padding: "1px" }}>
-            {images.has(index) && <ImagesGallery images={images.get(index)} />}
+            {images.has(question.quesId) && <ImagesGallery images={images.get(question.quesId)} />}
           </td>
         </tr>
       ))}

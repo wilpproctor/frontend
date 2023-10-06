@@ -62,6 +62,7 @@ const Quiz = (props) => {
   useEffect(()=>{
     setquestionData(examdata[currentindex]);
     console.log("questionData",questionData)
+    console.log("quesId",questionData.quesId);
   },[currentindex]);
 
   // useEffect(()=>{
@@ -129,6 +130,7 @@ const Quiz = (props) => {
       quesId: examdata[index].quesId, // Replace with your question ID property
       response: typeof(response) == 'object'?response.join(""):response,
     }));
+    const userAnswerUrls = 
     console.log(userResponseData,"userResponse");
 
     const requestData = {
@@ -215,7 +217,7 @@ const Quiz = (props) => {
       })
       .catch((err) => console.log(err));
     }
-    savedImages.set(currentindex,images);
+    savedImages.set(examdata[currentindex].quesId,images);
     setSavedImages(savedImages);
     console.log("imageUrls",imageUrls)
   }
@@ -321,7 +323,7 @@ const Quiz = (props) => {
           </button>
         )}
       </div>
-      <ImagesGallery images={savedImages.has(currentindex) ? savedImages.get(currentindex) : images} style={{display: 'flex',
+      <ImagesGallery images={examdata.length && examdata[currentindex].quesId && savedImages.has(examdata[currentindex].quesId) ? savedImages.get(examdata[currentindex].quesId) : images} style={{display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center',
     alignItems: 'center',
