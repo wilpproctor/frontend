@@ -16,6 +16,7 @@ const initialState = {
   compiler: false,
   excel: false,
   calculator: false,
+  images: null,
 };
 
 // Reducer
@@ -45,6 +46,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, excel: action.payload };
     case "SET_CALCULATOR":
       return { ...state, calculator: action.payload };
+    case "SET_IMAGES":
+      return { ...state, images: action.payload };
     default:
       return state;
   }

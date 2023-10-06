@@ -61,6 +61,7 @@ const Quiz = (props) => {
 
   useEffect(()=>{
     setquestionData(examdata[currentindex]);
+    console.log("questionData",questionData)
   },[currentindex]);
 
   // useEffect(()=>{
@@ -102,18 +103,25 @@ const Quiz = (props) => {
     updatedAnswers[currentindex] = textAnswer;
     setUserAnswers(updatedAnswers);
   };
-
+  const [savedImages,setSavedImages]=useState(new Map());
+  // export the savedImages to redux store
+  // const dispatch = useDispatch();
+  dispatch({ type: 'SET_IMAGES', payload: savedImages });
   const handleBack = () => {
     if (currentindex > 0) {
       setCurrentindex(currentindex - 1);
     }
+    savedImages.set(currentindex,images);
+    setSavedImages(savedImages);
+    setImages([]);
   };
 
   const handleNext = () => {
     if (currentindex < examdata.length - 1) {
       setCurrentindex(currentindex + 1);
     }
-    // clear the images shown
+    savedImages.set(currentindex,images);
+    setSavedImages(savedImages);
     setImages([]);
     
   };
@@ -129,9 +137,11 @@ const Quiz = (props) => {
     console.log(userResponseData,"userResponse");
 
     const requestData = {
+      // course_id:
       examId: examId,
       userResponse: userResponseData,
       images: imageUrls,
+
     };
     console.log(userResponseData,"userResponse");
 
@@ -153,6 +163,7 @@ const Quiz = (props) => {
         //window.location = "/student/examselect";
         // Handle successful response, maybe show a success message
       } else {
+        
         // Handle error response, maybe show an error message
       }
     } catch (error) {
